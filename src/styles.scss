@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+/* Variáveis de Cores (Definidas no elemento raiz para uso global) */
+:root {
+  // Cores Primárias do seu projeto (Baseado na imagem)
+  --color-primary-dark: #004c8c;   // Azul escuro do header e footer
+  --color-primary-light:  #0060b2;  // Um tom um pouco mais claro (para hover/active)
+  
+  // Cores de Destaque/Secundárias (Baseado na imagem/logomarca)
+  --color-accent: #f9db19;         // Amarelo da logomarca/terciária
+  --color-accent-variant: #FFBF00;
+  --color-secondary-blue: #00B7FF; // Seu secondary (para links, botões, etc.)
+  
+  
+  // Cores Neutras
+  --color-text-light: #ffffff;     // Texto sobre o fundo escuro
+  --color-text-dark: #1a1a1a;      // Texto sobre o fundo claro
+  --color-background-white: #fcfcfc; // Fundo do conteúdo principal
+  --color-border-light: #cccccc;   // Cor de bordas e divisores
+  --color-background-dark:#1C2A40;
+  --color-background-variant: #2D405F;
+  
+
+  --color-blue-01: #075aa9;
+  --color-blue-02: #0056b3;
+  --color-blue-03: #007bff;
+}
+
+/* Estilos globais e fontes */
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: var(--color-text-dark); /* Cor de texto padrão */
+  background-color: var(--color-background-white);
+}
+
+/* Utilitários */
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Classe para aplicar a cor primária em fundo (ex: botões, cards)
+.bg-primary {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-light);
+}
+
+// Classe para aplicar a cor de destaque (ex: botões CTA, ícones)
+.text-accent {
+  color: var(--color-accent);
+}
