@@ -1,1 +1,129 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==============================================
+   1. IMPORTAÇÕES GLOBAIS
+   ============================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons"); /* CORREÇÃO FINAL: Importa a fonte dos ícones */
+
+/* ==============================================
+   2. VARIÁVEIS DE CORES E LAYOUT
+   ============================================== */
+
+:root {
+  /* Cores Primárias */
+  /* Cores Azuis (do mais claro para o mais escuro) */
+  --color-blue-light: #86b6ec; /* Azul muito claro */
+  --color-secondary-light: #00b7ff; /* Azul ciano/claro */
+  --color-primary-light: #0060b2; /* Azul primário claro */
+  --color-secondary-dark: #174fac; /* Azul secundário escuro/saturado */
+  --color-primary-dark: #004c8c; /* Azul primário escuro */
+
+  // CORES PRAIA SOL
+  --color-yellow-01: #ece165; /* Amarelo muito claro/suave */
+  --color-yellow-02: #eedd46;
+  --color-yellow-03: #f7e416;
+  --color-yellow-04: #f9db19;
+  --color-yellow-05: #ffbf00;
+
+  // CORES VEREDA
+  --color-green-01: #43a278; /* Verde desbotado/claro */
+  --color-green-02: #34b27c; /* Verde primário (claro/médio) */
+  --color-green-03: #39b475;
+  --color-green-04: #26b46e; /* Verde variante (médio) */
+  --color-green-05: #11a260; /* Verde forte (médio/escuro) */
+  --color-green-06: #12a658;
+  --color-green-07: #29835d; /* Verde escuro */
+  --color-green-08: #174;
+
+  /* Cores Neutras (do mais claro para o mais escuro) */
+  --color-light-01: #ffffff; /* Branco puro */
+  --color-light-02: #fcfcfc;
+  --color-light-03: #f1f6f6;
+  --color-light-04: #ecf0f1;
+  --color-light-05: #e5e5e3;
+  --color-light-06: #dfe0de;
+  --color-light-07: #cccccc; /* Cinza claro */
+
+  --color-medium-08: #adb5bd;
+  --color-medium-09: #857e7c; /* Cinza médio */
+  --color-medium-10: #818187; /* Cinza médio */
+
+  --color-darker-11: #384549; /* Cinza escuro */
+  --color-darker-12: #374448; /* Cinza escuro */
+  --color-darker-13: #2d405f;
+  --color-darker-14: #2c3e50;
+  --color-darker-15: #1c2a40;
+  --color-darker-16: #282830; /* Fundo escuro principal (azul marinho) */
+  --color-darker-17: #1a1a1a; /* Preto muito escuro */
+
+  --color-grey-variant: #8886aa;
+}
+
+/* ==============================================
+   3. RESETS E ESTRUTURA BASE
+   ============================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  color: var(--color-text-dark);
+  background-color: var(--color-background-white);
+}
+
+/* O componente raiz do Angular ocupa 100% da altura */
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ==============================================
+   4. ESTILOS DO MATERIAL ICONS (CORREÇÃO)
+   ============================================== */
+
+/* É importante definir estas regras globalmente para garantir que o navegador 
+   traduza a string de texto (ex: 'home') para o glifo do ícone. */
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==============================================
+   5. UTILITÁRIOS GLOBAIS
+   ============================================== */
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.bg-primary {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-light);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+/* Removido: .display-desktop e .display-mobile, 
+   pois são classes de layout específicas que devem ser controladas no componente 
+   principal do layout para responsividade. */
