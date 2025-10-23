@@ -1,0 +1,33 @@
+<div class="sidenav">
+  <div class="logo-container">
+    <button type="button" class="logo"></button>
+    <div class="logo-text"></div>
+    <button type="button" class="btn-close"></button>
+  </div>
+  <ul class="sidenav-nav">
+    <li class="sidenav-nav-item" *ngFor="let data of navData">
+      <a href="/" class="sidenav-nav-link" [routerLink]="[data.routeLink]">
+        <i class="sidenav-link-icon" [class]="data.icon"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">{{data.label}}</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+//outra opção
+<nav class="sidebar-nav">
+
+  <!--<a *ngFor="let item of menuItems"
+  [routerLink]="item.route"
+  routerLinkActive="active"
+  class="nav-link">
+    <span class="material-icon">{{item.icon}}</span>
+
+    <span class="label">{{item.label}}</span>
+  </a>-->
+
+  <app-menu-item *ngFor="let item of menuItems" [item]="item" class="top-level-item"/>
+  
+  <div *ngIf="menuItems.length ===0" class="no-items">Nenhum item de menu encontrado</div>
+</nav>
+

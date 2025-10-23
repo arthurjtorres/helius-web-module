@@ -1,0 +1,70 @@
+<div class="sidebar" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
+  <div class="sidebar-header">
+    <button class="sidebar-toggle-btn" (click)="onSidebarToggle()">
+      <i class="material-icons">menu</i>
+    </button>
+
+    <a href="/" class="sidebar-logo">{{
+      isSidebarCollapsed ? "" : "Helius"
+    }}</a>
+  </div>
+  <div class="sidebar-menu">
+    <ul>
+      <ng-container *ngFor="let item of menuItems">
+        <li class="sidebar-menu-item">
+          <a
+            class="sidebar-item"
+            [routerLink]="item.route"
+            [routerLinkActive]="['menu-item-active']"
+            [class.has-children]="item.children"
+            (click)="toggleMenuItem(item)"
+          >
+            <span class="material-icons sidebar-icon">{{ item.icon }}</span>
+            <span class="sidebar-item-text">{{ item.label }}</span>
+            <span
+              *ngIf="item.children && !isSidebarCollapsed"
+              class="material-icons sidebar-item-arrow"
+              [ngClass]="{ rotated: item.isOpen }"
+              >{{ "keyboard_arrow_right" }}</span
+            >
+          </a>
+
+          <!-- Sub-Menu -->
+          <ul
+            *ngIf="item.children && !isSidebarCollapsed && item.isOpen"
+            class="sidebar-submenu"
+          >
+            <li *ngFor="let child of item.children">
+              <a
+                [routerLink]="child.route"
+                [routerLinkActive]="['menu-item-active']"
+                class="sidebar-item sidebar-subitem"
+              >
+                <span class="material-icons sidebar-icon subitem-icon">{{
+                  child.icon
+                }}</span>
+                <span class="sidebar-item-text">{{ child.label }}</span>
+              </a>
+            </li>
+          </ul>
+
+          <!-- Menu Suspenso quando recolhido -->
+          <ul *ngIf="item.children" class="sidebar-submenu-collapsed">
+            <li *ngFor="let child of item.children">
+              <a
+                [routerLink]="child.route"
+                [routerLinkActive]="['menu-item-active']"
+                class="sidebar-item sidebar-subitem"
+              >
+                <span class="material-icons sidebar-icon subitem-icon">{{
+                  child.icon
+                }}</span>
+                <span class="sidebar-item-text">{{ child.label }}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>
