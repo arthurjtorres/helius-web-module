@@ -1,35 +1,37 @@
 <div class="sidebar" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
   <div class="sidebar-header">
-    <button class="sidebar-toggle-btn" (click)="onSidebarToggle()">
-      <i class="material-icons">menu</i>
+    <button matMiniFab class="sidebar-toggle-btn" (click)="onSidebarToggle()">
+      <mat-icon class="material-icons">menu</mat-icon>
     </button>
 
-    <a href="/" class="sidebar-logo">{{
-      isSidebarCollapsed ? "" : "Helius"
-    }}</a>
+    <a href="/" class="sidebar-logo" *ngIf="!isSidebarCollapsed">Helius</a>
   </div>
+
   <div class="sidebar-menu">
-    <ul>
-      <ng-container *ngFor="let item of menuItems">
-        <li class="sidebar-menu-item">
+    <mat-nav-list>        
+
+        <ng-container *ngFor="let item of menuItems" class="sidebar-menu-item">
+          
           <a
+          
             class="sidebar-item"
             [routerLink]="item.route"
             [routerLinkActive]="['menu-item-active']"
             [class.has-children]="item.children"
             (click)="toggleMenuItem(item)"
+            [matMenuTriggerFor]="(isSidebarCollapsed && item.children) ? itemMenu : null"
           >
-            <span class="material-icons sidebar-icon">{{ item.icon }}</span>
+            <mat-icon class="material-icons sidebar-icon">{{ item.icon }}</mat-icon>
             <span class="sidebar-item-text">{{ item.label }}</span>
-            <span
+            
+            <mat-icon
               *ngIf="item.children && !isSidebarCollapsed"
               class="material-icons sidebar-item-arrow"
               [ngClass]="{ rotated: item.isOpen }"
-              >{{ "keyboard_arrow_right" }}</span
+              >{{ "keyboard_arrow_right" }}</mat-icon
             >
           </a>
 
-          <!-- Sub-Menu -->
           <ul
             *ngIf="item.children && !isSidebarCollapsed && item.isOpen"
             class="sidebar-submenu"
@@ -40,31 +42,34 @@
                 [routerLinkActive]="['menu-item-active']"
                 class="sidebar-item sidebar-subitem"
               >
-                <span class="material-icons sidebar-icon subitem-icon">{{
+                <mat-icon class="material-icons sidebar-icon subitem-icon">{{
                   child.icon
-                }}</span>
+                }}</mat-icon>
                 <span class="sidebar-item-text">{{ child.label }}</span>
               </a>
             </li>
           </ul>
 
-          <!-- Menu Suspenso quando recolhido -->
-          <ul *ngIf="item.children" class="sidebar-submenu-collapsed">
-            <li *ngFor="let child of item.children">
-              <a
+          <mat-menu 
+            #itemMenu="matMenu" 
+            xPosition="after" 
+            panelClass="sidebar-flyout-menu"
+          >
+            <ng-container *ngIf="item.children">
+              <button 
+                mat-menu-item 
+                *ngFor="let child of item.children"
                 [routerLink]="child.route"
-                [routerLinkActive]="['menu-item-active']"
-                class="sidebar-item sidebar-subitem"
+                [routerLinkActive]="['menu-item-active-flyout']"
               >
-                <span class="material-icons sidebar-icon subitem-icon">{{
-                  child.icon
-                }}</span>
-                <span class="sidebar-item-text">{{ child.label }}</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ng-container>
-    </ul>
+                <mat-icon>{{ child.icon }}</mat-icon>
+                <span>{{ child.label }}</span>
+              </button>
+            </ng-container>
+          </mat-menu>
+
+        </ng-container>
+      
+    </mat-nav-list>
   </div>
 </div>
