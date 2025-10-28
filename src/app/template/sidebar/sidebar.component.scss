@@ -40,10 +40,11 @@ $sidebar-collapsed-width: 60px;
     padding-top: 10px;
     overflow-y: auto;
 
-    ul {
+    mat-nav-list {
       list-style: none;
       padding: 0;
       margin: 0;
+      
     }
   }
   .sidebar-toggle-btn {
@@ -68,7 +69,8 @@ $sidebar-collapsed-width: 60px;
 
 .sidebar-item {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: center !important;
   color: var(--color-light-01);
   text-decoration: none;
   padding: 0.75rem 1rem;
@@ -76,10 +78,11 @@ $sidebar-collapsed-width: 60px;
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(24, 11, 11, 0.2);
     border-radius: 5px;
     transform: scale(1.05);
   }
+  
 
   &.menu-item-active {
     background-color: var(--color-yellow-05);
@@ -87,12 +90,14 @@ $sidebar-collapsed-width: 60px;
     border-radius: 5px;
   }
 
-  span {
-    margin-right: 0.75rem;
+  mat-icon {
+    margin-right: 0.5rem;
     font-size: 1rem;
 
     &.sidebar-icon {
       font-size: 1.6rem !important;
+      padding-right: 1.7rem;
+      
     }
 
     &.sidebar-item-arrow {
@@ -104,6 +109,16 @@ $sidebar-collapsed-width: 60px;
         transform: rotate(90deg);
       }
     }
+
+  }
+
+  span {
+    margin-right: 0.75rem;
+    font-size: 1rem;
+
+     
+
+    
   }
 
   &-text {
@@ -179,43 +194,47 @@ $sidebar-collapsed-width: 60px;
   // }
 }
 
-.sidebar-submenu-collapsed {
-  display: none; // Escondido por padrão
-  position: absolute;
-  left: $sidebar-collapsed-width; // Inicia exatamente onde o menu recolhido termina
-  top: 0; // Alinha com o topo do item pai (<li>)
-  z-index: 1001; // Garante que fique sobre o conteúdo
 
-  // Estilização (similar à imagem de inspiração)
-  background-color: var(--color-darker-16); // Cor de fundo do menu
-  min-width: 220px;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  padding: 0.5rem;
-  margin: 0;
-  list-style: none;
+/* Estilização opcional para o mat-menu */
+::ng-deep .sidebar-flyout-menu {
+  
+  /* Altera o painel (fundo) */
+  .mat-mdc-menu-panel {
+    background-color: var(--color-darker-16) !important;
+  }
 
-  // Precisamos resetar os estilos dos itens dentro do fly-out,
-  // pois eles herdam os estilos de ".sidebar-collapsed .sidebar-item" (flex-direction: column)
-  .sidebar-item {
-    flex-direction: row; // Força a direção de volta para linha
-    padding: 0.5rem 1rem;
-    text-align: left;
+  /* Altera os itens do menu */
+  .mat-mdc-menu-item {
+    color: var(--color-light-01);
 
-    &.sidebar-subitem {
-      padding-left: 1rem; // Reseta o padding grande do accordion
+    .mat-icon {
+      color: var(--color-light-01);
+      margin-right: 12px; // Ajuste o espaçamento
     }
 
-    .sidebar-item-text {
-      font-size: 0.9rem; // Tamanho de fonte normal
-      opacity: 1; // Garante que o texto seja visível
-      width: auto;
-      text-align: left;
-    }
-
-    .sidebar-icon {
-      font-size: 1.4rem !important; // Tamanho normal do ícone
-      margin-right: 0.75rem; // Espaçamento normal
+    /* Hover */
+    &:hover, &:focus {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
+
+  /* Item ativo (se você usar a classe do routerLinkActive) */
+  .menu-item-active-flyout {
+    background-color: var(--color-yellow-05);
+    color: var(--color-text-dark);
+
+    .mat-icon {
+      color: var(--color-text-dark);
+    }
+  }
+}
+
+.mat-list-item, a.mat-list-item {
+  display: flex !important;
+  align-items: center;
+  color: var(--color-light-01);
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
