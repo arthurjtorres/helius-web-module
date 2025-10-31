@@ -1,14 +1,12 @@
-<div class="app-container">
-  
-    <app-sidebar
-      [isSidebarCollapsed]="isSidebarCollapsed"
-      (sidebarToggle)="onSidebarToggle()"
-    >
-    </app-sidebar>
-    
-  
+<mat-toolbar class="mat-elevation-z3">
+  <button mat-icon-button (click)="collapsed.set(!collapsed())"><mat-icon>menu</mat-icon></button>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav class="sidebar" opened mode="side" [style.width]="sidebarWidth()">
+    <app-sidebar [collapsed]="collapsed()"/>
+  </mat-sidenav>
 
-  <main class="content" [ngClass]="{ 'content-expanded': isSidebarCollapsed }">
-    <div class="content-inner">Content goes here</div>
-  </main>
-</div>
+  <mat-sidenav-content class="content" [style.margin-left]="sidebarWidth()">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,67 +1,16 @@
-/* template/layout/layout.component.scss */
-
-// Variáveis para largura do sidebar (mantidas do SCSS anterior)
-$sidebar-expanded-width: 250px;
-$sidebar-collapsed-width: 70px;
-$mobile-breakpoint: 768px; // 768px
-$sidebar-margin:1rem;
-
-
-.app-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  position: relative; // Necessário para posicionar o sidebar no mobile
+.content{
+  padding: 24px;
 }
 
-app-sidebar {
-  // Desktop: Sidebar Fixo
-  flex-shrink: 0;
-  transition: width 0.3s ease-in-out;
-  // Note: A largura é controlada pela classe no componente sidebar
+mat-toolbar {
+  position: relative;
+  z-index: 5;
 }
 
-.content {
-  flex-grow: 1;
-  transition: margin-left 0.3s ease-in-out;
-  background-color: var(--color-background-white);
-  overflow-y: auto;
-  padding-top: 2rem;
-  margin-left: $sidebar-margin;  
+mat-sidenav-container {
+  height: calc(100vh - 64px);
 }
 
-/* ==============================================
-   RESPONSIVIDADE (MOBILE FIRST)
-   ============================================== */
-
-@media (max-width: $mobile-breakpoint) {
-  // 1. O Conteúdo Principal ocupa 100% no Mobile (o sidebar é oculto/flutuante)
-  app-sidebar {
-    position: relative;
-    width: $sidebar-collapsed-width !important;
-    transform: none !important;
-  }
-
-  .content {
-    margin-left: $sidebar-margin !important;
-    width: calc(100% - #{$sidebar-collapsed-width})!important;
-  }
-
-  // ESTADO MOBILE OVERLAY (Menu Aberto)
-  .sidebar-overlay-open { 
-    
-    // Quando o overlay abre, a sidebar precisa sair do fluxo:
-    & app-sidebar {
-        position: absolute !important; // Tira do fluxo
-        width: $sidebar-expanded-width !important; // Largura total de 250px
-        transform: translateX(0) !important; // Traz para a tela
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    }
-    
-    // O conteúdo deve ZERAR a margem e ter width: 100%
-    & .content {
-        margin-left: 0 !important;
-        width: 100% !important;
-    }
-  }
+.sidebar {
+  background-color: var(--color-light-03);
 }
