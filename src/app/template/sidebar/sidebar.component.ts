@@ -1,6 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SidebarService } from './sidebar.service';
-import { SidebarItem } from './sidebarItem.interface';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+
+export type MenuItem = {
+  label?: string;
+  icon?: string;
+  route?: string;
+  children?: MenuItem[];
+  roles?: string[];
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -8,39 +14,68 @@ import { SidebarItem } from './sidebarItem.interface';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent  {
 
-  @Input() isSidebarCollapsed = false;
-  @Output() sidebarToggle = new EventEmitter<void>();
+  isSidebarCollapsed = signal(false);
+  @Input() set collapsed(val: boolean) {
+    this.isSidebarCollapsed.set(val)
+  };
+  
+  menuItems = signal<MenuItem[]>([
+    {
+      label: 'Início',
+      route: '/',
+      icon: 'home',
+      //isOpen: false // Adicionado estado inicial
+    },
+    {
+      label: 'Cadastro',
+      route: 'registry',
+      icon: 'person_add', // Icon Material
+      //isOpen: false
+    },
+    {
+      label: 'Escala',
+      route: 'schedule',
+      icon: 'schedule', // Icon Material
+      //isOpen: false
+    },
+    {
+      label: 'Juridico',
+      route: 'juristic',
+      icon: 'balance', // Icon Material
+      //isOpen: false,
+      children: [
+        {
+          label: 'Controle de Notificações',
+          route: 'penalty-control',
+          icon: 'announcement' // Icon Material
+        },
+        {
+          label: 'CTDOP',
+          route: 'ctdop',
+          icon: 'library_books' // Icon Material          
+        },
+        {
+          label: 'Recursos',
+          route: 'appeal',
+          icon: 'gavel' // Icon Material          
+        },
+        {
+          label: 'Índice',
+          route: 'apendix',
+          icon: 'info' // Icon Material          
+        },
 
-  // menuItems AGORA é do tipo SidebarItem[] e será preenchido pelo serviço
-  menuItems: SidebarItem[] = []; // Variável para armazenar a lista de itens
-
-  constructor(private sidebarService: SidebarService) { }
-  // Injeção de Dependência do Serviço
-  ngOnInit(): void {
-    // Ao iniciar, subscrevemos ao Observable do serviço para obter os dados
-    this.sidebarService.getMenuItems().subscribe(items => {
-      this.menuItems = items;
-    });
-  }
-
-  toggleSidebar() {
-    this.sidebarToggle.emit();
-  }
-
-  toggleMenuItem(item: SidebarItem) { // Usando SidebarItem
-    // Apenas alterna a abertura se o item tiver filhos E o sidebar NÃO estiver colapsado
-    if (!this.isSidebarCollapsed && item.children) {
-      item.isOpen = !item.isOpen;
+      ]
+    },
+    {
+      label: 'Monitora',
+      route: '/monitoring',
+      icon: 'visibility', // Icon Material
+      //isOpen: false
     }
-  }
-
-  onSidebarToggle() {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
-  }
-
-  //menuItems: SidebarItem[] = []; // Variável para armazenar a lista de itens
+  ])
 
 
 

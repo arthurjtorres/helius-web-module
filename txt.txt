@@ -1,0 +1,13 @@
+./app
+├──template
+  template-routing.module.ts
+  template.module.ts
+  ├──layout
+    ├──layout.component.html
+    ├──layout.component.ts
+  ├──sidebar
+    ├──sidebar.component.html
+    ├──sidebar.component.ts
+  ├──menu-item
+    ├──menu-item.component.html
+    ├──menu-item.component.ts
