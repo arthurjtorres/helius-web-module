@@ -7,12 +7,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { TemplateRoutingModule } from './template-routing.module';
 //import { BodyComponent } from './body/body.component';
 import { LayoutComponent } from './layout/layout.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { HeaderComponent } from './header/header.component';
+
+import { MenuItemComponent } from './menu-item/menu-item.component';
 
 
 
@@ -22,18 +24,19 @@ import { HeaderComponent } from './header/header.component';
     //BodyComponent,
     LayoutComponent,
     SidebarComponent,
-    HeaderComponent,
-
-
+    MenuItemComponent,
   ],
   imports: [
     CommonModule,
+    RouterModule,
     TemplateRoutingModule,
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
     MatToolbarModule,
+    MatSidenavModule,
+
   ],
   exports: [
     LayoutComponent,
