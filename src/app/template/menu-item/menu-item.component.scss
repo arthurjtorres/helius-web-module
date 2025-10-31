@@ -1,0 +1,18 @@
+:host * {
+  transition: all 500ms ease-in-out;
+}
+
+.menu-item {
+  border-left: 5px solid;
+  border-left-color: var(--color-primary-light);
+}
+
+.selected-menu-item {
+  background-color: var(--color-yellow-05);
+  color: var(--color-text-dark);
+  border-radius: 5px;
+}
+
+.submenu-item {
+  --mat-list-list-item-leading-icon-start-space: 3rem;
+}
