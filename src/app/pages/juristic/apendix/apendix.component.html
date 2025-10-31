@@ -1,30 +1,56 @@
+<ng-container>
+  <mat-tab-group>
+    <mat-tab label="Códigos de Multa">
+      
+      <mat-table
+        class="mat-elevation-z8 fineCodeTable"
+        [dataSource]="fineCodeSource"
+      >
+        <ng-container matColumnDef="fineCodeId">
+          <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+          <mat-cell *matCellDef="let fineCode">{{
+            fineCode.fineCodeId
+          }}</mat-cell>
+        </ng-container>
 
-<table mat-table class="mat-elevation-z8" >
-  <ng-container matColumnDef="fineCodeId">
-    <th mat-header-cell *matHeaderCellDef>Código</th>
-    <td mat-cell *matCellDef="let fineCode"></td>
-  </ng-container>
+        <ng-container matColumnDef="fineDescription">
+          <mat-header-cell *matHeaderCellDef>Descrição</mat-header-cell>
+          <mat-cell *matCellDef="let fineCode">{{
+            fineCode.fineDescription
+          }}</mat-cell>
+        </ng-container>
 
-  <ng-container matColumnDef="fineDescription">
-    <th mat-header-cell *matHeaderCellDef>Descrição</th>
-    <td mat-cell *matCellDef="let fineCode"></td>
-  </ng-container>
+        <ng-container matColumnDef="fineKm">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by number"
+            >KM</mat-header-cell
+          >
+          <mat-cell *matCellDef="let fineCode">{{ fineCode.fineKm }}</mat-cell>
+        </ng-container>
 
-  <ng-container matColumnDef="fineKm">
-    <th mat-header-cell *matHeaderCellDef>KM</th>
-    <td mat-cell *matCellDef="let fineCode"></td>
-  </ng-container>
+        <ng-container matColumnDef="fineAlias">
+          <mat-header-cell *matHeaderCellDef>Alias</mat-header-cell>
+          <mat-cell *matCellDef="let fineCode">{{
+            fineCode.fineAlias
+          }}</mat-cell>
+        </ng-container>
 
-  <ng-container matColumnDef="fineAlias">
-    <th mat-header-cell *matHeaderCellDef>Alias</th>
-    <td mat-cell *matCellDef="let fineCode"></td>
-  </ng-container>
+        <ng-container matColumnDef="fineOrder">
+          <mat-header-cell *matHeaderCellDef>Ordem</mat-header-cell>
+          <mat-cell *matCellDef="let fineCode">{{
+            fineCode.fineOrder
+          }}</mat-cell>
+        </ng-container>
 
-  <ng-container matColumnDef="fineOrder">
-    <th mat-header-cell *matHeaderCellDef>Ordem</th>
-    <td mat-cell *matCellDef="let fineCode"></td>
-  </ng-container>
+        <mat-header-row *matHeaderRowDef="fineCodeHeader"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: fineCodeHeader"></mat-row>
+      </mat-table>
+    </mat-tab>
 
-  <tr mat-header-row *matHeaderRowDef="fineCodeHeader"></tr>
-  <tr mat-row *matRowDef="let row; columns: fineCodeHeader;"></tr>
-</table>
+    <mat-tab label="Motivos"></mat-tab>
+
+    <mat-tab label="Empresas"></mat-tab>
+  </mat-tab-group>
+</ng-container>
