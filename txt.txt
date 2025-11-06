@@ -11,3 +11,13 @@
   ├──menu-item
     ├──menu-item.component.html
     ├──menu-item.component.ts
+├──pages
+  ├──home
+  ├──juristic
+    ├──apendix
+      ├──apendix.component.html
+      ├──apendix.component.scss
+      ├──apendix.component.ts
+      ├──fineCode.ts
+  ├──registry
+  ├──schedule
