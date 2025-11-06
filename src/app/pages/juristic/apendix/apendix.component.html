@@ -1,52 +1,88 @@
 <ng-container>
   <mat-tab-group>
     <mat-tab label="Códigos de Multa">
-      
-      <mat-table
-        class="mat-elevation-z8 fineCodeTable"
-        [dataSource]="fineCodeSource"
-      >
-        <ng-container matColumnDef="fineCodeId">
-          <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
-          <mat-cell *matCellDef="let fineCode">{{
-            fineCode.fineCodeId
-          }}</mat-cell>
-        </ng-container>
+      <div class="fineCodeContainer">
+        <mat-form-field>
+          <input matInput type="search" />
+          <button matSuffix mat-icon-button aria-label="Search">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
 
-        <ng-container matColumnDef="fineDescription">
-          <mat-header-cell *matHeaderCellDef>Descrição</mat-header-cell>
-          <mat-cell *matCellDef="let fineCode">{{
-            fineCode.fineDescription
-          }}</mat-cell>
-        </ng-container>
+        <button mat-fab extended class="button-cadastro">
+          <mat-icon>add_circle_outline</mat-icon>
+          Adicionar
+        </button>
 
-        <ng-container matColumnDef="fineKm">
-          <mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by number"
-            >KM</mat-header-cell
-          >
-          <mat-cell *matCellDef="let fineCode">{{ fineCode.fineKm }}</mat-cell>
-        </ng-container>
+        
 
-        <ng-container matColumnDef="fineAlias">
-          <mat-header-cell *matHeaderCellDef>Alias</mat-header-cell>
-          <mat-cell *matCellDef="let fineCode">{{
-            fineCode.fineAlias
-          }}</mat-cell>
-        </ng-container>
+        <mat-table
+          class="mat-elevation-z8 fineCodeTable"
+          [dataSource]="fineCodeSource"
+        >
+          <ng-container matColumnDef="fineCodeId">
+            <mat-header-cell *matHeaderCellDef class="fineCodeId"
+              >Código</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item" class="fineCodeId">{{
+              item.fineCodeId
+            }}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="fineOrder">
-          <mat-header-cell *matHeaderCellDef>Ordem</mat-header-cell>
-          <mat-cell *matCellDef="let fineCode">{{
-            fineCode.fineOrder
-          }}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="fineDescription">
+            <mat-header-cell *matHeaderCellDef class="fineDescription"
+              >Descrição</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item" class="fineDescription">{{
+              item.fineDescription
+            }}</mat-cell>
+          </ng-container>
 
-        <mat-header-row *matHeaderRowDef="fineCodeHeader"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: fineCodeHeader"></mat-row>
-      </mat-table>
+          <ng-container matColumnDef="fineKm">
+            <mat-header-cell *matHeaderCellDef class="fineKm"
+              >KM</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item" class="fineKm">{{
+              item.fineKm
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fineAlias">
+            <mat-header-cell *matHeaderCellDef class="fineAlias"
+              >Alias</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item" class="fineAlias">{{
+              item.fineAlias
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fineOrder">
+            <mat-header-cell *matHeaderCellDef class="fineOrder"
+              >Ordem</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item" class="fineOrder">{{
+              item.fineOrder
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+            <mat-cell *matCellDef="let item">
+              <button mat-icon-button matTooltip="Editar" class="iconbutton" (click)="edit(item)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="fineCodeHeader"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: fineCodeHeader" ></mat-row>
+        </mat-table>
+      </div>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        aria-label="Select Page"
+      ></mat-paginator>
     </mat-tab>
 
     <mat-tab label="Motivos"></mat-tab>
