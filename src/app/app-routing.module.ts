@@ -8,8 +8,11 @@ import { DashboardComponent } from './pages/juristic/dashboard/dashboard.compone
 import { CTDOPControlComponent } from './pages/juristic/ctdop-control/ctdop-control.component';
 import { AppealControlComponent } from './pages/juristic/appeal-control/appeal-control.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
-import { RegistryComponent } from './pages/registry/registry.component';
+
 import { ApendixComponent } from './pages/juristic/apendix/apendix.component';
+import { PersonnelComponent } from './pages/human-resources/personnel/personnel.component';
+import { CorporateComponent } from './pages/human-resources/corporate/corporate.component';
+import { RegisterEmployeeComponent } from './pages/human-resources/register-employee/register-employee.component';
 
 
 const routes: Routes = [
@@ -26,11 +29,18 @@ const routes: Routes = [
       },
 
       {
-        path: 'registry',
-        component: RegistryComponent,
+        path: 'human-resources/personnel',
+        component: PersonnelComponent,
       },
-
-
+      {
+        path: 'human-resources/register-employee',
+        component: RegisterEmployeeComponent,
+      },
+      {
+        path: 'human-resources/corporate',
+        component: CorporateComponent,
+      },
+     
       {
         path: 'schedule',
         component: ScheduleComponent,
