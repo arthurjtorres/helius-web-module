@@ -1,6 +1,4 @@
 //juristic.module.ts
-import { RegistryComponent } from '../registry/registry.component';
-import { ScheduleComponent } from '../schedule/schedule.component';
 import { ApendixComponent } from './apendix/apendix.component';
 import { AppealControlComponent } from './appeal-control/appeal-control.component';
 import { CTDOPControlComponent } from './ctdop-control/ctdop-control.component';
@@ -12,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { JuristicRoutingModule } from './juristic-routing.module';
 import { RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {
   MAT_DIALOG_DATA,
@@ -44,8 +42,6 @@ import { MatButtonModule } from "@angular/material/button";
 @NgModule({
   declarations: [
     PenaltyControlComponent,
-    ScheduleComponent,
-    RegistryComponent,
     DashboardComponent,
     AppealControlComponent,
     CTDOPControlComponent,
@@ -74,10 +70,10 @@ import { MatButtonModule } from "@angular/material/button";
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    FormsModule, 
-    MatFormFieldModule, 
-    
-],
+    FormsModule,
+    MatFormFieldModule,
+
+  ],
 
   exports: [
 

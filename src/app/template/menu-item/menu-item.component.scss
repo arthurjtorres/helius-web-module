@@ -5,6 +5,34 @@
 .menu-item {
   border-left: 5px solid;
   border-left-color: var(--color-primary-light);
+  
+  // 1. Permite que a altura do item cresça conforme o conteúdo
+  height: auto !important;
+  min-height: 48px; 
+  display: flex;
+  align-items: center; // Centraliza o conteúdo verticalmente
+  padding: 8px 0;      // Adiciona um respiro quando houver quebra
+
+  // 2. Alvos específicos do Angular Material (MDC Components)
+  ::ng-deep {
+    .mdc-list-item__content {
+      white-space: normal !important; // Permite a quebra de linha
+      word-wrap: break-word;
+    }
+
+    .mat-mdc-list-item-title {
+      white-space: normal !important; // Garante que o título quebre
+      line-height: 1.25rem !important; // Ajusta o espaçamento entre linhas
+      display: block !important;
+    }
+    
+    // Centraliza o ícone verticalmente caso o texto quebre
+    .mat-mdc-list-item-icon {
+      align-self: center !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
+  }
 }
 
 .selected-menu-item {
@@ -14,5 +42,11 @@
 }
 
 .submenu-item {
-  --mat-list-list-item-leading-icon-start-space: 3rem;
+  // Ajuste do espaçamento interno para subitens
+  --mat-list-list-item-leading-icon-start-space: 1.5rem;
+  
+  // Se não estiver colapsado, aumenta o recuo
+  &:not(.collapsed) {
+     padding-left: 1rem;
+  }
 }

@@ -21,3 +21,311 @@
       ├──fineCode.ts
   ├──registry
   ├──schedule
+
+
+
+
+
+
+  layout.component.html:
+  <mat-toolbar class="mat-elevation-z3">
+  <button mat-icon-button (click)="collapsed.set(!collapsed())"><mat-icon>menu</mat-icon></button>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav class="sidebar" opened mode="side" [style.width]="sidebarWidth()">
+    <app-sidebar [collapsed]="collapsed()"/>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content" [style.margin-left]="sidebarWidth()">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+layout.component.ts:
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+
+export type MenuItem = {
+  label?: string;
+  icon?: string;
+  route?: string;
+  children?: MenuItem[];
+  roles?: string[];
+}
+
+@Component({
+  selector: 'app-sidebar',
+  standalone: false,
+  templateUrl: './sidebar.component.html',
+  styleUrl: './sidebar.component.scss'
+})
+export class SidebarComponent  {
+
+  isSidebarCollapsed = signal(false);
+  @Input() set collapsed(val: boolean) {
+    this.isSidebarCollapsed.set(val)
+  };
+  
+  menuItems = signal<MenuItem[]>([
+    {
+      label: 'Início',
+      route: '/',
+      icon: 'home',
+      //isOpen: false // Adicionado estado inicial
+    },
+    {
+      label: 'Cadastro',
+      route: 'registry',
+      icon: 'person_add', // Icon Material
+      //isOpen: false
+    },
+    {
+      label: 'Escala',
+      route: 'schedule',
+      icon: 'schedule', // Icon Material
+      //isOpen: false
+    },
+    {
+      label: 'Juridico',
+      route: 'juristic',
+      icon: 'balance', // Icon Material
+      //isOpen: false,
+      children: [
+        {
+          label: 'Controle de Notificações',
+          route: 'penalty-control',
+          icon: 'announcement' // Icon Material
+        },
+        {
+          label: 'CTDOP',
+          route: 'ctdop',
+          icon: 'library_books' // Icon Material          
+        },
+        {
+          label: 'Recursos',
+          route: 'appeal',
+          icon: 'gavel' // Icon Material          
+        },
+        {
+          label: 'Índice',
+          route: 'apendix',
+          icon: 'info' // Icon Material          
+        },
+
+      ]
+    },
+    {
+      label: 'Monitora',
+      route: '/monitoring',
+      icon: 'visibility', // Icon Material
+      //isOpen: false
+    }
+  ])
+}
+
+
+layout.component.scss:
+.content{
+  padding: 24px;
+}
+
+mat-toolbar {
+  position: relative;
+  z-index: 5;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+.sidebar {
+  background-color: var(--color-light-03);
+}
+
+
+menu-item.component.html:
+<a
+  mat-list-item
+  class="menu-item"
+  [routerLink]="item().route"
+  (click)="toggleNested()"
+  routerLinkActive="selected-menu-item"
+  [routerLinkActiveOptions]="{ exact: true}"
+  #rla="routerLinkActive"
+  [activated]="rla.isActive"
+>
+  <mat-icon matListItemIcon>{{ item().icon }}</mat-icon>
+  @if (!isCollapsed()) {
+  <span matListItemTitle> {{ item().label }}</span>
+  } @if (item().children) {
+  <span matListItemMeta>
+    @if(nestedMenuOpen()){
+    <mat-icon>expand_less</mat-icon>
+    } @else {
+    <mat-icon>expand_more</mat-icon>
+    }
+  </span>
+  }
+</a>
+
+@if (item().children && nestedMenuOpen()) {
+<div>
+  @for (child of item().children; track child.label) {
+  <a
+    mat-list-item
+    class="menu-item"
+    [class.submenu-item]="!isCollapsed()"
+    [routerLink]="item().route + '/' + child.route"
+    routerLinkActive="selected-menu-item"
+    #rla="routerLinkActive"
+    [activated]="rla.isActive"
+  >
+    <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
+    @if (!isCollapsed()) {
+    <span matListItemTitle> {{ child.label }}</span>
+    }
+  </a>
+  }
+</div>
+}
+
+
+menu-item.component.ts:
+import { Component, Input, input, signal } from '@angular/core';
+import { MenuItem } from '../sidebar/sidebar.component';
+
+@Component({
+  selector: 'app-menu-item',
+  standalone: false,
+  templateUrl: './menu-item.component.html',
+  styleUrl: './menu-item.component.scss'
+})
+export class MenuItemComponent {
+  item = input.required<MenuItem>();
+  isCollapsed = input(false);
+
+  nestedMenuOpen = signal(false);
+
+  toggleNested() {
+    if(!this.item().children) {
+      return;
+    }
+
+    this.nestedMenuOpen.set(!this.nestedMenuOpen());
+  }
+}
+
+
+menu-item.component.scss:
+:host * {
+  transition: all 500ms ease-in-out;
+}
+
+.menu-item {
+  border-left: 5px solid;
+  border-left-color: var(--color-primary-light);
+}
+
+.selected-menu-item {
+  background-color: var(--color-yellow-05);
+  color: var(--color-text-dark);
+  border-radius: 5px;
+}
+
+.submenu-item {
+  --mat-list-list-item-leading-icon-start-space: 3rem;
+}
+
+
+sidebar.component.html:
+<mat-nav-list class="sidebar">
+  @for (item of menuItems(); track item.label) {
+    <app-menu-item [item]="item" [isCollapsed]="isSidebarCollapsed()"/>   
+  }
+  
+</mat-nav-list>
+
+
+sidebar.component.ts:
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+
+export type MenuItem = {
+  label?: string;
+  icon?: string;
+  route?: string;
+  children?: MenuItem[];
+  roles?: string[];
+}
+
+@Component({
+  selector: 'app-sidebar',
+  standalone: false,
+  templateUrl: './sidebar.component.html',
+  styleUrl: './sidebar.component.scss'
+})
+export class SidebarComponent  {
+
+  isSidebarCollapsed = signal(false);
+  @Input() set collapsed(val: boolean) {
+    this.isSidebarCollapsed.set(val)
+  };
+  
+  menuItems = signal<MenuItem[]>([
+    {
+      label: 'Início',
+      route: '/',
+      icon: 'home',
+      //isOpen: false // Adicionado estado inicial
+    },
+    {
+      label: 'Cadastro',
+      route: 'registry',
+      icon: 'person_add', // Icon Material
+      //isOpen: false
+    },
+    {
+      label: 'Escala',
+      route: 'schedule',
+      icon: 'schedule', // Icon Material
+      //isOpen: false
+    },
+    {
+      label: 'Juridico',
+      route: 'juristic',
+      icon: 'balance', // Icon Material
+      //isOpen: false,
+      children: [
+        {
+          label: 'Controle de Notificações',
+          route: 'penalty-control',
+          icon: 'announcement' // Icon Material
+        },
+        {
+          label: 'CTDOP',
+          route: 'ctdop',
+          icon: 'library_books' // Icon Material          
+        },
+        {
+          label: 'Recursos',
+          route: 'appeal',
+          icon: 'gavel' // Icon Material          
+        },
+        {
+          label: 'Índice',
+          route: 'apendix',
+          icon: 'info' // Icon Material          
+        },
+
+      ]
+    },
+    {
+      label: 'Monitora',
+      route: '/monitoring',
+      icon: 'visibility', // Icon Material
+      //isOpen: false
+    }
+  ])
+}
+
+
+sidebar.component.scss:

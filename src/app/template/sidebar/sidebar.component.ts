@@ -29,10 +29,27 @@ export class SidebarComponent  {
       //isOpen: false // Adicionado estado inicial
     },
     {
-      label: 'Cadastro',
-      route: 'registry',
+      label: 'SRH',
+      route: 'human-resources',
       icon: 'person_add', // Icon Material
       //isOpen: false
+      children: [
+        {
+          label: 'Pessoal',
+          route: 'personnel',
+          icon: 'person',
+        },
+        {
+          label: 'Cadastrar Funcionário',
+          route: 'register-employee',
+          icon: 'person_add',
+        },
+        {
+          label: 'Corporativo',
+          route: 'corporate',
+          icon: 'person',
+        },
+      ]
     },
     {
       label: 'Escala',
