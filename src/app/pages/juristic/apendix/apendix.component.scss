@@ -1,6 +1,43 @@
-.fineCodeContainer {
+.apendix-container {
+  padding: 0.5rem 0.1rem 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.apendix-container {
   width: 100%;
   padding: 0.5rem 0.1rem 1rem 0.1rem;
+}
+
+.apendix-header {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.header-search {
+  //position: absolute;
+  //left: 50%;
+  //transform: translateX(-50%);
+  margin: 0;
+  font: 1.5rem;
+  font-weight: 500;
+  padding-top: 1.5rem;
+  width: 25%;
+}
+
+.button-import {
+  font-weight: 500;
+  background-color: var(--color-blue-light);
+  color: var(--color-darker-17);
+  //left: 80%;
+  margin: 0;
+  //transform: translateX(60%);
 }
 
 .fineCodeTable {

@@ -1,20 +1,25 @@
-<ng-container>
+<ng-container class="apendix-container">
   <mat-tab-group>
     <mat-tab label="Códigos de Multa">
-      <div class="fineCodeContainer">
-        <mat-form-field>
-          <input matInput type="search" />
-          <button matSuffix mat-icon-button aria-label="Search">
-            <mat-icon>search</mat-icon>
+      <div class="apendix-container">
+        <header class="apendix-header">
+          <button mat-fab extended class="button-import">
+            <mat-icon>cloud_upload</mat-icon>Importar Arquivo
           </button>
-        </mat-form-field>
 
-        <button mat-fab extended class="button-cadastro">
-          <mat-icon>add_circle_outline</mat-icon>
-          Adicionar
-        </button>
+          <mat-form-field class="header-search" appearance="outline">
+            <input matInput type="search" />
+            <button matSuffix mat-icon-button aria-label="Search">
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
 
-        
+          <button mat-fab extended class="button-import">
+            <mat-icon>add_circle_outline</mat-icon>Adicionar
+          </button>
+        </header>
+
+        <mat-divider></mat-divider>
 
         <mat-table
           class="mat-elevation-z8 fineCodeTable"
@@ -68,14 +73,19 @@
           <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
             <mat-cell *matCellDef="let item">
-              <button mat-icon-button matTooltip="Editar" class="iconbutton" (click)="edit(item)">
+              <button
+                mat-icon-button
+                matTooltip="Editar"
+                class="iconbutton"
+                (click)="edit(item)"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
             </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="fineCodeHeader"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: fineCodeHeader" ></mat-row>
+          <mat-row *matRowDef="let row; columns: fineCodeHeader"></mat-row>
         </mat-table>
       </div>
       <mat-paginator
