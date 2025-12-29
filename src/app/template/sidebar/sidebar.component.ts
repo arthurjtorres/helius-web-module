@@ -80,7 +80,7 @@ export class SidebarComponent  {
         },
         {
           label: 'Índice',
-          route: 'apendix',
+          route: 'appendix',
           icon: 'info' // Icon Material          
         },
 

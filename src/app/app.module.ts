@@ -7,6 +7,9 @@ import { TemplateModule } from './template/template.module';
 import { HomeComponent } from './pages/home/home.component';
 import { JuristicModule } from './pages/juristic/juristic.module';
 import { HumanResourcesModule } from './pages/human-resources/human-resources.module';
+import { AppendixModule } from './pages/appendix/appendix.module';
+
+
 
 
 @NgModule({
@@ -21,6 +24,7 @@ import { HumanResourcesModule } from './pages/human-resources/human-resources.mo
     TemplateModule,
     JuristicModule,    
     HumanResourcesModule,
+    AppendixModule,
 ],
   providers: [],
   bootstrap: [AppComponent]
