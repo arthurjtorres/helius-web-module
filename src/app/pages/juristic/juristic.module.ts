@@ -1,5 +1,5 @@
 //juristic.module.ts
-import { ApendixComponent } from './apendix/apendix.component';
+
 import { AppealControlComponent } from './appeal-control/appeal-control.component';
 import { CTDOPControlComponent } from './ctdop-control/ctdop-control.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,10 +21,12 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
+import { MatSort, Sort, MatSortModule, MatSortHeader } from '@angular/material/sort';
 import { AfterViewInit, Component, ViewChild, inject, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 import {
   MatTableModule,
   MatColumnDef,
@@ -39,16 +41,22 @@ import { MatIcon } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
 
+
+
+
+
 @NgModule({
   declarations: [
     PenaltyControlComponent,
     DashboardComponent,
     AppealControlComponent,
     CTDOPControlComponent,
-    ApendixComponent,
+    
 
   ],
   imports: [
+    
+
     JuristicRoutingModule,
     RouterModule,
     CommonModule,
@@ -72,8 +80,13 @@ import { MatButtonModule } from "@angular/material/button";
     MatDialogClose,
     FormsModule,
     MatFormFieldModule,
-
-  ],
+    HttpClientModule,
+    BrowserModule,
+    MatSort,
+    MatSortHeader,
+    MatSortModule,
+    ReactiveFormsModule
+],
 
   exports: [
 
