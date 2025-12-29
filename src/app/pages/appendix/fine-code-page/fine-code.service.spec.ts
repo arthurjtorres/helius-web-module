@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReferenceService } from './reference.service';
+import { FineCodeService } from './fine-code.service';
 
-describe('ReferenceService', () => {
-  let service: ReferenceService;
+describe('FineCodeService', () => {
+  let service: FineCodeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ReferenceService);
+    service = TestBed.inject(FineCodeService);
   });
 
   it('should be created', () => {
