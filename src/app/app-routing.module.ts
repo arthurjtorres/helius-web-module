@@ -9,10 +9,11 @@ import { CTDOPControlComponent } from './pages/juristic/ctdop-control/ctdop-cont
 import { AppealControlComponent } from './pages/juristic/appeal-control/appeal-control.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 
-import { ApendixComponent } from './pages/juristic/apendix/apendix.component';
+
 import { PersonnelComponent } from './pages/human-resources/personnel/personnel.component';
 import { CorporateComponent } from './pages/human-resources/corporate/corporate.component';
 import { RegisterEmployeeComponent } from './pages/human-resources/register-employee/register-employee.component';
+import { AppendixContentComponent } from './pages/appendix/appendix-content/appendix-content.component';
 
 
 const routes: Routes = [
@@ -63,8 +64,8 @@ const routes: Routes = [
         component: AppealControlComponent,
       },
       {
-        path: 'juristic/apendix',
-        component: ApendixComponent,
+        path: 'juristic/appendix',
+        component: AppendixContentComponent,
       }
     ]
   },
