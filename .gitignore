@@ -44,3 +44,5 @@ Thumbs.db
 /yarn.lock
 
 *.txt
+/environments
+/src/environments

@@ -1,0 +1,204 @@
+// landingpage.component.scss
+
+// Cor de fundo específica da imagem (um azul vibrante, similar ao "Google Blue")
+// Se preferir usar uma das suas variáveis, troque por var(--color-secondary-light) ou similar.
+$bg-blue-vibrant: #0d6efd; 
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: $bg-blue-vibrant; // Fundo azul total da página
+  padding: 1rem;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: row;
+  width: 900px;
+  max-width: 100%;
+  height: 550px; // Altura fixa para dar o aspecto do print
+  padding: 0 !important; // Remove padding padrão do mat-card
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: var(--color-light-01);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
+}
+
+.card-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  &.left-side {
+    background-color: $bg-blue-vibrant; // O lado esquerdo "funde" com o background
+    color: var(--color-light-01);
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    margin-left: 1.5rem;
+    border-top-left-radius: 24px !important;
+    border-bottom-left-radius: 24px !important;
+    
+    // Pequeno ajuste visual se quiser separar o card do fundo, 
+    // mas na imagem eles parecem ter a mesma cor exata.
+
+    .content {
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        font-size: 1.2rem;
+        font-weight: 300;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  &.right-side {
+    background-color: var(--color-light-01);
+    padding: 3rem 4rem; // Espaçamento interno generoso
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--color-darker-16);
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      padding: 2rem;
+    }
+  }
+}
+
+// === Estilização do Formulário ===
+
+.input-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 0.9rem;
+    color: var(--color-darker-12);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+}
+
+// Sobrescrevendo estilos do Angular Material para ficar igual à imagem
+::ng-deep .custom-field {
+  width: 100%;
+  
+  .mat-mdc-text-field-wrapper {
+    background-color: #fff !important; 
+    padding: 0;
+  }
+  
+  .mdc-button {
+    min-width: 48px;
+    margin-right: 8px;
+    padding-right: 2px;
+    display: flex;
+    justify-content: center;
+
+    .show-pass-icon {
+      transform: scale(1.2);
+      padding-left: 4px;
+      min-width: 32px;
+    }
+  }
+
+  // Ajuste do ícone no início (Prefix)
+  .mat-icon {
+    color: var(--color-darker-16);
+    margin-right: 8px;
+    transform: scale(0.9);
+  }
+  
+  // Altura do input para ficar compacto
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--color-light-07); // Borda cinza suave
+  }
+
+  // Remove o label flutuante padrão do Material se houver espaço reservado
+  .mdc-notched-outline__notch { 
+    border-top: 1px solid var(--color-light-07) !important; 
+  }
+}
+
+.show-pass-btn {
+  font-weight: 400;
+  color: var(--color-medium-09);
+  font-size: 0.85rem;
+  transform: scale(1.2);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+
+  .forgot-link {
+    color: var(--color-secondary-light); // Azul claro do link
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Botões
+.btn-block {
+  width: 100%;
+  height: 48px;
+  border-radius: 6px !important;
+  font-size: 1rem !important;
+}
+
+.btn-enter {
+  background-color: $bg-blue-vibrant !important; // Azul forte
+  color: #fff;
+  font-weight: 500;
+}
+
+.separator {
+  text-align: center;
+  margin: 1rem 0;
+  color: var(--color-darker-12);
+  font-size: 0.9rem;
+}
+
+.btn-email {
+  color: var(--color-darker-12) !important;
+  border-color: var(--color-light-07) !important;
+}
+
+.footer-text {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: var(--color-darker-12);
+
+  a {
+    color: var(--color-secondary-light);
+    text-decoration: none;
+    font-weight: 500;
+  }
+}
