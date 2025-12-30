@@ -8,6 +8,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { JuristicModule } from './pages/juristic/juristic.module';
 import { HumanResourcesModule } from './pages/human-resources/human-resources.module';
 import { AppendixModule } from './pages/appendix/appendix.module';
+import { LandingpageModule } from './pages/landingpage/landingpage.module';
 
 
 
@@ -25,6 +26,7 @@ import { AppendixModule } from './pages/appendix/appendix.module';
     JuristicModule,    
     HumanResourcesModule,
     AppendixModule,
+    LandingpageModule,
 ],
   providers: [],
   bootstrap: [AppComponent]
