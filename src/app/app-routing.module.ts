@@ -16,11 +16,16 @@ import { RegisterEmployeeComponent } from './pages/human-resources/register-empl
 import { AppendixContentComponent } from './pages/appendix/appendix-content/appendix-content.component';
 import { LandingpageComponent } from './pages/landingpage/landingpage.component';
 import { authGuard } from './core/guards/auth.guard';
+import { loginGuard } from './core/guards/login.guard';
 
 
 const routes: Routes = [
   // 1. Rota principal que carrega o MainLayoutComponent
-  { path: 'login', component: LandingpageComponent},
+  {
+    path: 'login',
+    component: LandingpageComponent,
+    canActivate: [loginGuard]
+  },
   {
     path: 'home', // Define o caminho base
     component: LayoutComponent, // O componente a ser carregado
@@ -43,7 +48,7 @@ const routes: Routes = [
         path: 'human-resources/corporate',
         component: CorporateComponent,
       },
-     
+
       {
         path: 'schedule',
         component: ScheduleComponent,
