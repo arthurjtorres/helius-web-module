@@ -14,18 +14,20 @@ import { PersonnelComponent } from './pages/human-resources/personnel/personnel.
 import { CorporateComponent } from './pages/human-resources/corporate/corporate.component';
 import { RegisterEmployeeComponent } from './pages/human-resources/register-employee/register-employee.component';
 import { AppendixContentComponent } from './pages/appendix/appendix-content/appendix-content.component';
+import { LandingpageComponent } from './pages/landingpage/landingpage.component';
+import { authGuard } from './core/guards/auth.guard';
 
 
 const routes: Routes = [
   // 1. Rota principal que carrega o MainLayoutComponent
+  { path: 'login', component: LandingpageComponent},
   {
-    path: '', // Define o caminho base
-
+    path: 'home', // Define o caminho base
     component: LayoutComponent, // O componente a ser carregado
+    canActivate: [authGuard],
     children: [ // As rotas aninhadas serão injetadas no <router-outlet> DENTRO do LayoutComponent
       {
         path: '', // A rota vazia ('/')
-        pathMatch: 'full',
         component: HomeComponent // Carrega o HomeComponent dentro do layout
       },
 
@@ -69,6 +71,9 @@ const routes: Routes = [
       }
     ]
   },
+  {
+    path: '', redirectTo: '/login', pathMatch: 'full'
+  }
 
 
 ];
