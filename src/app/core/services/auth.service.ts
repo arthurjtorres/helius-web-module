@@ -10,13 +10,14 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   private readonly API_URL = 'http://localhost:1010';
-
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  private userData = new BehaviorSubject<any>(this.getUserDataFromToken());
 
   constructor(private http: HttpClient, private router: Router) { }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
+    return !! token && this.isTokenExpired(token);
   }
 
   login(login: string, password: string): Observable<any> {
@@ -25,14 +26,42 @@ export class AuthService {
       'X-Auth-Pass': password
     });
 
-    return this.http.post<any>(`${this.API_URL}/auth/login`, {}, {headers: authHeaders }).pipe(
+    return this.http.post<any>(`${this.API_URL}/auth/login`, {}, { headers: authHeaders }).pipe(
       tap(res => {
         if (res && res.data && res.data.token) {
           localStorage.setItem('access_token', res.data.token);
           this.loggedIn.next(true);
+          // Atualiza os dados do usuário assim que logar
+          this.userData.next(this.decodeToken(res.data.token));
         }
       })
     );
+  }
+
+  getUser(): Observable<any> {
+    return this.userData.asObservable();
+  }
+
+  private getUserDataFromToken() {
+    const token = localStorage.getItem('access_token');
+    return token ? this.decodeToken(token) : null;
+  }
+
+  private decodeToken(token: string) {
+    try {
+      const payload = token.split('.')[1];
+      const decoded = JSON.parse(window.atob(payload));
+      return decoded;
+    }catch (e) {
+      return null;
+    }
+  }
+
+  private isTokenExpired(token: string) : boolean {
+    const decoded = this.decodeToken(token);
+    if (!decoded || !decoded.exp) return false;
+    const expirationDate = decoded.exp *1000;
+    return Date.now() > expirationDate;
   }
 
   isLoggedIn(): Observable<boolean> {
@@ -42,7 +71,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem('access_token');
     this.loggedIn.next(false);
-    this.router.navigate(['/login']);
+    this.userData.next(null);
+    this.router.navigate(['/landingpage']);
   }
   
 }
