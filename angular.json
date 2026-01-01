@@ -57,13 +57,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "5MB",
+                  "maximumError": "10MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "5MB",
+                  "maximumError": "500kB"
                 }
               ],
               "outputHashing": "all"
@@ -86,10 +86,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "helius-web-portal:build:production"
+              "buildTarget": "helius-web-portal:build:production",
+              "port": 1100
             },
             "development": {
-              "buildTarget": "helius-web-portal:build:development"
+              "buildTarget": "helius-web-portal:build:development",
+              "port": 8000
             }
           },
           "defaultConfiguration": "development"

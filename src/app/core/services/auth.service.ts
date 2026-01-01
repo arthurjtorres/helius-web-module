@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private readonly API_URL = 'http://localhost:1010';
+  private readonly AUTH_URL =  environment.baseUrl +':'+ environment.control_port;
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   private userData = new BehaviorSubject<any>(this.getUserDataFromToken());
 
@@ -23,10 +23,11 @@ export class AuthService {
   login(login: string, password: string): Observable<any> {
     const authHeaders = new HttpHeaders({
       'X-Auth-User': login,
-      'X-Auth-Pass': password
+      'X-Auth-Pass': password,
+      'X-Auth-Login': btoa(login +';'+password)
     });
 
-    return this.http.post<any>(`${this.API_URL}/auth/login`, {}, { headers: authHeaders }).pipe(
+    return this.http.post<any>(`${this.AUTH_URL}/auth/login`, {}, { headers: authHeaders }).pipe(
       tap(res => {
         if (res && res.data && res.data.token) {
           localStorage.setItem('access_token', res.data.token);

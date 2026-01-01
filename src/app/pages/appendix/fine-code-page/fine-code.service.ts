@@ -8,8 +8,8 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class FineCodeService {
-  apiUrl: string = environment.apiUrl + 'fine-code';
-  private API: string = 'http://localhost:1030/fine-code';
+  private API: string = environment.baseUrl +':'+ environment.juristic_port + '/fine-code';
+  
 
   constructor(private http: HttpClient) { }
 
