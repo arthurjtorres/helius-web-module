@@ -9,6 +9,8 @@ import { JuristicModule } from './pages/juristic/juristic.module';
 import { HumanResourcesModule } from './pages/human-resources/human-resources.module';
 import { AppendixModule } from './pages/appendix/appendix.module';
 import { LandingpageModule } from './pages/landingpage/landingpage.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 
 
@@ -28,7 +30,11 @@ import { LandingpageModule } from './pages/landingpage/landingpage.module';
     AppendixModule,
     LandingpageModule,
 ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

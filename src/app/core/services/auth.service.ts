@@ -24,7 +24,7 @@ export class AuthService {
     const authHeaders = new HttpHeaders({
       'X-Auth-User': login,
       'X-Auth-Pass': password,
-      'X-Auth-Login': btoa(login +';'+password)
+      //'X-Auth-Login': btoa(login +';'+password)
     });
 
     return this.http.post<any>(`${this.AUTH_URL}/auth/login`, {}, { headers: authHeaders }).pipe(
@@ -65,8 +65,15 @@ export class AuthService {
     return Date.now() > expirationDate;
   }
 
-  isLoggedIn(): Observable<boolean> {
-    return this.loggedIn.asObservable();
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('access_token');
+    if(!token) return false;
+
+    if (this.isTokenExpired(token)) {
+      this.logout();
+      return false;
+    }
+    return true;
   }
 
   logout() {
