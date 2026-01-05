@@ -27,7 +27,7 @@ export class AuthService {
       //'X-Auth-Login': btoa(login +';'+password)
     });
 
-    return this.http.post<any>(`${this.AUTH_URL}/auth/login`, {}, { headers: authHeaders }).pipe(
+    return this.http.post<any>(`${this.AUTH_URL}/authenticate`, {}, { headers: authHeaders }).pipe(
       tap(res => {
         if (res && res.data && res.data.token) {
           localStorage.setItem('access_token', res.data.token);

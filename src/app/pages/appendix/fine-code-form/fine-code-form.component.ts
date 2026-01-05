@@ -20,7 +20,7 @@ export class FineCodeFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      fineNumber: ['', Validators.required],
+      //fineNumber: [''],
       fineDescription: ['', Validators.required],
       fineKm: [''],
       fineAlias: [''],
