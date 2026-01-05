@@ -21,10 +21,10 @@ export class FineCodeFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       //fineNumber: [''],
-      fineDescription: ['', Validators.required],
+      fineDescription: ['', [Validators.required, Validators.minLength(10)]],
       fineKm: [''],
       fineAlias: [''],
-      fineOrder: [0]
+      fineOrder: [0, Validators.pattern("^[0-9]*$")] // Garante apenas números
     });
   }
 
