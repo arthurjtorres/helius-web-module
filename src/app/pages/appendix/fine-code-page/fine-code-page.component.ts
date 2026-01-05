@@ -51,7 +51,7 @@ export class FineCodePageComponent implements OnInit {
 
   addFineCode(): void {
   const dialogRef = this.dialog.open(FineCodeFormComponent, {
-    width: '500px'
+    width: '1000px'
   });
 
   dialogRef.afterClosed().subscribe(result => {
