@@ -1,4 +1,5 @@
-import { Component, computed, HostListener, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, signal } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -7,7 +8,14 @@ import { Component, computed, HostListener, signal } from '@angular/core';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
-  collapsed = signal(false);
+  private authService = inject(AuthService);
 
-  sidebarWidth = computed(() => this.collapsed() ? '60px' : '250px')
+  collapsed = signal(false);
+  sidebarWidth = computed(() => this.collapsed() ? '60px' : '250px');
+
+  user$ = this.authService.getUser();
+
+  logout(){
+    this.authService.logout();
+  }
 }
