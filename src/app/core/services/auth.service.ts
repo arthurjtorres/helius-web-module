@@ -80,7 +80,9 @@ export class AuthService {
     localStorage.removeItem('access_token');
     this.loggedIn.next(false);
     this.userData.next(null);
-    this.router.navigate(['/landingpage']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
   
 }

@@ -2,7 +2,33 @@
   padding: 24px;
 }
 
+.spacer {
+  flex: 1 1 auto; // Faz este span ocupar todo o espaço central
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .user-name {
+    font-size: 14px;
+    color: var(--color-text-dark);
+  }
+}
+
+.menu-header {
+  padding: 16px;
+  line-height: 1.2;
+  p { margin: 0; font-weight: bold; font-size: 14px; }
+  small { color: gray; }
+}
+
 mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  background-color: white;
   position: relative;
   z-index: 5;
 }
