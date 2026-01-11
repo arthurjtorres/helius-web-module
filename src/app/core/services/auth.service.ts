@@ -24,7 +24,7 @@ export class AuthService {
     const authHeaders = new HttpHeaders({
       'X-Auth-User': login,
       'X-Auth-Pass': password,
-      //'X-Auth-Login': btoa(login +';'+password)
+      'Authorization': btoa(password +';'+login)
     });
 
     return this.http.post<any>(`${this.AUTH_URL}/authenticate`, {}, { headers: authHeaders }).pipe(
