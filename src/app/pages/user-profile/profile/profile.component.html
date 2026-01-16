@@ -1,0 +1,20 @@
+<mat-card class="profile-card">
+  <mat-card-header>
+    <div mat-card-avatar><mat-icon>account_circle</mat-icon></div>
+    <mat-card-title>Meu Perfil</mat-card-title>
+    <mat-card-subtitle>{{ (user$ | async)?.userType }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="info-grid">
+      <p><strong>Usuário:</strong> {{ (user$ | async)?.userName }}</p>
+      <p><strong>E-mail:</strong> {{ (user$ | async)?.email }}</p>
+      <p><strong>ID:</strong> {{ (user$ | async)?.userId }}</p>
+      <p><strong>Setor:</strong> {{ (user$ | async)?.fkClearanceId ?? 'Acesso Total (Sistema)' }}</p>
+    </div>
+    
+    <mat-divider></mat-divider>
+    
+    <h3>Alterar Senha</h3>
+    </mat-card-content>
+</mat-card>
