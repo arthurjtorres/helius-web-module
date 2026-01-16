@@ -22,8 +22,6 @@ export class AuthService {
 
   login(login: string, password: string): Observable<any> {
     const authHeaders = new HttpHeaders({
-      'X-Auth-User': login,
-      'X-Auth-Pass': password,
       'Authorization': btoa(password +';'+login)
     });
 

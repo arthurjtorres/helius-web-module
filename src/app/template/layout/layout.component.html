@@ -10,7 +10,7 @@
   @if (user$ | async; as user) {
   <div class="user-info">
     <span class="user-name"
-      >Olá, <b>{{ user.userName.split("@")[0] }}</b></span
+      >Olá, <b>{{ user.usertag }}</b></span
     >
 
     <button mat-icon-button [matMenuTriggerFor]="userMenu">
