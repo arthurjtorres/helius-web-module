@@ -11,6 +11,7 @@ import { AppendixModule } from './pages/appendix/appendix.module';
 import { LandingpageModule } from './pages/landingpage/landingpage.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { UserProfileModule } from './pages/user-profile/user-profile.module';
 
 
 
@@ -29,6 +30,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     HumanResourcesModule,
     AppendixModule,
     LandingpageModule,
+    UserProfileModule,
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
