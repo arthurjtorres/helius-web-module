@@ -87,11 +87,11 @@
           "configurations": {
             "production": {
               "buildTarget": "helius-web-portal:build:production",
-              "port": 1100
+              "port": 4000
             },
             "development": {
               "buildTarget": "helius-web-portal:build:development",
-              "port": 8000
+              "port": 4000
             }
           },
           "defaultConfiguration": "development"

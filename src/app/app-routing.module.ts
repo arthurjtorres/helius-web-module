@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './template/layout/layout.component';
 import { HomeComponent } from './pages/home/home.component';
 
-import { PenaltyControlComponent } from './pages/juristic/penalty-control/penalty-control.component';
+import { PenaltyContentComponent } from './pages/penalty-control/penalty-content/penalty-content.component';
 import { DashboardComponent } from './pages/juristic/dashboard/dashboard.component';
 import { CTDOPControlComponent } from './pages/juristic/ctdop-control/ctdop-control.component';
 import { AppealControlComponent } from './pages/juristic/appeal-control/appeal-control.component';
@@ -60,7 +60,7 @@ const routes: Routes = [
       },
       {
         path: 'juristic/penalty-control',
-        component: PenaltyControlComponent,
+        component: PenaltyContentComponent,
       },
       {
         path: 'juristic/ctdop',

@@ -21,45 +21,102 @@ export class FineCodePageComponent implements OnInit {
     'fineKm',
     'fineAlias',
     'fineOrder',
+    'actions'
   ];
-
-  dataSource: FineCodeInterface[] = [];
-
-  constructor(
-    private service: FineCodeService,
-    private dialog: MatDialog // Injete o serviço de Dialog
-  ) { }
 
   fineCodeSource = new MatTableDataSource<FineCodeInterface>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort; // 2. Capture o MatSort do HTML
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private service: FineCodeService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
     this.service.getAll().subscribe({
       next: (response: any) => {
-        this.fineCodeSource.data = response.data;
+        const rawData = response.data || response;
+        const activeData = rawData.filter((item: FineCodeInterface) => item.activated !== false);
+
+        this.fineCodeSource.data = activeData;
         this.fineCodeSource.paginator = this.paginator;
-        this.fineCodeSource.sort = this.sort; // 3. Vincule ao dataSource
-        
-        // 4. Opcional: Definir ordenação inicial padrão por 'fineNumber'
-        this.sort.sort({ id: 'fineNumber', start: 'asc', disableClear: false });
+        this.fineCodeSource.sort = this.sort;
+
+        if (this.sort) {
+          this.sort.sort({ id: 'fineNumber', start: 'asc', disableClear: false });
+        }
       },
       error: (err) => console.error('Erro:', err)
     });
   }
 
   addFineCode(): void {
-  const dialogRef = this.dialog.open(FineCodeFormComponent, {
-    width: '1000px'
-  });
+    const dialogRef = this.dialog.open(FineCodeFormComponent, {
+      width: '1000px',
+      disableClose: true
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      // Se retornou true, recarregamos a tabela para mostrar o novo dado
-      this.ngOnInit(); 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadData();
+      }
+    });
+  }
+
+  editFineCode(item: FineCodeInterface) {
+    const dialogRef = this.dialog.open(FineCodeFormComponent, {
+      width: '1000px',
+      disableClose: true,
+      data: item
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadData();
+      }
+    });
+  }
+
+  deleteFineCode(item: FineCodeInterface) {
+    if (confirm(`Deseja Realmente excluir o código de multa ${item.fineNumber}?`)) {
+      if (item.fineCodeId) {
+        const payload: any = { ...item};
+
+        delete payload.fineCodeId;
+        delete payload.createdAt;
+
+        delete payload.createdBy;
+        delete payload.updatedAt;
+        delete payload.updatedBy;
+        payload.activated = false;
+
+        this.service.update(item.fineCodeId, payload).subscribe({
+          next: () => {
+            this.loadData();
+          },
+          error: (err) => {
+            console.error('Erro ao excluir:', err);
+            alert('Não foi possível excluir o item.');
+          }
+        });
+      } else {
+        console.error('Item sem ID não pode ser excluído');
+      }
     }
-  });
-}
+  }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.fineCodeSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.fineCodeSource.paginator) {
+      this.fineCodeSource.paginator.firstPage();
+    }
+  }
 } 
