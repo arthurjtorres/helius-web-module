@@ -17,6 +17,10 @@ export class FineCodeService {
     return this.http.post<FineCodeInterface>(this.API, fineCode);
   }
 
+  update(fineCodeId: string, fineCode: FineCodeInterface): Observable<FineCodeInterface> {
+    return this.http.put<FineCodeInterface>(`${this.API}/${fineCodeId}`, fineCode);
+  }
+
   getAll() : Observable<FineCodeInterface[]> {
     return this.http.get<FineCodeInterface[]>(this.API);
   }

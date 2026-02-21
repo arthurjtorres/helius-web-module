@@ -3,7 +3,6 @@
 import { AppealControlComponent } from './appeal-control/appeal-control.component';
 import { CTDOPControlComponent } from './ctdop-control/ctdop-control.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { PenaltyControlComponent } from './penalty-control/penalty-control.component';
 
 
 import { CommonModule } from '@angular/common';
@@ -47,7 +46,6 @@ import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
   declarations: [
-    PenaltyControlComponent,
     DashboardComponent,
     AppealControlComponent,
     CTDOPControlComponent,

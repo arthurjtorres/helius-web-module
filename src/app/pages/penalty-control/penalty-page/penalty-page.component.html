@@ -1,0 +1,101 @@
+<ng-container class="penalty-container">
+  <header class="penalty-header">
+
+    <button mat-fab extended class="button-import">
+      <mat-icon>cloud_upload</mat-icon>Importar Arquivo
+    </button>
+
+    <mat-form-field class="penalty-search" appearance="outline">
+      <input matInput type="search" />
+      <button matSuffix mat-icon-button aria-label="Search">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-fab extended class="button-import">
+      <mat-icon>add_circle_outline</mat-icon>Adicionar
+    </button>
+
+  </header>
+  <mat-divider></mat-divider>
+
+  <div class="table-container">
+    <mat-table class="mat-elevation-z8" [dataSource]="penaltySource" matSort>
+
+      <ng-container matColumnDef="ctdopNumber">
+        <mat-header-cell *matHeaderCellDef class="ctdopNumber">CTDOP</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="ctdopNumber"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="docRegistration">
+        <mat-header-cell *matHeaderCellDef class="docRegistration">Notificação</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="docRegistration"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="company">
+        <mat-header-cell *matHeaderCellDef class="company">Empresa</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="company"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vehicleNumber">
+        <mat-header-cell *matHeaderCellDef class="vehicleNumber">Veículo</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="vehicleNumber"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="busTimetableCode">
+        <mat-header-cell *matHeaderCellDef class="busTimetableCode">Linha</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="busTimetableCode"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="penaltyDate">
+        <mat-header-cell *matHeaderCellDef class="penaltyDate">Data</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="penaltyDate"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fineCodeNumber">
+        <mat-header-cell *matHeaderCellDef class="fineCodeNumber">Cód. Multa</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="fineCodeNumber"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <mat-header-cell *matHeaderCellDef class="location">Local da Ocor.</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="location"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="penaltyStatus">
+        <mat-header-cell *matHeaderCellDef class="penaltyStatus">Status</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="penaltyStatus"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="appealProtocol">
+        <mat-header-cell *matHeaderCellDef class="appealProtocol">Recurso</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="appealProtocol"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="actions">Ações</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="actions">
+          <button
+            mat-icon-button
+            color="primary"
+            
+            matTooltip="Editar"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="penaltyHeader"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: penaltyHeader"></mat-row>
+    </mat-table>
+  </div>
+
+  <mat-paginator
+    [pageSizeOptions]="[10, 20, 50]"
+    showFirstLastButtons
+    aria-label="Select Page"
+  ></mat-paginator>
+</ng-container>

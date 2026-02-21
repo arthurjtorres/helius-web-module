@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AppendixRoutingModule } from './appendix-routing.module';
-import { FineCodePageComponent } from './fine-code-page/fine-code-page.component';
-import { AppendixContentComponent } from './appendix-content/appendix-content.component';
-import { FineCodeFormComponent } from './fine-code-form/fine-code-form.component';
-import { MatIconModule } from "@angular/material/icon";
-import { MatFormField, MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import { PenaltyControlRoutingModule } from './penalty-control-routing.module';
+import { PenaltyPageComponent } from './penalty-page/penalty-page.component';
+import { PenaltyContentComponent } from './penalty-content/penalty-content.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -16,21 +15,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MotivePageComponent } from './motive-page/motive-page.component';
-import { MotiveFormComponent } from './motive-form/motive-form.component';
 
 
 @NgModule({
   declarations: [
-    FineCodePageComponent,
-    AppendixContentComponent,
-    FineCodeFormComponent,
-    MotivePageComponent,
-    MotiveFormComponent
+    PenaltyPageComponent,
+    PenaltyContentComponent
   ],
   imports: [
     CommonModule,
-    AppendixRoutingModule,
+    PenaltyControlRoutingModule,
     MatIconModule,
     MatFormFieldModule,
     MatDividerModule,
@@ -43,6 +37,6 @@ import { MotiveFormComponent } from './motive-form/motive-form.component';
     MatTabsModule,
     MatInputModule,
     MatButtonModule
-]
+  ]
 })
-export class AppendixModule { }
+export class PenaltyControlModule { }

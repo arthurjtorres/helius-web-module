@@ -12,6 +12,7 @@ import { LandingpageModule } from './pages/landingpage/landingpage.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { UserProfileModule } from './pages/user-profile/user-profile.module';
+import { PenaltyControlModule } from './pages/penalty-control/penalty-control.module';
 
 
 
@@ -31,6 +32,7 @@ import { UserProfileModule } from './pages/user-profile/user-profile.module';
     AppendixModule,
     LandingpageModule,
     UserProfileModule,
+    PenaltyControlModule,
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
