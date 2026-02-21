@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private readonly AUTH_URL =  environment.baseUrl +':'+ environment.control_port;
+  private readonly AUTH_URL = environment.baseUrl + ':' + environment.control_port;
+
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   private userData = new BehaviorSubject<any>(this.getUserDataFromToken());
 
@@ -17,12 +18,12 @@ export class AuthService {
 
   private hasToken(): boolean {
     const token = localStorage.getItem('access_token');
-    return !! token && this.isTokenExpired(token);
+    return !!token && !this.isTokenExpired(token);
   }
 
   login(login: string, password: string): Observable<any> {
     const authHeaders = new HttpHeaders({
-      'Authorization': btoa(password +';'+login)
+      'Authorization': btoa(password + ';' + login)
     });
 
     return this.http.post<any>(`${this.AUTH_URL}/authenticate`, {}, { headers: authHeaders }).pipe(
@@ -51,21 +52,21 @@ export class AuthService {
       const payload = token.split('.')[1];
       const decoded = JSON.parse(window.atob(payload));
       return decoded;
-    }catch (e) {
+    } catch (e) {
       return null;
     }
   }
 
-  private isTokenExpired(token: string) : boolean {
+  private isTokenExpired(token: string): boolean {
     const decoded = this.decodeToken(token);
     if (!decoded || !decoded.exp) return false;
-    const expirationDate = decoded.exp *1000;
+    const expirationDate = decoded.exp * 1000;
     return Date.now() > expirationDate;
   }
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('access_token');
-    if(!token) return false;
+    if (!token) return false;
 
     if (this.isTokenExpired(token)) {
       this.logout();
@@ -82,5 +83,5 @@ export class AuthService {
       window.location.reload();
     });
   }
-  
+
 }

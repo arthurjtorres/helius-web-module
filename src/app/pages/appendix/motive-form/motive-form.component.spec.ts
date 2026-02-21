@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PenaltyControlComponent } from './penalty-control.component';
+import { MotiveFormComponent } from './motive-form.component';
 
-describe('PenaltyControlComponent', () => {
-  let component: PenaltyControlComponent;
-  let fixture: ComponentFixture<PenaltyControlComponent>;
+describe('MotiveFormComponent', () => {
+  let component: MotiveFormComponent;
+  let fixture: ComponentFixture<MotiveFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PenaltyControlComponent]
+      declarations: [MotiveFormComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PenaltyControlComponent);
+    fixture = TestBed.createComponent(MotiveFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

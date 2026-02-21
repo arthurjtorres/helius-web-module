@@ -5,7 +5,6 @@ import { AppendixRoutingModule } from './appendix-routing.module';
 import { FineCodePageComponent } from './fine-code-page/fine-code-page.component';
 import { AppendixContentComponent } from './appendix-content/appendix-content.component';
 import { FineCodeFormComponent } from './fine-code-form/fine-code-form.component';
-import { MotiveComponent } from './motive/motive.component';
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormField, MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
@@ -17,6 +16,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MotivePageComponent } from './motive-page/motive-page.component';
+import { MotiveFormComponent } from './motive-form/motive-form.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
     FineCodePageComponent,
     AppendixContentComponent,
     FineCodeFormComponent,
-    MotiveComponent
+    MotivePageComponent,
+    MotiveFormComponent
   ],
   imports: [
     CommonModule,
