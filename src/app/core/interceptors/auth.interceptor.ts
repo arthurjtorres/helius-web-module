@@ -14,12 +14,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('access_token');
-
     const apiBaseUrl = environment.baseUrl;
 
     const isInternalRequest = request.url.startsWith(apiBaseUrl);
+    const isLoginRequest = request.url.includes('/authenticate');    
 
-    if(token && isInternalRequest) {
+    if(token && isInternalRequest && !isLoginRequest) {
       request = request.clone({
         setHeaders: { Authorization: `Bearer ${token}` }
       });
