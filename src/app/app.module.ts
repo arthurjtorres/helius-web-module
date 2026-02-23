@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { UserProfileModule } from './pages/user-profile/user-profile.module';
 import { PenaltyControlModule } from './pages/penalty-control/penalty-control.module';
+import { EmployeeModule } from './pages/employee/employee.module';
 
 
 
@@ -33,6 +34,7 @@ import { PenaltyControlModule } from './pages/penalty-control/penalty-control.mo
     LandingpageModule,
     UserProfileModule,
     PenaltyControlModule,
+    EmployeeModule,
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
