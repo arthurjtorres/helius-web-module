@@ -2,8 +2,6 @@ import { NgModule, ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { HumanResourcesRoutingModule } from './human-resources-routing.module';
-import { PersonnelComponent } from './personnel/personnel.component';
-import { CorporateComponent } from './corporate/corporate.component';
 
 import { MatIcon } from "@angular/material/icon";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -23,8 +21,7 @@ import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
-    PersonnelComponent,
-    CorporateComponent,
+    
     
     RegisterEmployeeComponent
   ],
