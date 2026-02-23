@@ -10,13 +10,12 @@ import { AppealControlComponent } from './pages/juristic/appeal-control/appeal-c
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 
 
-import { PersonnelComponent } from './pages/human-resources/personnel/personnel.component';
-import { CorporateComponent } from './pages/human-resources/corporate/corporate.component';
 import { RegisterEmployeeComponent } from './pages/human-resources/register-employee/register-employee.component';
 import { AppendixContentComponent } from './pages/appendix/appendix-content/appendix-content.component';
 import { LandingpageComponent } from './pages/landingpage/landingpage.component';
 import { authGuard } from './core/guards/auth.guard';
 import { loginGuard } from './core/guards/login.guard';
+import { EmployeePageContentComponent } from './pages/employee/employee-page-content/employee-page-content.component';
 
 
 const routes: Routes = [
@@ -38,7 +37,7 @@ const routes: Routes = [
 
       {
         path: 'human-resources/personnel',
-        component: PersonnelComponent,
+        component: EmployeePageContentComponent,
       },
       {
         path: 'human-resources/register-employee',
@@ -46,7 +45,7 @@ const routes: Routes = [
       },
       {
         path: 'human-resources/corporate',
-        component: CorporateComponent,
+        
       },
 
       {
