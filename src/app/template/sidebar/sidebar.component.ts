@@ -39,16 +39,7 @@ export class SidebarComponent  {
           route: 'personnel',
           icon: 'person',
         },
-        {
-          label: 'Cadastrar Funcionário',
-          route: 'register-employee',
-          icon: 'person_add',
-        },
-        {
-          label: 'Corporativo',
-          route: 'corporate',
-          icon: 'person',
-        },
+        
       ]
     },
     {

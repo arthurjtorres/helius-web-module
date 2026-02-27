@@ -1,53 +1,80 @@
-<h2 mat-dialog-title>{{ isEdit ? 'Editar Cadastro de Funcionário' : 'Novo Cadastro de Funcionário'}}</h2>
+<h2 mat-dialog-title>
+  {{isEdit ? "Editar Cadastro de Funcionário" : "Novo Cadastro de Funcionário"}}
+</h2>
 
-<mat-dialog-content>
-  <form [formGroup]="employeeForm" class="form-container">
+<mat-dialog-content class="form-container">
+  <form [formGroup]="employeeForm" class="employee-card">
+    <mat-card class="employee-data" appearance="outlined">
+      <mat-form-field appearance="outline">
+        <mat-label>Matrícula</mat-label>
+        <input matInput formControlName="registration" />
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-            <mat-label>Matrícula</mat-label>
-            <input matInput type="text"/>
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline">
-            <mat-label>Data de Admissão</mat-label>
-            <input matInput type="date"/>
-          </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Empresa</mat-label>
+        <mat-select formControlName="company">
+          <mat-option *ngFor="let c of companies" [value]="c.companyId">
+            {{ c.companyName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Empresa</mat-label>
-            <mat-select>
-              <mat-option value="one">First</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline">
-            <mat-label>Função</mat-label>
-            <mat-select>
-              <mat-option value="one">First</mat-option>
-            </mat-select>
-          </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Data de Admissão</mat-label>
+        <input matInput type="date" formControlName="admissionDate" />
+      </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Setor</mat-label>
-            <mat-select>
-              <mat-option value="one">First</mat-option>
-            </mat-select>
-          </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Função</mat-label>
+        <mat-select formControlName="position">
+          <mat-option *ngFor="let p of positions" [value]="p.positionId">
+            {{ p.positionName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Departamento</mat-label>
-            <mat-select>
-              <mat-option value="one">First</mat-option>
-            </mat-select>
-          </mat-form-field>       
-              
-        </form>
+      <mat-form-field appearance="outline">
+        <mat-label>Setor</mat-label>
+        <mat-select formControlName="sector">
+          <mat-option *ngFor="let s of sectors" [value]="s.sectorId">
+            {{ s.sectorName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
+      <mat-form-field appearance="outline">
+        <mat-label>Departamento</mat-label>
+        <mat-select formControlName="department">
+          <mat-option *ngFor="let d of departments" [value]="d.departmentId">
+            {{ d.departmentName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card class="person-data" appearance="outlined">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome Completo</mat-label>
+      <input matInput formControlName="fullName" />
+    </mat-form-field>
+
+      <mat-form-field appearance="outline">
+      <mat-label>Data de Nascimento</mat-label>
+      <input matInput type="date" formControlName="birthDate" />
+    </mat-form-field>
+    </mat-card>
+  </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" color="warn">Descartar</button>
-  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="employeeForm.invalid">
-    <mat-icon>{{ isEdit ? 'edit' : 'save'}}</mat-icon> {{ isEdit ? 'Atualizar' : 'Cadastrar'}}
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="employeeForm.invalid"
+  >
+    <mat-icon>{{ isEdit ? "edit" : "save" }}</mat-icon>
+    {{ isEdit ? "Atualizar" : "Cadastrar" }}
   </button>
 </mat-dialog-actions>

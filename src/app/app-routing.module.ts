@@ -9,8 +9,6 @@ import { CTDOPControlComponent } from './pages/juristic/ctdop-control/ctdop-cont
 import { AppealControlComponent } from './pages/juristic/appeal-control/appeal-control.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 
-
-import { RegisterEmployeeComponent } from './pages/human-resources/register-employee/register-employee.component';
 import { AppendixContentComponent } from './pages/appendix/appendix-content/appendix-content.component';
 import { LandingpageComponent } from './pages/landingpage/landingpage.component';
 import { authGuard } from './core/guards/auth.guard';
@@ -39,14 +37,8 @@ const routes: Routes = [
         path: 'human-resources/personnel',
         component: EmployeePageContentComponent,
       },
-      {
-        path: 'human-resources/register-employee',
-        component: RegisterEmployeeComponent,
-      },
-      {
-        path: 'human-resources/corporate',
-        
-      },
+      
+      
 
       {
         path: 'schedule',
