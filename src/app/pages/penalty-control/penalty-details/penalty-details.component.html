@@ -1,0 +1,32 @@
+<h2 mat-dialog-title> Detalhes da Notificação: {{ data.docRegistration }}</h2>
+<mat-dialog-content class="dialog-content">
+      
+      <div class="detail-section">
+        <h3>Informações Gerais</h3>
+        <p><strong>CTDOP:</strong> {{ data.ctdopNumber }} (Período: {{ data.ctdopPeriod }})</p>
+        <p><strong>Empresa:</strong> {{ data.company }}</p>
+        <p><strong>Veículo:</strong> {{ data.vehicleNumber }}</p>
+        <p><strong>Linha:</strong> {{ data.busTimetableCode }}</p>
+      </div>
+
+      <div class="detail-section">
+        <h3>Infração</h3>
+        <p><strong>Data/Hora:</strong> {{ data.penaltyDate | date:'dd/MM/yyyy HH:mm' }}</p>
+        <p><strong>Local:</strong> {{ data.location }}</p>
+        <p><strong>Código Infração:</strong> {{ data.fineCodeNumber }}</p>
+        <p><strong>Agente:</strong> {{ data.agentCode }}</p>
+        <p><strong>Anotação do Agente:</strong> {{ data.agentAnnotation || 'Nenhuma' }}</p>
+      </div>
+
+      <div class="detail-section">
+        <h3>Recurso & Status</h3>
+        <p><strong>Status Atual:</strong> {{ data.penaltyStatus }}</p>
+        <p><strong>Protocolo do Recurso:</strong> {{ data.appealProtocol || 'Não interposto' }}</p>
+        <p><strong>Resposta do Recurso:</strong> {{ data.appealStatus || '-' }}</p>
+        <p><strong>Anotação Interna:</strong> {{ data.internalAnnotation || 'Nenhuma' }}</p>
+      </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Fechar</button>
+    </mat-dialog-actions>

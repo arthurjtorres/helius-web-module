@@ -24,52 +24,52 @@
 
       <ng-container matColumnDef="ctdopNumber">
         <mat-header-cell *matHeaderCellDef class="ctdopNumber">CTDOP</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="ctdopNumber"></mat-cell>
+        <mat-cell *matCellDef="let item" class="ctdopNumber"> {{item.ctdopNumber || '-'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="docRegistration">
         <mat-header-cell *matHeaderCellDef class="docRegistration">Notificação</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="docRegistration"></mat-cell>
+        <mat-cell *matCellDef="let item" class="docRegistration">{{ item.docRegistration }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="company">
         <mat-header-cell *matHeaderCellDef class="company">Empresa</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="company"></mat-cell>
+        <mat-cell *matCellDef="let item" class="company"> {{ item.company }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="vehicleNumber">
         <mat-header-cell *matHeaderCellDef class="vehicleNumber">Veículo</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="vehicleNumber"></mat-cell>
+        <mat-cell *matCellDef="let item" class="vehicleNumber">{{ item.vehicleNumber }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="busTimetableCode">
         <mat-header-cell *matHeaderCellDef class="busTimetableCode">Linha</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="busTimetableCode"></mat-cell>
+        <mat-cell *matCellDef="let item" class="busTimetableCode">{{ item.busTimetableCode }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="penaltyDate">
         <mat-header-cell *matHeaderCellDef class="penaltyDate">Data</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="penaltyDate"></mat-cell>
+        <mat-cell *matCellDef="let item" class="penaltyDate">{{ item.penaltyDate }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fineCodeNumber">
         <mat-header-cell *matHeaderCellDef class="fineCodeNumber">Cód. Multa</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="fineCodeNumber"></mat-cell>
+        <mat-cell *matCellDef="let item" class="fineCodeNumber">{{ item.fineCodeNumber }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="location">
         <mat-header-cell *matHeaderCellDef class="location">Local da Ocor.</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="location"></mat-cell>
+        <mat-cell *matCellDef="let item" class="location"> {{ item.location }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="penaltyStatus">
         <mat-header-cell *matHeaderCellDef class="penaltyStatus">Status</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="penaltyStatus"></mat-cell>
+        <mat-cell *matCellDef="let item" class="penaltyStatus">{{ item.penaltyStatus }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="appealProtocol">
         <mat-header-cell *matHeaderCellDef class="appealProtocol">Recurso</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="appealProtocol"></mat-cell>
+        <mat-cell *matCellDef="let item" class="appealProtocol">{{ item.appealProtocol }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -78,10 +78,10 @@
           <button
             mat-icon-button
             color="primary"
-            
+            (click)="openDetailsDialog(item)"
             matTooltip="Editar"
           >
-            <mat-icon>edit</mat-icon>
+            <mat-icon>visibility</mat-icon>
           </button>
 
           
