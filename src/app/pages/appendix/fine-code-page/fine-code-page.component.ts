@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FineCodeInterface } from './fine-code.interface';
+import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
 import { MatPaginator } from '@angular/material/paginator';
-import { FineCodeService } from './fine-code.service';
+import { FineCodeService } from '../../../core/services/fine-code.service';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { FineCodeFormComponent } from '../fine-code-form/fine-code-form.component';

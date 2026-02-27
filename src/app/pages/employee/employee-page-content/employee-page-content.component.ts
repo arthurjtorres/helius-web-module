@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { EmployeeInterface } from '../employee.interface';
+import { EmployeeInterface } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { FineCodeService } from '../../appendix/fine-code-page/fine-code.service';
 import { EmployeePageFormComponent } from '../employee-page-form/employee-page-form.component';
+import { EmployeeService } from '../../../core/services/employee.service';
 
 @Component({
   selector: 'app-employee-page-content',
@@ -16,7 +16,13 @@ import { EmployeePageFormComponent } from '../employee-page-form/employee-page-f
 export class EmployeePageContentComponent implements OnInit {
 
   employeeHeader: string[] = [
-    'registration'
+    'registration',
+    'company',
+    'fullName',
+    'birthDate',
+    'admissionDate',
+    'position',
+    'actions'
   ]
 
   employeeDataSource = new MatTableDataSource<EmployeeInterface>([]);
@@ -25,7 +31,7 @@ export class EmployeePageContentComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private service: FineCodeService,
+    private service: EmployeeService,
     private dialog: MatDialog
   ) {
 
@@ -36,7 +42,39 @@ export class EmployeePageContentComponent implements OnInit {
   }
 
   loadData() {
+    this.service.getAll().subscribe({
+      next: (response: any) => {
+        const rawData = response.data || [];
 
+        const mappedData: EmployeeInterface[] = rawData.map((item: any) => {
+          return {
+            employeeId: item.employeeId,
+            fkEmployeeCompanyId: item.fkEmployeeCompanyId,
+            fkEmployeePositionId: item.fkEmployeePositionId,
+            fkSectorId: item.fkSectorId,
+            fkDepartmentId: item.fkDepartmentId,
+
+            // Dados para a tabela (exibição)
+            registration: item.registration,
+            admissionDate: item.admissionDate,
+            fullName: item.PersonModel?.fullName,
+            birthDate: item.PersonModel?.birthDate,
+            company: item.CompanyModel?.companyName,
+            position: item.PositionModel?.positionName,
+            activated: item.activated,
+          };
+        });
+
+        const activeData = mappedData.filter(emp => emp.activated !== false);
+
+        this.employeeDataSource.data = activeData;
+        setTimeout(() => {
+          this.employeeDataSource.paginator = this.paginator;
+          this.employeeDataSource.sort = this.sort;
+        });
+      },
+      error: (err) => console.error('Erro ao buscar funcionários:', err)
+    })
   }
 
   addEmployee(): void {
@@ -46,7 +84,20 @@ export class EmployeePageContentComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
+        this.loadData();
+      }
+    });
+  }
+
+  editEmployee(item: EmployeeInterface): void {
+    const dialogRef = this.dialog.open(EmployeePageFormComponent, {
+      width: '1200px',
+      disableClose: true,
+      data: item
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
         this.loadData();
       }
     });

@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { TemplateModule } from './template/template.module';
 import { HomeComponent } from './pages/home/home.component';
 import { JuristicModule } from './pages/juristic/juristic.module';
-import { HumanResourcesModule } from './pages/human-resources/human-resources.module';
 import { AppendixModule } from './pages/appendix/appendix.module';
 import { LandingpageModule } from './pages/landingpage/landingpage.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -28,8 +27,7 @@ import { EmployeeModule } from './pages/employee/employee.module';
     BrowserModule,
     AppRoutingModule,
     TemplateModule,
-    JuristicModule,    
-    HumanResourcesModule,
+    JuristicModule,
     AppendixModule,
     LandingpageModule,
     UserProfileModule,

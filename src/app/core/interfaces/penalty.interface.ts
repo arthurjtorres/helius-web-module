@@ -1,4 +1,4 @@
-export interface PenaltyInterface {
+export interface PenaltyCompositeView {
   
   // Dados do PenaltyDoc (O Conector)
   docId: string;
