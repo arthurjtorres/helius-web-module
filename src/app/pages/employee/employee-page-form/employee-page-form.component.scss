@@ -67,3 +67,12 @@
   padding: 1.5rem 3rem 1rem 3rem;
 }
 
+.person-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4rem;
+  align-items: start;
+  padding: 1.5rem 3rem 1rem 3rem;
+  margin-top: 3rem;
+}
+

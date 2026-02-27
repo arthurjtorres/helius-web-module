@@ -1,7 +1,7 @@
  import { Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment"; 
+import { environment } from "../../../environments/environment"; 
 import { HttpClient } from "@angular/common/http";
-import { FineCodeInterface } from "./fine-code.interface";
+import { FineCodeInterface } from "../interfaces/fine-code.interface";
 import { Observable } from "rxjs";
 
 @Injectable({

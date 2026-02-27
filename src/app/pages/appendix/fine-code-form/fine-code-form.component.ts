@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FineCodeService } from '../fine-code-page/fine-code.service';
-import { FineCodeInterface } from '../fine-code-page/fine-code.interface';
+import { FineCodeService } from '../../../core/services/fine-code.service';
+import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
 
 @Component({
   selector: 'app-fine-code-form',

@@ -15,12 +15,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { PenaltyDetailsComponent } from './penalty-details/penalty-details.component';
 
 
 @NgModule({
   declarations: [
     PenaltyPageComponent,
-    PenaltyContentComponent
+    PenaltyContentComponent,
+    PenaltyDetailsComponent
   ],
   imports: [
     CommonModule,

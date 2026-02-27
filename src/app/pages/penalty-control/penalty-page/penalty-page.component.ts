@@ -4,10 +4,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
-import { PenaltyInterface } from './penalty.interface';
-import { PenaltyService } from './penalty.service';
+
+import { PenaltyCompositeView } from '../../../core/interfaces/penalty.interface';
+import { PenaltyService } from '../../../core/services/penalty.service';
+import { PenaltyDetailsComponent } from '../penalty-details/penalty-details.component';
 
 
 @Component({
@@ -15,13 +16,7 @@ import { PenaltyService } from './penalty.service';
   standalone: false,
   templateUrl: './penalty-page.component.html',
   styleUrl: './penalty-page.component.scss',
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+ 
 })
 export class PenaltyPageComponent implements OnInit {
 
@@ -39,15 +34,15 @@ export class PenaltyPageComponent implements OnInit {
     'actions'
   ];
   
-  penaltySource = new MatTableDataSource<PenaltyInterface>([]);
-  expandedElement: PenaltyInterface | null = null;
+  penaltySource = new MatTableDataSource<PenaltyCompositeView>([]);
+  expandedElement: PenaltyCompositeView | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-      private service: PenaltyService,
-  
+      private penaltyService: PenaltyService,
+      private dialog: MatDialog  
     ) { }
   
   ngOnInit(): void {
@@ -55,10 +50,36 @@ export class PenaltyPageComponent implements OnInit {
   }
 
   loadData() {
+    this.penaltyService.getCompositePenalties().subscribe({
+      next: (response: any) => {
+        const rawData = response.data || response;
+        const activeData = rawData //falta colocar aqui o filtro de ativos
 
+        this.penaltySource.data = activeData;
+        this.penaltySource.paginator = this.paginator;
+        this.penaltySource.sort = this.sort;
+
+        if (this.sort) {
+          this.sort.sort({ id: 'penaltyDate', start: 'asc', disableClear: false})
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao buscar penalidades', err);
+        
+      }
+    });
   }
 
-  toggleRow(row: PenaltyInterface) {
+  
+  openDetailsDialog(penalty: PenaltyCompositeView) {
+    this.dialog.open(PenaltyDetailsComponent, {
+      width: '800px', // Um tamanho bom para ver muitos dados
+      data: penalty   // Passamos o objeto inteiro da linha clicada para o dialog
+    });
+  }
+  
+
+  toggleRow(row: PenaltyCompositeView) {
     this.expandedElement = this.expandedElement === row ? null : row;
   }
 
