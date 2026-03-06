@@ -1,0 +1,81 @@
+<ng-container class="vehicle-container">
+  <header class="vehicle-header">
+     <button mat-fab extended class="button-import" (click)="importVehicles()">
+      <mat-icon>cloud_upload</mat-icon>Importar Arquivo
+    </button>
+
+    <mat-form-field class="vehicle-search" appearance="outline">
+      <input matInput type="search" />
+      <button matSuffix mat-icon-button aria-label="Search">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-fab extended class="button-import" (click)="addVehicle()">
+      <mat-icon>add_circle_outline</mat-icon>Adicionar
+    </button>
+
+  </header>
+  <mat-divider></mat-divider>
+
+  <div class="table-container">
+    <mat-table class="mat-elevation-z8" [dataSource]="vehicleDataSource" matSort>
+
+      <ng-container matColumnDef="company">
+        <mat-header-cell *matHeaderCellDef class="company">Empresa</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="company"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vehicleNumber">
+        <mat-header-cell *matHeaderCellDef class="vehicleNumber">Número</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="vehicleNumber"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="brand">
+        <mat-header-cell *matHeaderCellDef class="brand">Marca</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="brand"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="licensePlate">
+        <mat-header-cell *matHeaderCellDef class="licensePlate">Placa</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="licensePlate"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="renavan">
+        <mat-header-cell *matHeaderCellDef class="renavan">Renavan</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="renavan"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="model">
+        <mat-header-cell *matHeaderCellDef class="model">Modelo</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="model"></mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="actions">Ações</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="actions">
+          <button
+            mat-icon-button
+            color="primary"
+            
+            matTooltip="Editar"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button
+            mat-icon-button
+            color="warn"
+            
+            matTooltip="Excluir"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="vehicleHeader"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: vehicleHeader"></mat-row>
+    </mat-table>
+  </div>
+</ng-container>
