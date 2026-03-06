@@ -1,5 +1,7 @@
 <h2 mat-dialog-title>
-  {{isEdit ? "Editar Cadastro de Funcionário" : "Novo Cadastro de Funcionário"}}
+  {{
+    isEdit ? "Editar Cadastro de Funcionário" : "Novo Cadastro de Funcionário"
+  }}
 </h2>
 
 <mat-dialog-content class="form-container">
@@ -53,15 +55,21 @@
     </mat-card>
 
     <mat-card class="person-data" appearance="outlined">
-    <mat-form-field appearance="outline">
-      <mat-label>Nome Completo</mat-label>
-      <input matInput formControlName="fullName" />
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>CPF (Apenas números)</mat-label>
+          <input matInput formControlName="cpf" (blur)="onCpfBlur()" maxlength="11" />
+          <mat-hint>Digite 11 dígitos para buscar</mat-hint>
+        </mat-form-field>
 
       <mat-form-field appearance="outline">
-      <mat-label>Data de Nascimento</mat-label>
-      <input matInput type="date" formControlName="birthDate" />
-    </mat-form-field>
+        <mat-label>Nome Completo</mat-label>
+        <input matInput formControlName="fullName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de Nascimento</mat-label>
+        <input matInput type="date" formControlName="birthDate" />
+      </mat-form-field>
     </mat-card>
   </form>
 </mat-dialog-content>
