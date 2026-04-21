@@ -1,1 +1,109 @@
-<p>employee-page-import works!</p>
+<h2 mat-dialog-title>Importar Funcionários</h2>
+
+<mat-dialog-content class="form-container">
+  <mat-card class="employee-data import-config-card" appearance="outlined">
+    <div class="grid-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Empresa</mat-label>
+        <mat-select [(ngModel)]="companyId" (selectionChange)="onCompanyChange($event.value)" [disabled]="isLoading">
+          <mat-option *ngFor="let c of companies" [value]="c.companyId">
+            {{ c.companyName }} ({{ c.companyAcronym }})
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="!companyAcronym">Selecione uma empresa para importar</mat-hint>
+      </mat-form-field>
+
+      <div class="file-input-wrapper">
+        <input
+          type="file"
+          #fileInput
+          hidden
+          (change)="handleFileUpload($event)"
+          accept=".txt,.xlsx,.xls"
+          [disabled]="isLoading"
+        />
+        <button
+          mat-stroked-button
+          color="primary"
+          class="full-width-button"
+          (click)="fileInput.click()"
+          [disabled]="!companyAcronym || isLoading"
+        >
+          <mat-icon>attach_file</mat-icon> 
+          {{ parsedData.length > 0 ? 'Trocar Arquivo' : 'Selecionar Arquivo' }}
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card *ngIf="isLoading" class="progress-card" appearance="outlined" style="margin-top: 16px; border-color: var(--primary-color);">
+    <mat-card-content>
+      <div class="progress-container">
+        <p><strong>Enviando dados para o servidor...</strong> {{ progress }}% concluído</p>
+        <mat-progress-bar mode="determinate" [value]="progress" color="primary"></mat-progress-bar>
+        <mat-hint>Por favor, não feche esta janela.</mat-hint>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="person-data table-preview-card" appearance="outlined" *ngIf="parsedData.length > 0" style="margin-top: 16px;">
+    <mat-card-header>
+      <mat-card-title>Pré-visualização ({{ parsedData.length }} registros)</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="table-container" style="max-height: 400px; overflow: auto;">
+        <table mat-table [dataSource]="parsedData" class="mat-elevation-z0">
+          
+          <ng-container matColumnDef="cpf">
+            <th mat-header-cell *matHeaderCellDef> CPF </th>
+            <td mat-cell *matCellDef="let element"> {{ element.cpf ? element.cpf : "---" }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="registration">
+            <th mat-header-cell *matHeaderCellDef> Matrícula </th>
+            <td mat-cell *matCellDef="let element"> {{ element.registration }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef> Nome </th>
+            <td mat-cell *matCellDef="let element"> {{ element.fullName }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="admissionDate">
+            <th mat-header-cell *matHeaderCellDef> Admissão </th>
+            <td mat-cell *matCellDef="let element"> {{ element.admissionDate }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> Função </th>
+            <td mat-cell *matCellDef="let element"> {{ element.position }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="birthDate">
+            <th mat-header-cell *matHeaderCellDef> Nascimento </th>
+            <td mat-cell *matCellDef="let element"> {{ element.birthDate }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close color="warn" [disabled]="isLoading">Cancelar</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="enviarParaAPI()"
+    [disabled]="!parsedData.length || isLoading"
+  >
+    <mat-icon>cloud_upload</mat-icon>
+    <span *ngIf="!isLoading">Confirmar Importação</span>
+    <span *ngIf="isLoading">Enviando...</span>
+  </button>
+</mat-dialog-actions>

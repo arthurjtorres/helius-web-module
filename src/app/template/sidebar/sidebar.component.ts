@@ -43,10 +43,17 @@ export class SidebarComponent  {
       ]
     },
     {
-      label: 'Escala',
-      route: 'schedule',
-      icon: 'schedule', // Icon Material
-      //isOpen: false
+      label: 'Operacional',
+      route: 'operations',
+      icon: 'engineering', // Icon Material
+      //isOpen: false,
+      children: [
+        {
+          label: 'Frota',
+          route: 'vehicles',
+          icon: 'directions_bus',
+        }
+      ]
     },
     {
       label: 'Juridico',
