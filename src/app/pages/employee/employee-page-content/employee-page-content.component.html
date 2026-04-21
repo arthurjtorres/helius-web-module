@@ -1,6 +1,6 @@
 <ng-container class="personnel-container">
   <header class="personnel-header">
-    <button mat-fab extended class="button-import">
+    <button mat-fab extended class="button-import" (click)="importEmployee()">
       <mat-icon>cloud_upload</mat-icon>Importar Arquivo
     </button>
 
@@ -61,6 +61,14 @@
             <mat-icon>edit</mat-icon>
           </button>
 
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteEmployee(item)"
+            matTooltip="Excluir"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
           
         </mat-cell>
       </ng-container>

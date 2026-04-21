@@ -14,6 +14,7 @@ import { LandingpageComponent } from './pages/landingpage/landingpage.component'
 import { authGuard } from './core/guards/auth.guard';
 import { loginGuard } from './core/guards/login.guard';
 import { EmployeePageContentComponent } from './pages/employee/employee-page-content/employee-page-content.component';
+import { VehiclesContentComponent } from './pages/vehicles/vehicles-content/vehicles-content.component';
 
 
 const routes: Routes = [
@@ -37,12 +38,9 @@ const routes: Routes = [
         path: 'human-resources/personnel',
         component: EmployeePageContentComponent,
       },
-      
-      
-
       {
-        path: 'schedule',
-        component: ScheduleComponent,
+        path: 'operations/vehicles',
+        component: VehiclesContentComponent,
       },
       {
         path: 'juristic',

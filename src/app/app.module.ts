@@ -13,6 +13,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { UserProfileModule } from './pages/user-profile/user-profile.module';
 import { PenaltyControlModule } from './pages/penalty-control/penalty-control.module';
 import { EmployeeModule } from './pages/employee/employee.module';
+import { VehiclesModule } from './pages/vehicles/vehicles.module';
 
 
 
@@ -33,6 +34,7 @@ import { EmployeeModule } from './pages/employee/employee.module';
     UserProfileModule,
     PenaltyControlModule,
     EmployeeModule,
+    VehiclesModule,
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

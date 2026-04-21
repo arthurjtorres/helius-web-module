@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { EmployeeInterface } from '../../../core/interfaces/employee.interface';
+import { EmployeeDTO, EmployeeView } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeePageFormComponent } from '../employee-page-form/employee-page-form.component';
 import { EmployeeService } from '../../../core/services/employee.service';
+import { EmployeePageImportComponent } from '../employee-page-import/employee-page-import.component';
 
 @Component({
   selector: 'app-employee-page-content',
@@ -25,7 +26,7 @@ export class EmployeePageContentComponent implements OnInit {
     'actions'
   ]
 
-  employeeDataSource = new MatTableDataSource<EmployeeInterface>([]);
+  employeeDataSource = new MatTableDataSource<EmployeeView>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -46,21 +47,22 @@ export class EmployeePageContentComponent implements OnInit {
       next: (response: any) => {
         const rawData = response.data || [];
 
-        const mappedData: EmployeeInterface[] = rawData.map((item: any) => {
+        const mappedData: EmployeeView[] = rawData.map((item: any) => {
           return {
             employeeId: item.employeeId,
-            fkEmployeeCompanyId: item.fkEmployeeCompanyId,
-            fkEmployeePositionId: item.fkEmployeePositionId,
+            fkPersonId: item.fkPersonId,
+            fkCompanyId: item.fkCompanyId,
+            fkPositionId: item.fkPositionId,
             fkSectorId: item.fkSectorId,
             fkDepartmentId: item.fkDepartmentId,
 
             // Dados para a tabela (exibição)
             registration: item.registration,
             admissionDate: item.admissionDate,
-            fullName: item.PersonModel?.fullName,
-            birthDate: item.PersonModel?.birthDate,
-            company: item.CompanyModel?.companyName,
-            position: item.PositionModel?.positionName,
+            fullName: item.Person?.fullName,
+            birthDate: item.Person?.birthDate,
+            company: item.Company?.companyName,
+            position: item.Position?.positionName,
             activated: item.activated,
           };
         });
@@ -90,7 +92,20 @@ export class EmployeePageContentComponent implements OnInit {
     });
   }
 
-  editEmployee(item: EmployeeInterface): void {
+  importEmployee(): void {
+    const dialogRef = this.dialog.open(EmployeePageImportComponent, {
+      width: '1200px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadData();
+      }
+    });
+  }
+
+  editEmployee(item: EmployeeView): void {
     const dialogRef = this.dialog.open(EmployeePageFormComponent, {
       width: '1200px',
       disableClose: true,
@@ -101,5 +116,43 @@ export class EmployeePageContentComponent implements OnInit {
         this.loadData();
       }
     });
+  }
+
+  deleteEmployee(item: EmployeeView): void {
+    if (confirm(`Deseja Realmente excluir o funcionário ${item.registration}?`)) {
+      if (item.employeeId) {
+        const payload: any = { ...item };
+
+        delete payload.employeeId;
+        delete payload.registration;
+        delete payload.admissionDate;
+        delete payload.fullName;
+        delete payload.birthDate;
+        delete payload.companyName;
+        delete payload.positionName;
+        delete payload.company;
+        delete payload.position;
+        delete payload.fkPersonId;
+        delete payload.fkCompanyId;
+        delete payload.fkPositionId;
+        delete payload.fkSectorId;
+        delete payload.fkDepartmentId;
+
+
+        payload.activated = false;
+
+        this.service.update(item.employeeId, payload).subscribe({
+          next: () => {
+            this.loadData();
+          },
+          error: (err) => {
+            console.error('Erro ao excluir:', err);
+            alert('Não foi possível excluir o item.');
+          }
+        });
+      } else {
+        console.error('Item sem ID não pode ser excluído');
+      }
+    }
   }
 }

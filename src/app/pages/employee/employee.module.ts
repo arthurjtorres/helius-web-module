@@ -18,6 +18,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -43,6 +45,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatCardModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ]
 })
 export class EmployeeModule { }
