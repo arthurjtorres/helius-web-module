@@ -25,6 +25,7 @@ export class FineCodeFormComponent implements OnInit {
     this.isEdit = !!this.data;
 
     this.form = this.fb.group({
+      fineNumber: [this.data?.fineNumber || ''],
       fineDescription: [this.data?.fineDescription || '', [Validators.required, Validators.minLength(10)]],
       fineKm: [this.data?.fineKm || ''],
       fineAlias: [this.data?.fineAlias || ''],

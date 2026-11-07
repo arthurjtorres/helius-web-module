@@ -8,27 +8,58 @@
   <span class="spacer"></span>
 
   @if (user$ | async; as user) {
-  <div class="user-info">
-    <span class="user-name"
-      >Olá, <b>{{ user.userName }}</b></span
-    >
+    <div class="user-info">
+      <span class="user-name"
+        >Olá, <b>{{ user.userName }}</b></span
+      >
 
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-
-    <mat-menu #userMenu="matMenu">
-      <div class="menu-header">
-        <p>{{ user.email }}</p>
-        <small>{{ user.userType }}</small>
-      </div>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Sair</span>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
       </button>
-    </mat-menu>
-  </div>
+
+      <button
+        mat-icon-button
+        (click)="toggleDarkMode(!isDarkMode)"
+        [title]="
+          isDarkMode ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'
+        "
+      >
+        <mat-icon>{{ isDarkMode ? "dark_mode" : "light_mode" }}</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu-panel">
+        <div class="menu-header">
+          <p>{{ user.email }}</p>
+          <small>{{ user.userType }}</small>
+        </div>
+
+        <mat-divider></mat-divider>
+        <button mat-menu-item>
+          <mat-icon class="menu-icons-custom">settings</mat-icon>
+          <span class="menu-items-custom">Configuração</span>
+        </button>
+
+        <button
+          mat-menu-item
+          (click)="$event.stopPropagation()"
+          class="dark-mode-item"
+        >
+          <mat-slide-toggle
+            [checked]="isDarkMode"
+            (change)="toggleDarkMode($event.checked)"
+          >
+            <!-- Opcional: texto acessível ou deixar vazio para o CSS injetar o ícone -->
+          </mat-slide-toggle>
+          <span class="dark-mode-label">Modo Escuro</span>
+        </button>
+
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Sair</span>
+        </button>
+      </mat-menu>
+    </div>
   }
 </mat-toolbar>
 

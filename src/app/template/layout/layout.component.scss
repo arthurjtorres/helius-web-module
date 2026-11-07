@@ -1,4 +1,4 @@
-.content{
+.content {
   padding: 24px;
 }
 
@@ -20,8 +20,16 @@
 .menu-header {
   padding: 16px;
   line-height: 1.2;
-  p { margin: 0; font-weight: bold; font-size: 14px; }
-  small { color: gray; }
+
+  p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  small {
+    color: gray;
+  }
 }
 
 mat-toolbar {
@@ -40,3 +48,117 @@ mat-sidenav-container {
 .sidebar {
   background-color: var(--color-light-03);
 }
+
+.mat-mdc-menu-item .mat-icon {
+  margin-right: 6px;
+
+}
+
+.menu-items-custom {
+  font-size: 14px;
+}
+
+::ng-deep .menu-icons-custom {
+  font-size: 20px;
+  margin-right: 2px !important;
+}
+
+::ng-deep .mat-mdc-menu-panel.user-menu-panel {
+  min-width: 250px !important;
+}
+
+.dark-mode-item {
+  display: flex;
+  font-size: 20px;
+  align-items: center;
+  justify-content: space-between;
+  cursor: default !important;
+
+  .dark-mode-label {
+    flex: 1;
+    font-size: 14px;
+    margin-right: 6px;
+  }
+
+  /* Força a alteração dos ícones do MDC Slide Toggle */
+  ::ng-deep {
+    .mat-mdc-slide-toggle {
+
+      /* Oculta os SVGs nativos (check e traço) de vez */
+      .mdc-switch__icon {
+        display: none !important;
+      }
+
+      /* Prepara o container para receber os ícones de fonte */
+      .mdc-switch__icons {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
+
+      /* Ícone para o estado DESLIGADO (Off -> Sol / light_mode) */
+      .mdc-switch:not(.mdc-switch--selected) {
+        .mdc-switch__icons::before {
+          content: 'light_mode';
+          font-family: 'Material Icons';
+          font-size: 14px;
+          color: var(--color-yellow-05);
+        }
+      }
+
+      /* Ícone para o estado LIGADO (On -> Lua / dark_mode) */
+      .mdc-switch.mdc-switch--selected {
+        .mdc-switch__icons::before {
+          content: 'dark_mode';
+          font-family: 'Material Icons';
+          font-size: 14px;
+          color: var(--color-secondary-light);
+          /* Ajuste para a cor de destaque desejada */
+
+        }
+
+        --mdc-switch-selected-track-color: var(--color-darker-11);
+        --mdc-switch-selected-handle-color: var(--color-darker-12);
+        --mdc-switch-selected-hover-track-color: var(--color-darker-14);
+        --mdc-switch-selected-hover-handle-color: var(--color-darker-14);
+        --mdc-switch-selected-hover-state-layer-color: var(--color-darker-14);
+        --mdc-switch-selected-focus-handle-color: var(--color-darker-13);
+        --mdc-switch-selected-focus-track-color: var(--color-darker-11) !important;
+        --mdc-switch-selected-focus-state-layer-color: var(--color-green-08);
+        --mdc-switch-selected-pressed-track-color:var(--color-darker-12);
+        --mdc-switch-selected-pressed-handle-color: var(--color-darker-11);
+        --mdc-switch-selected-pressed-state-layer-color:var(--color-darker-11);
+
+
+        .mdc-switch__track {
+          background-color: var(--color-darker-11) !important;
+          border-color: var(--color-primary-dark) !important;
+        }
+
+        mdc-switch__handle {
+          background-color: var(--color-darker-11) !important;
+        }
+
+      }
+
+    }
+  }
+}
+
+html .mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-focus-state-layer-color: #d81b60;
+    --mdc-switch-selected-handle-color: #d81b60;
+    --mdc-switch-selected-hover-state-layer-color: #d81b60;
+    --mdc-switch-selected-pressed-state-layer-color: #d81b60;
+    --mdc-switch-selected-focus-handle-color: #880e4f;
+    --mdc-switch-selected-hover-handle-color: #880e4f;
+    --mdc-switch-selected-pressed-handle-color: #880e4f;
+    --mdc-switch-selected-focus-track-color: var(--color-darker-11) !important;
+    --mdc-switch-selected-hover-track-color: #f06292;
+    --mdc-switch-selected-pressed-track-color: #f06292;
+    --mdc-switch-selected-track-color: #f06292
+}
+
