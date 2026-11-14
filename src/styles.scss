@@ -2,6 +2,8 @@
    1. IMPORTAÇÕES GLOBAIS
    ============================================== */
 
+@use "@angular/material" as mat;
+@use "./theme-colors" as tc;
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 /* CORREÇÃO FINAL: Importa a fonte dos ícones */
@@ -14,7 +16,7 @@
   /* Azuis */
   --color-blue-light: #86b6ec;
   --color-secondary-light: #00b7ff;
-  --color-primary-light: #0060b2;
+  --color-primary-light: #006ac6;
   --color-secondary-dark: #0d57cd;
   --color-primary-dark: #001b95;
 
@@ -47,7 +49,7 @@
   /* Neutros médios */
   --color-medium-08: #adb5bd;
   --color-medium-09: #857e7c;
-  --color-medium-10: #818187;
+  --color-medium-10: #888889;
 
   /* Neutros escuros */
   --color-darker-11: #384549;
@@ -59,61 +61,50 @@
   --color-darker-17: #1a1a1a;
 
   --color-grey-variant: #8886aa;
+  --color-error: #f45454;
 }
 
 /* ==============================================
-   3. TOKENS SEMÂNTICOS — TEMA CLARO (padrão)
+   3. TEMA MATERIAL (M3)
+   ============================================== */
+html {
+  color-scheme: light dark; /* padrão: segue o sistema */
+
+  @include mat.theme((
+    color: (
+      primary: tc.$primary-palette,
+      tertiary: tc.$tertiary-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+/* Escolha explícita do usuário (definida pelo ThemeService) */
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="dark"]  { color-scheme: dark; }
+
+/* ==============================================
+   4. TOKENS DA APLICAÇÃO (usar nos componentes)
    ============================================== */
 :root {
-  color-scheme: light;
+  --app-bg: var(--mat-sys-background);
+  --app-surface: var(--mat-sys-surface-container);
+  --app-surface-variant: var(--mat-sys-surface-container-high);
+  --app-border: var(--mat-sys-outline-variant);
+  --app-border-strong: var(--mat-sys-outline);
 
-  --app-bg: var(--color-light-03);
-  --app-surface: var(--color-light-01);
-  --app-surface-variant: var(--color-light-04);
-  --app-border: var(--color-light-06);
+  --app-text: var(--mat-sys-on-surface);
+  --app-text-muted: var(--mat-sys-on-surface-variant);
+  --app-text-on-primary: var(--mat-sys-on-primary);
 
-  --app-text: var(--color-darker-14);
-  --app-text-muted: var(--color-medium-10);
-  --app-text-on-primary: var(--color-light-01);
+  --app-primary: var(--mat-sys-primary);
+  --app-accent: var(--mat-sys-tertiary);
 
-  --app-primary: var(--color-primary-light);
-  --app-primary-strong: var(--color-primary-dark);
-  --app-accent: var(--color-secondary-light);
-
-  --app-success: var(--color-green-05);
-  --app-warning: var(--color-yellow-05);
-
-  --app-toolbar-bg: var(--color-primary-dark);
-  --app-sidebar-bg: var(--color-light-01);
+  --app-success: light-dark(var(--color-green-05), var(--color-green-02));
+  --app-warning: light-dark(var(--color-yellow-05), var(--color-yellow-04));
+  --app-error: var(--mat-sys-error);
 }
-
-/* ==============================================
-   4. TOKENS SEMÂNTICOS — TEMA ESCURO
-   ============================================== */
-:root[data-theme="dark"],
-body.dark-theme /* alias temporário, remover após migrar o toggle */ {
-  color-scheme: dark;
-
-  --app-bg: var(--color-darker-16);
-  --app-surface: var(--color-darker-15);
-  --app-surface-variant: var(--color-darker-14);
-  --app-border: var(--color-darker-13);
-
-  --app-text: var(--color-light-03);
-  --app-text-muted: var(--color-medium-08);
-  --app-text-on-primary: var(--color-light-01);
-
-  --app-primary: var(--color-blue-light);   /* #0060b2 tem contraste fraco em fundo escuro */
-  --app-primary-strong: var(--color-secondary-dark);
-  --app-accent: var(--color-secondary-light);
-
-  --app-success: var(--color-green-02);
-  --app-warning: var(--color-yellow-04);
-
-  --app-toolbar-bg: var(--color-darker-15);
-  --app-sidebar-bg: var(--color-darker-16);
-}
-
 
 /* ==============================================
    5. RESETS E BASE
@@ -160,36 +151,22 @@ app-root { display: flex; flex-direction: column; height: 100%; }
 .text-accent { color: var(--app-accent); }
 
 
-/* Removido: .display-desktop e .display-mobile, 
-   pois são classes de layout específicas que devem ser controladas no componente 
-   principal do layout para responsividade. */
-
 /* ==============================================
-   ESTILOS DO TEMA ESCURO (.dark-theme)
+   8. OVERRIDES DE COMPONENTES MATERIAL
    ============================================== */
-body.dark-theme {
-  /* Sobrescreve as cores neutras e de fundo para o modo escuro */
-  --color-light-01: #1a1a1a;
-  --color-light-03: #222b32;
-  --color-text-dark: #f1f6f6;
-  /* Inverte o texto para claro */
-
-  background-color: var(--color-darker-16);
-  color: var(--color-text-dark);
-
-  /* Ajuste específico para componentes do Toolbar e Sidenav no escuro */
-  mat-toolbar {
-    background-color: var(--color-darker-15) !important;
-    color: #ffffff;
-  }
-
-  .sidebar {
-    background-color: var(--color-darker-16) !important;
-  }
-}
-
+/* Mesma especificidade do seletor que gera o rosa; vem depois, então vence */
 html .mat-mdc-slide-toggle.mat-accent {
-    
-    --mdc-switch-selected-focus-track-color: var(--color-darker-11) !important;
-    
+  @include mat.slide-toggle-overrides((
+    selected-handle-color: var(--mat-sys-on-primary),
+    selected-hover-handle-color: var(--mat-sys-on-primary),
+    selected-focus-handle-color: var(--mat-sys-on-primary),
+    selected-pressed-handle-color: var(--mat-sys-on-primary),
+    selected-track-color: var(--mat-sys-primary),
+    selected-hover-track-color: var(--mat-sys-primary),
+    selected-focus-track-color: var(--mat-sys-primary),
+    selected-pressed-track-color: var(--mat-sys-primary),
+    selected-hover-state-layer-color: var(--mat-sys-primary),
+    selected-focus-state-layer-color: var(--mat-sys-primary),
+    selected-pressed-state-layer-color: var(--mat-sys-primary),
+  ));
 }

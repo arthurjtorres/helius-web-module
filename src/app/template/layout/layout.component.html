@@ -17,16 +17,6 @@
         <mat-icon>account_circle</mat-icon>
       </button>
 
-      <button
-        mat-icon-button
-        (click)="toggleDarkMode(!isDarkMode)"
-        [title]="
-          isDarkMode ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'
-        "
-      >
-        <mat-icon>{{ isDarkMode ? "dark_mode" : "light_mode" }}</mat-icon>
-      </button>
-
       <mat-menu #userMenu="matMenu" class="user-menu-panel">
         <div class="menu-header">
           <p>{{ user.email }}</p>
@@ -45,11 +35,9 @@
           class="dark-mode-item"
         >
           <mat-slide-toggle
-            [checked]="isDarkMode"
-            (change)="toggleDarkMode($event.checked)"
-          >
-            <!-- Opcional: texto acessível ou deixar vazio para o CSS injetar o ícone -->
-          </mat-slide-toggle>
+            [checked]="theme.isDark()"
+            (change)="theme.toggle()"
+          ></mat-slide-toggle>
           <span class="dark-mode-label">Modo Escuro</span>
         </button>
 
