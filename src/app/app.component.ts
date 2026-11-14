@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { inject, Component } from '@angular/core';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'helius-web-portal';
+  title = 'Portal Helius';
+  private readonly _theme = inject(ThemeService);
 }
