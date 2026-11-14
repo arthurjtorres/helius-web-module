@@ -6,15 +6,15 @@
 
 .detail-section {
   padding: 0.625rem;
-  background: var(--color-light-03);
+  background: var(--app-bg); 
   border-radius: 0.5rem;
 }
 
 h3 {
   margin-top: 0;
-  color: #3f51b5; 
+  color: var(--app-primary); 
   font-size: 1rem; 
-  border-bottom: 0.063 solid #ddd; 
+  border-bottom: 1px solid var(--app-border); 
   padding-bottom: 0.25rem; 
 }
 
