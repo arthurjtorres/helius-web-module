@@ -1,5 +1,6 @@
-import { Component, computed, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-layout',
@@ -9,13 +10,14 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class LayoutComponent {
   private authService = inject(AuthService);
+  theme = inject(ThemeService);
 
   collapsed = signal(false);
   sidebarWidth = computed(() => this.collapsed() ? '60px' : '250px');
 
   user$ = this.authService.getUser();
 
-  logout(){
+  logout() {
     this.authService.logout();
   }
 }

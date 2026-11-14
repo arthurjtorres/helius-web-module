@@ -19,6 +19,7 @@
               matInput
               id="userLogin"
               formControlName="userLogin"
+              autocomplete="username"
               placeholder="Usuário ou Email"
             />
           </mat-form-field>
@@ -33,6 +34,7 @@
               [type]="hidePassword ? 'password' : 'text'"
               id="password"
               formControlName="password"
+              autocomplete="current-password"
               placeholder="Digite sua Senha!"
             />
 
@@ -41,11 +43,14 @@
               matSuffix
               type="button"
               (click)="hidePassword = !hidePassword"
-              
-              [attr.aria-label]="'Ocultar senha'" 
+              [attr.aria-label]="
+                hidePassword ? 'Mostrar senha' : 'Ocultar senha'
+              "
               [attr.aria-pressed]="hidePassword"
             >
-              <mat-icon class="show-pass-icon">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              <mat-icon class="show-pass-icon">{{
+                hidePassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
             </button>
           </mat-form-field>
         </div>

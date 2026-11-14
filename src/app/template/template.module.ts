@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { FormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { TemplateRoutingModule } from './template-routing.module';
 //import { BodyComponent } from './body/body.component';
@@ -36,7 +38,8 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
     MatListModule,
     MatToolbarModule,
     MatSidenavModule,
-
+    FormsModule,
+    MatSlideToggleModule,
   ],
   exports: [
     LayoutComponent,

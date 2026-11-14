@@ -14,6 +14,7 @@ import { UserProfileModule } from './pages/user-profile/user-profile.module';
 import { PenaltyControlModule } from './pages/penalty-control/penalty-control.module';
 import { EmployeeModule } from './pages/employee/employee.module';
 import { VehiclesModule } from './pages/vehicles/vehicles.module';
+import { CompanyModule } from './pages/company/company.module';
 
 
 
@@ -35,6 +36,7 @@ import { VehiclesModule } from './pages/vehicles/vehicles.module';
     PenaltyControlModule,
     EmployeeModule,
     VehiclesModule,
+    CompanyModule
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
