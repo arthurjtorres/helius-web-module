@@ -2,90 +2,126 @@
    1. IMPORTAÇÕES GLOBAIS
    ============================================== */
 
+@use "@angular/material" as mat;
+@use "./theme-colors" as tc;
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons"); /* CORREÇÃO FINAL: Importa a fonte dos ícones */
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+/* CORREÇÃO FINAL: Importa a fonte dos ícones */
 
 /* ==============================================
-   2. VARIÁVEIS DE CORES E LAYOUT
+   2. PALETA (primitivos) — não usar direto nos componentes
    ============================================== */
 
 :root {
-  /* Cores Primárias */
-  /* Cores Azuis (do mais claro para o mais escuro) */
-  --color-blue-light: #86b6ec; /* Azul muito claro */
-  --color-secondary-light: #00b7ff; /* Azul ciano/claro */
-  --color-primary-light: #0060b2; /* Azul primário claro */
-  --color-secondary-dark: #174fac; /* Azul secundário escuro/saturado */
-  --color-primary-dark: #004c8c; /* Azul primário escuro */
+  /* Azuis */
+  --color-blue-light: #86b6ec;
+  --color-secondary-light: #00b7ff;
+  --color-primary-light: #006ac6;
+  --color-secondary-dark: #0d57cd;
+  --color-primary-dark: #001b95;
 
-  // CORES PRAIA SOL
-  --color-yellow-01: #ece165; /* Amarelo muito claro/suave */
+  /* Amarelos */
+  --color-yellow-01: #ece165;
   --color-yellow-02: #eedd46;
   --color-yellow-03: #f7e416;
   --color-yellow-04: #f9db19;
   --color-yellow-05: #ffbf00;
 
-  // CORES VEREDA
-  --color-green-01: #43a278; /* Verde desbotado/claro */
-  --color-green-02: #34b27c; /* Verde primário (claro/médio) */
+  /* Verdes */
+  --color-green-01: #43a278;
+  --color-green-02: #34b27c;
   --color-green-03: #39b475;
-  --color-green-04: #26b46e; /* Verde variante (médio) */
-  --color-green-05: #11a260; /* Verde forte (médio/escuro) */
+  --color-green-04: #26b46e;
+  --color-green-05: #11a260;
   --color-green-06: #12a658;
-  --color-green-07: #29835d; /* Verde escuro */
-  --color-green-08: #174;
+  --color-green-07: #29835d;
+  --color-green-08: #117744;
 
-  /* Cores Neutras (do mais claro para o mais escuro) */
-  --color-light-01: #ffffff; /* Branco puro */
+  /* Neutros claros */
+  --color-light-01: #ffffff;
   --color-light-02: #fcfcfc;
   --color-light-03: #f1f6f6;
   --color-light-04: #ecf0f1;
   --color-light-05: #e5e5e3;
   --color-light-06: #dfe0de;
-  --color-light-07: #cccccc; /* Cinza claro */
+  --color-light-07: #cccccc;
 
+  /* Neutros médios */
   --color-medium-08: #adb5bd;
-  --color-medium-09: #857e7c; /* Cinza médio */
-  --color-medium-10: #818187; /* Cinza médio */
+  --color-medium-09: #857e7c;
+  --color-medium-10: #888889;
 
-  --color-darker-11: #384549; /* Cinza escuro */
-  --color-darker-12: #374448; /* Cinza escuro */
+  /* Neutros escuros */
+  --color-darker-11: #384549;
+  --color-darker-12: #374448;
   --color-darker-13: #2d405f;
   --color-darker-14: #2c3e50;
   --color-darker-15: #1c2a40;
-  --color-darker-16: #282830; /* Fundo escuro principal (azul marinho) */
-  --color-darker-17: #1a1a1a; /* Preto muito escuro */
+  --color-darker-16: #282830;
+  --color-darker-17: #1a1a1a;
 
   --color-grey-variant: #8886aa;
+  --color-error: #f45454;
 }
 
 /* ==============================================
-   3. RESETS E ESTRUTURA BASE
+   3. TEMA MATERIAL (M3)
    ============================================== */
+html {
+  color-scheme: light dark; /* padrão: segue o sistema */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  @include mat.theme((
+    color: (
+      primary: tc.$primary-palette,
+      tertiary: tc.$tertiary-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
 }
 
-html,
-body {
+/* Escolha explícita do usuário (definida pelo ThemeService) */
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="dark"]  { color-scheme: dark; }
+
+/* ==============================================
+   4. TOKENS DA APLICAÇÃO (usar nos componentes)
+   ============================================== */
+:root {
+  --app-bg: var(--mat-sys-background);
+  --app-surface: var(--mat-sys-surface-container);
+  --app-surface-variant: var(--mat-sys-surface-container-high);
+  --app-border: var(--mat-sys-outline-variant);
+  --app-border-strong: var(--mat-sys-outline);
+
+  --app-text: var(--mat-sys-on-surface);
+  --app-text-muted: var(--mat-sys-on-surface-variant);
+  --app-text-on-primary: var(--mat-sys-on-primary);
+
+  --app-primary: var(--mat-sys-primary);
+  --app-accent: var(--mat-sys-tertiary);
+
+  --app-success: light-dark(var(--color-green-05), var(--color-green-02));
+  --app-warning: light-dark(var(--color-yellow-05), var(--color-yellow-04));
+  --app-error: var(--mat-sys-error);
+}
+
+/* ==============================================
+   5. RESETS E BASE
+   ============================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
   height: 100%;
   font-family: "Roboto", "Helvetica Neue", sans-serif;
-  color: var(--color-text-dark);
-  background-color: var(--color-background-white);
+  color: var(--app-text);
+  background-color: var(--app-bg);
 }
 
-/* O componente raiz do Angular ocupa 100% da altura */
-app-root {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+app-root { display: flex; flex-direction: column; height: 100%; }
 
 /* ==============================================
-   4. ESTILOS DO MATERIAL ICONS (CORREÇÃO)
+   6. ESTILOS DO MATERIAL ICONS (CORREÇÃO)
    ============================================== */
 
 /* É importante definir estas regras globalmente para garantir que o navegador 
@@ -108,22 +144,29 @@ app-root {
 }
 
 /* ==============================================
-   5. UTILITÁRIOS GLOBAIS
+   7. UTILITÁRIOS
    ============================================== */
+.spacer { flex: 1 1 auto; }
+.bg-primary { background-color: var(--app-primary); color: var(--app-text-on-primary); }
+.text-accent { color: var(--app-accent); }
 
-.spacer {
-  flex: 1 1 auto;
+
+/* ==============================================
+   8. OVERRIDES DE COMPONENTES MATERIAL
+   ============================================== */
+/* Mesma especificidade do seletor que gera o rosa; vem depois, então vence */
+html .mat-mdc-slide-toggle.mat-accent {
+  @include mat.slide-toggle-overrides((
+    selected-handle-color: var(--mat-sys-on-primary),
+    selected-hover-handle-color: var(--mat-sys-on-primary),
+    selected-focus-handle-color: var(--mat-sys-on-primary),
+    selected-pressed-handle-color: var(--mat-sys-on-primary),
+    selected-track-color: var(--mat-sys-primary),
+    selected-hover-track-color: var(--mat-sys-primary),
+    selected-focus-track-color: var(--mat-sys-primary),
+    selected-pressed-track-color: var(--mat-sys-primary),
+    selected-hover-state-layer-color: var(--mat-sys-primary),
+    selected-focus-state-layer-color: var(--mat-sys-primary),
+    selected-pressed-state-layer-color: var(--mat-sys-primary),
+  ));
 }
-
-.bg-primary {
-  background-color: var(--color-primary-dark);
-  color: var(--color-text-light);
-}
-
-.text-accent {
-  color: var(--color-accent);
-}
-
-/* Removido: .display-desktop e .display-mobile, 
-   pois são classes de layout específicas que devem ser controladas no componente 
-   principal do layout para responsividade. */

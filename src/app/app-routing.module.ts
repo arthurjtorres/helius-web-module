@@ -15,6 +15,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { loginGuard } from './core/guards/login.guard';
 import { EmployeePageContentComponent } from './pages/employee/employee-page-content/employee-page-content.component';
 import { VehiclesContentComponent } from './pages/vehicles/vehicles-content/vehicles-content.component';
+import { CompanyPageContentComponent } from './pages/company/company-page-content/company-page-content.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,10 @@ const routes: Routes = [
       {
         path: 'human-resources/personnel',
         component: EmployeePageContentComponent,
+      },
+      {
+        path: 'human-resources/company',
+        component: CompanyPageContentComponent,
       },
       {
         path: 'operations/vehicles',
