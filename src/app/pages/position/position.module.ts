@@ -10,11 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { PositionPageComponent } from './position-page/position-page.component';
 import { PositionFormComponent } from './position-form/position-form.component';
 
 /** Cadastro de cargos (SRH). */
 @NgModule({
   declarations: [
+    PositionPageComponent,
     PositionFormComponent,
   ],
   imports: [
