@@ -1,0 +1,37 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px; // Espaço para não colar no título
+  
+  .full-width {
+    width: 100%;
+  }
+
+  .fields-row {
+    display: flex;
+    flex-wrap: wrap; // Garante responsividade em telas menores
+    gap: 16px;      // Separação entre os campos
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .field-item {
+    flex: 1;        // Faz os campos crescerem igualmente
+    min-width: 150px;
+
+    &.small {
+      flex: 0 0 120px; // Anos, capacidade, Wi-Fi e câmera
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+// Estilo para o título do Dialog
+h2[mat-dialog-title] {
+  margin-bottom: 0;
+  color: var(--app-primary);
+  font-weight: 500;
+}
