@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { EmployeeDTO } from '../interfaces/employee.interface';
+import { ImportReport } from '../../shared/import-report/import-report.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,12 @@ export class EmployeeService {
 
   getAll(): Observable<any>{
     return this.http.get<any>(this.API)
+  }
+
+  /** Importação em lote (`upsert`, tudo ou nada); `dryRun` só simula. */
+  bulkImport(companyId: string, employees: object[], dryRun: boolean, confirmIds: string[] = []): Observable<{ data: ImportReport }> {
+    const params = { mode: 'upsert', dryRun: String(dryRun) };
+    return this.http.post<{ data: ImportReport }>(`${this.API}/bulk`, { companyId, employees, confirmIds }, { params });
   }
 
   bulkInsert(payload: any): Observable<any> {
