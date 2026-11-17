@@ -1,1 +1,116 @@
-<p>vehicles-form works!</p>
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Veículo' : 'Novo Veículo' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-container" (ngSubmit)="onSave()">
+
+    <div class="fields-row">
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Empresa</mat-label>
+        <mat-select formControlName="fkVehicleCompanyId">
+          @for (company of companies; track company.companyId) {
+            <mat-option [value]="company.companyId">{{ company.companyName }}</mat-option>
+          }
+        </mat-select>
+        @if (!companies.length) { <mat-hint>Nenhuma empresa cadastrada.</mat-hint> }
+        <mat-error>Informe a empresa.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="fkTypeVehicleId">
+          @for (type of vehicleTypes; track type.typeVehicleId) {
+            <mat-option [value]="type.typeVehicleId">{{ type.typeVehicleName }}</mat-option>
+          }
+        </mat-select>
+        @if (!vehicleTypes.length) { <mat-hint>Nenhum tipo de veículo cadastrado.</mat-hint> }
+        <mat-error>Informe o tipo.</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="fields-row">
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Número (prefixo)</mat-label>
+        <input matInput formControlName="vehicleNumber">
+        <mat-error>{{ form.get('vehicleNumber')?.getError('conflict') || 'Informe o número.' }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Placa</mat-label>
+        <input matInput formControlName="licensePlate" placeholder="AAA-0000 ou AAA0A00">
+        <mat-error>{{ form.get('licensePlate')?.getError('conflict') || 'Placa inválida; use AAA-0000 ou AAA0A00.' }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Renavam</mat-label>
+        <input matInput formControlName="renavan" inputmode="numeric">
+        <mat-error>Use de 9 a 11 dígitos.</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="fields-row">
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Marca</mat-label>
+        <input matInput formControlName="brand">
+        <mat-error>Informe a marca.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Modelo</mat-label>
+        <input matInput formControlName="model">
+        <mat-error>Informe o modelo.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Chassi</mat-label>
+        <input matInput formControlName="chassisNumber">
+        <mat-error>Use de 8 a 25 letras e números.</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="fields-row">
+      <mat-form-field appearance="outline" class="field-item small">
+        <mat-label>Ano fab.</mat-label>
+        <input matInput formControlName="fabricationYear" inputmode="numeric">
+        <mat-error>Ano inválido.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item small">
+        <mat-label>Ano mod.</mat-label>
+        <input matInput formControlName="modelYear" inputmode="numeric">
+        <mat-error>Ano inválido.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item small">
+        <mat-label>Capacidade</mat-label>
+        <input matInput formControlName="capacity" inputmode="numeric">
+        <mat-error>De 1 a 300.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item small">
+        <mat-label>Wi-Fi</mat-label>
+        <mat-select formControlName="hasWifi">
+          <mat-option [value]="true">Sim</mat-option>
+          <mat-option [value]="false">Não</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item small">
+        <mat-label>Câmera</mat-label>
+        <mat-select formControlName="cameraType">
+          @for (camera of cameraTypes; track camera) {
+            <mat-option [value]="camera">{{ camera }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>Informe a câmera.</mat-error>
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" color="warn">Descartar</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || saving">
+    <mat-icon>{{ isEdit ? 'edit' : 'save' }}</mat-icon> {{ isEdit ? 'Atualizar' : 'Cadastrar' }}
+  </button>
+</mat-dialog-actions>

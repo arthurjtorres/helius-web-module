@@ -39,7 +39,7 @@ describe('VehiclePageComponent', () => {
     Array.from(el.querySelectorAll(`mat-cell.${column}`)).map(c => c.textContent?.trim());
 
   beforeEach(async () => {
-    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['getAllVehicles']);
+    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['getAllVehicles', 'deleteVehicle']);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
       imports: [VehiclesModule, NoopAnimationsModule],
@@ -79,5 +79,22 @@ describe('VehiclePageComponent', () => {
   it('notifica os demais erros', fakeAsync(() => {
     render(throwError(() => new HttpErrorResponse({ status: 500 })));
     expect(notification.error).toHaveBeenCalledOnceWith('Não foi possível carregar os veículos.');
+  }));
+
+  it('exclui após confirmação e recarrega a lista', fakeAsync(() => {
+    render(of({ data: [vehicle] }));
+    spyOn(window, 'confirm').and.returnValue(true);
+    vehicleService.deleteVehicle.and.returnValue(of({}));
+    fixture.componentInstance.deleteVehicle(vehicle);
+    tick();
+    expect(vehicleService.deleteVehicle).toHaveBeenCalledWith('v1');
+    expect(vehicleService.getAllVehicles).toHaveBeenCalledTimes(2);
+  }));
+
+  it('não exclui sem confirmação', fakeAsync(() => {
+    render(of({ data: [vehicle] }));
+    spyOn(window, 'confirm').and.returnValue(false);
+    fixture.componentInstance.deleteVehicle(vehicle);
+    expect(vehicleService.deleteVehicle).not.toHaveBeenCalled();
   }));
 });
