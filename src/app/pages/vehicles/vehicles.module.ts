@@ -15,6 +15,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { VehiclesImportComponent } from './vehicles-import/vehicles-import.component';
 import { VehiclesFormComponent } from './vehicles-form/vehicles-form.component';
 
@@ -41,7 +43,8 @@ import { VehiclesFormComponent } from './vehicles-form/vehicles-form.component';
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
-    
+    MatSelectModule,
+    MatTooltipModule,
   ]
 })
 export class VehiclesModule { }
