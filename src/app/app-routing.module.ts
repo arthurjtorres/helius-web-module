@@ -16,6 +16,7 @@ import { loginGuard } from './core/guards/login.guard';
 import { EmployeePageContentComponent } from './pages/employee/employee-page-content/employee-page-content.component';
 import { VehiclesContentComponent } from './pages/vehicles/vehicles-content/vehicles-content.component';
 import { CompanyPageContentComponent } from './pages/company/company-page-content/company-page-content.component';
+import { PositionPageComponent } from './pages/position/position-page/position-page.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,10 @@ const routes: Routes = [
       {
         path: 'human-resources/company',
         component: CompanyPageContentComponent,
+      },
+      {
+        path: 'human-resources/positions',
+        component: PositionPageComponent,
       },
       {
         path: 'operations/vehicles',
