@@ -16,7 +16,7 @@ export class VehicleService {
     return this.http.post<VehicleInterface>(this.vehiclesAPI, vehicle);
   }
 
-  getAllVehicles(): Observable<VehicleInterface[]> {
-    return this.http.get<VehicleInterface[]>(this.vehiclesAPI);
+  getAllVehicles(): Observable<{ data: VehicleInterface[] }> {
+    return this.http.get<{ data: VehicleInterface[] }>(this.vehiclesAPI);
   }
 }
