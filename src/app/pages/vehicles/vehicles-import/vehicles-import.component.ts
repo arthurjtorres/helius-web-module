@@ -10,7 +10,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { VehicleService } from '../../../core/services/vehicle.service';
 import { normalizeText } from '../../../core/utils/normalize-text';
 import { readWorkbook } from '../../../core/utils/sheet-reader';
-import { ImportReport } from '../../../shared/import-report/import-report.model';
+import { ImportReport, withFileLines } from '../../../shared/import-report/import-report.model';
 import { VehicleRow, VehicleSheet, parseCapacity, parseVehicleSheet } from './vehicle-sheet';
 
 /** Máximo de veículos por requisição no `/vehicle/bulk`. */
@@ -128,17 +128,18 @@ export class VehiclesImportComponent implements OnInit {
     const vehicles = state.sheet.rows.map(({ line, ...row }) => ({
       ...row, hasWifi: row.hasWifi ?? state.hasWifi, cameraType: row.cameraType ?? state.cameraType,
     }));
+    const lines = state.sheet.rows.map(r => r.line);
     state.busy = true;
     this.vehicleService.bulkImport(state.companyId, vehicles, dryRun, dryRun ? [] : state.confirmIds).subscribe({
       next: res => {
         state.busy = false;
-        state.report = res.data;
+        state.report = withFileLines(res.data, lines);
         if (dryRun) this.loadOutside(state);
         else state.imported = true;
       },
       error: (err: HttpErrorResponse) => {
         state.busy = false;
-        if (err.status === 400 && err.error?.data) state.report = err.error.data;
+        if (err.status === 400 && err.error?.data) state.report = withFileLines(err.error.data, lines);
         else if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível importar.');
       }
     });
