@@ -44,6 +44,11 @@ export class SidebarComponent  {
           route: 'company',
           icon: 'person',
         },
+        {
+          label: 'Cargos',
+          route: 'positions',
+          icon: 'badge',
+        },
         
       ]
     },

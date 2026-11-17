@@ -3,8 +3,8 @@ export default interface PositionInterface {
   positionName: string;
   positionCode?: number;
 
-  createdAt: Date;
-  createdBy: string;
+  createdAt?: Date;
+  createdBy?: string;
   updatedAt?: Date;
   updatedBy?: string;
 }
