@@ -78,9 +78,32 @@ export class VehiclePageComponent implements OnInit {
   }
 
   addVehicle(): void {
+    this.openForm(null);
+  }
+
+  editVehicle(vehicle: VehicleInterface): void {
+    this.openForm(vehicle);
+  }
+
+  /** Desativa o veículo (exclusão lógica), após confirmação. */
+  deleteVehicle(vehicle: VehicleInterface): void {
+    if (!vehicle.vehicleId || !confirm(`Deseja realmente excluir o veículo ${vehicle.vehicleNumber}?`)) return;
+    this.vehicleService.deleteVehicle(vehicle.vehicleId).subscribe({
+      next: () => {
+        this.notification.info('Veículo excluído.');
+        this.loadData();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível excluir o veículo.');
+      }
+    });
+  }
+
+  private openForm(vehicle: VehicleInterface | null): void {
     const dialogRef = this.dialog.open(VehiclesFormComponent, {
       width: '1200px',
-      disableClose: true
+      disableClose: true,
+      data: vehicle,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -89,6 +112,4 @@ export class VehiclePageComponent implements OnInit {
       }
     });
   }
-
-
 }
