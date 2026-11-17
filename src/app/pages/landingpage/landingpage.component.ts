@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+
+const LOGIN_FAILED_MESSAGE = 'Falha na autenticação. Verifique seus dados.';
+const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde.';
 
 @Component({
   selector: 'app-landingpage',
@@ -41,13 +45,19 @@ export class LandingpageComponent {
         this.router.navigate(['/home']); // Ou a rota principal do seu app
       }
     },
-      error: (err) => {
-        this.errorMessage = 'Falha na autenticação. Verifique seus dados.';
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage = this.loginErrorMessage(err);
       }
     })
+  }
 
-    /*if (this.loginForm.valid) {
-      console.log('Formulário enviado', this.loginForm.value)
-    }*/
+  /**
+   * Mensagem do erro de login. O 429 vem do rate limit do `control` (3 falhas em 15 min por IP + login).
+   * @param err erro devolvido pelo `POST /authenticate`.
+   */
+  private loginErrorMessage(err: HttpErrorResponse): string {
+    if (err.status !== 429) return LOGIN_FAILED_MESSAGE;
+    const message = (err.error as { message?: unknown } | null)?.message;
+    return typeof message === 'string' && message.trim() ? message : TOO_MANY_ATTEMPTS_MESSAGE;
   }
 }
