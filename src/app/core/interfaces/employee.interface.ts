@@ -25,11 +25,3 @@ export interface EmployeeDTO {
   fkSectorId?: string;
   fkDepartmentId?: string;
 }
-
-export interface ImportEmployee {
-  registration: string;
-  fullName: string;
-  admissionDate: string;
-  position: string;
-  birthDate: string;
-}
