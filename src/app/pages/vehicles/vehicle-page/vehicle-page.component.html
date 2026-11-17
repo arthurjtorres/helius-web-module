@@ -23,32 +23,37 @@
 
       <ng-container matColumnDef="company">
         <mat-header-cell *matHeaderCellDef class="company">Empresa</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="company"></mat-cell>
+        <mat-cell *matCellDef="let item" class="company">{{ item.company?.companyName ?? '—' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="vehicleNumber">
         <mat-header-cell *matHeaderCellDef class="vehicleNumber">Número</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="vehicleNumber"></mat-cell>
+        <mat-cell *matCellDef="let item" class="vehicleNumber">{{ item.vehicleNumber }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef class="type">Tipo</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="type">{{ item.VehicleType?.typeVehicleName ?? '—' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="brand">
         <mat-header-cell *matHeaderCellDef class="brand">Marca</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="brand"></mat-cell>
+        <mat-cell *matCellDef="let item" class="brand">{{ item.brand }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="licensePlate">
         <mat-header-cell *matHeaderCellDef class="licensePlate">Placa</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="licensePlate"></mat-cell>
+        <mat-cell *matCellDef="let item" class="licensePlate">{{ item.licensePlate }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="renavan">
         <mat-header-cell *matHeaderCellDef class="renavan">Renavan</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="renavan"></mat-cell>
+        <mat-cell *matCellDef="let item" class="renavan">{{ item.renavan }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="model">
         <mat-header-cell *matHeaderCellDef class="model">Modelo</mat-header-cell>
-        <mat-cell *matCellDef="let item" class="model"></mat-cell>
+        <mat-cell *matCellDef="let item" class="model">{{ item.model }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">

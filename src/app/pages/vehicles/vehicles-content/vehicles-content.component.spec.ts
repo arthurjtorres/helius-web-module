@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { VehiclesContentComponent } from './vehicles-content.component';
 
@@ -8,7 +9,9 @@ describe('VehiclesContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VehiclesContentComponent]
+      declarations: [VehiclesContentComponent],
+      // Só a casca de abas: os filhos têm specs próprios.
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
 
