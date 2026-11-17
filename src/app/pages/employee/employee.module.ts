@@ -20,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { ImportReportModule } from '../../shared/import-report/import-report.module';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatCardModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ImportReportModule
   ]
 })
 export class EmployeeModule { }
