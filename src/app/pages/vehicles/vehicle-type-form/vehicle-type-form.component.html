@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Tipo de Veículo' : 'Novo Tipo de Veículo' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-container" (ngSubmit)="onSave()">
+    <div class="fields-row">
+      <mat-form-field appearance="outline" class="field-item">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="typeVehicleName" placeholder="Ex.: D-CONVENCIONAL AR">
+        <mat-error>{{ form.get('typeVehicleName')?.hasError('duplicate') ? 'Já existe um tipo de veículo com este nome.' : 'Informe o nome.' }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-item small">
+        <mat-label>Ar-condicionado</mat-label>
+        <mat-select formControlName="airConditioner">
+          <mat-option [value]="true">Sim</mat-option>
+          <mat-option [value]="false">Não</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" color="warn">Descartar</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || saving">
+    <mat-icon>{{ isEdit ? 'edit' : 'save' }}</mat-icon> {{ isEdit ? 'Atualizar' : 'Cadastrar' }}
+  </button>
+</mat-dialog-actions>
