@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { VehiclesImportComponent } from './vehicles-import/vehicles-import.component';
 import { VehiclesFormComponent } from './vehicles-form/vehicles-form.component';
+import { VehicleTypePageComponent } from './vehicle-type-page/vehicle-type-page.component';
 import { VehicleTypeFormComponent } from './vehicle-type-form/vehicle-type-form.component';
 
 
@@ -28,6 +29,7 @@ import { VehicleTypeFormComponent } from './vehicle-type-form/vehicle-type-form.
     VehiclePageComponent,
     VehiclesImportComponent,
     VehiclesFormComponent,
+    VehicleTypePageComponent,
     VehicleTypeFormComponent,
   ],
   imports: [

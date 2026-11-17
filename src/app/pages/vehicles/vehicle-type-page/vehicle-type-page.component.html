@@ -1,0 +1,38 @@
+<ng-container class="vehicle-container">
+  <header class="vehicle-header">
+    <span></span>
+    <button mat-fab extended class="button-import" (click)="openForm()">
+      <mat-icon>add_circle_outline</mat-icon>Adicionar
+    </button>
+  </header>
+  <mat-divider></mat-divider>
+
+  <div class="table-container">
+    <mat-table class="mat-elevation-z8" [dataSource]="dataSource">
+      <ng-container matColumnDef="typeVehicleName">
+        <mat-header-cell *matHeaderCellDef class="type">Nome</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="type">{{ item.typeVehicleName }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="airConditioner">
+        <mat-header-cell *matHeaderCellDef class="brand">Ar-condicionado</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="brand">{{ item.airConditioner ? 'Sim' : 'Não' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="actions">Ações</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="actions">
+          <button mat-icon-button color="primary" matTooltip="Editar" aria-label="Editar" (click)="openForm(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" matTooltip="Excluir" aria-label="Excluir" (click)="deleteType(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+    </mat-table>
+  </div>
+</ng-container>
