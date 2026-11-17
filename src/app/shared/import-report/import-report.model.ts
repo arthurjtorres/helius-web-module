@@ -37,3 +37,20 @@ export interface ImportReport {
   missingVehicleTypes?: string[];
   missingPositions?: string[];
 }
+
+/**
+ * O backend numera os itens pela posição na lista enviada (1 = primeiro); a tela mostra a linha do
+ * arquivo. Troca uma pela outra em todas as listas do relatório.
+ * @param lines linha do arquivo de cada item, na ordem do envio.
+ */
+export function withFileLines(report: ImportReport, lines: number[]): ImportReport {
+  const fix = <T extends { line: number }>(items: T[]): T[] => items.map(i => ({ ...i, line: lines[i.line - 1] ?? i.line }));
+  return {
+    ...report,
+    created: fix(report.created),
+    updated: report.updated && fix(report.updated),
+    unchanged: report.unchanged && fix(report.unchanged),
+    skipped: fix(report.skipped),
+    failed: fix(report.failed),
+  };
+}
