@@ -13,14 +13,15 @@ export interface VehicleInterface {
   cameraType?: string;
 
   fkVehicleCompanyId?: string;
-  companyName: string;
+  /** Empresa anexada pelo `operations` a partir do `registry`; nula ou ausente se o `registry` falhar. */
+  company?: { companyName: string } | null;
 
   fkTypeVehicleId?: string;
-  typeVehicleName: string;
-  airConditioner: boolean;
+  /** Tipo do veículo (alias `VehicleType` da API). */
+  VehicleType?: VehicleTypeInterface | null;
 
-  createdAt: Date;
-  createdBy: string;
+  createdAt?: Date;
+  createdBy?: string;
   updatedAt?: Date;
   updatedBy?: string;
   activated?: boolean;
@@ -36,8 +37,8 @@ export interface VehicleInterface {
   typeVehicleName: string;
   airConditioner: boolean;
 
-  createdAt: Date;
-  createdBy: string;
+  createdAt?: Date;
+  createdBy?: string;
   updatedAt?: Date;
   updatedBy?: string;
 }

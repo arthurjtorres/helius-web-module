@@ -8,6 +8,8 @@ import { VehicleInterface } from '../../../core/interfaces/vehicle.interface';
 import { VehicleService } from '../../../core/services/vehicle.service';
 import { VehiclesFormComponent } from '../vehicles-form/vehicles-form.component';
 import { VehiclesImportComponent } from '../vehicles-import/vehicles-import.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-vehicle-page',
@@ -20,6 +22,7 @@ export class VehiclePageComponent implements OnInit {
   vehicleHeader: string[] = [
     'company',
     'vehicleNumber',
+    'type',
     'brand',
     'licensePlate',
     'renavan',
@@ -35,54 +38,31 @@ export class VehiclePageComponent implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private dialog: MatDialog,
+    private notification: NotificationService,
   ) { }
 
   ngOnInit(): void {
     this.loadData();
   }
 
+  /** Carrega os veículos ativos. 404 = nenhum veículo; 403 já é avisado pelo interceptor. */
   loadData() {
     this.vehicleService.getAllVehicles().subscribe({
-      next: (response: any) => {
-        const rawData = response.data || [];
-        const mappedData: VehicleInterface[] = rawData.map((item: any) => {
-          return {
-            vehicleId: item.vehicleId,
-            fkVehicleCompanyId: item.fkVehicleCompanyId,
-            fkTypeVehicleId: item.fkTypeVehicleId,
-
-            // Dados de exibição
-            vehicleNumber: item.vehicleNumber,
-            brand: item.brand,
-            licensePlate: item.licensePlate,
-            chassisNumber: item.chassisNumber,
-            fabricationYear: item.fabricationYear,
-            modelYear: item.modelYear,
-            renavan: item.renavan,
-            capacity: item.capacity,
-            model: item.model,
-            hasWifi: item.hasWifi, 
-            cameraType: item.cameraType,
-            activated: item.activated,
-
-            // Dados de includes
-            typeVehicleName: item.VehicleTypeModel?.typeVehicleName,
-            companyName: item.CompanyModel?.companyName,
-          };
-        });
-
-        const activeData = mappedData.filter(bus => bus.activated !== false);
-
-        this.vehicleDataSource.data = activeData;
-        setTimeout(() => {
-          this.vehicleDataSource.paginator = this.paginator;
-          this.vehicleDataSource.sort = this.sort;
-        });
-      },
-      error: (err) => console.error('Erro ao buscar veículos:', err)
+      next: (response) => this.showVehicles(response.data ?? []),
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 404) return this.showVehicles([]);
+        if (err.status !== 403) this.notification.error('Não foi possível carregar os veículos.');
+      }
     })
   }
 
+  private showVehicles(vehicles: VehicleInterface[]): void {
+    this.vehicleDataSource.data = vehicles;
+    setTimeout(() => {
+      this.vehicleDataSource.paginator = this.paginator;
+      this.vehicleDataSource.sort = this.sort;
+    });
+  }
 
   importVehicles(): void {
     const dialogRef = this.dialog.open(VehiclesImportComponent, {
