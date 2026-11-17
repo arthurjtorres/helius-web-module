@@ -13,7 +13,8 @@ export class CompanyService {
 
    constructor(private http: HttpClient) { }
 
-   getAll(): Observable<CompanyInterface[]> {
-       return this.http.get<CompanyInterface[]>(this.API);
+   /** Lista as empresas ativas (envelope `{ data }` da API). */
+   getAll(): Observable<{ data: CompanyInterface[] }> {
+       return this.http.get<{ data: CompanyInterface[] }>(this.API);
      }
 }
