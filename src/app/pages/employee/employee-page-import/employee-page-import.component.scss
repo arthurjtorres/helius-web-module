@@ -1,56 +1,42 @@
-.form-container {
+.hint {
+  color: var(--app-text-muted);
+}
+
+.defaults {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding-top: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* Mantendo o padrão de padding interno dos seus cards */
-.import-config-card {
-  padding: 1.5rem 3rem 1rem 3rem;
+.preview {
+  max-height: 20rem;
+  overflow: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.2rem 0.5rem;
+    border-bottom: 1px solid var(--app-border);
+  }
 }
 
-.grid-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 4rem; /* Mesmo espaçamento usado no seu .employee-data */
-  align-items: start;
-}
-
-.file-input-wrapper {
+.actions {
   display: flex;
   align-items: center;
-  height: 3.5rem; /* ~56px, altura padrão do mat-form-field appearance="outline" */
-  
-  .full-width-button {
-    width: 100%;
-    height: 100%;
-    font-weight: 500;
-  }
+  gap: 0.5rem;
+  margin: 0.75rem 0;
 }
 
-.progress-card {
-  padding: 1rem 3rem;
-  margin-top: 1rem;
-  border-color: var(--color-blue-light); /* Aproveitando sua variável CSS */
-  
-  .progress-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+.error {
+  color: var(--app-error);
 }
 
-.table-preview-card {
-  padding: 0; /* Remove padding para a tabela encostar nas bordas */
-  margin-top: 1.5rem;
-  
-  mat-card-header {
-    padding: 1.5rem 3rem 1rem 3rem;
-  }
-
-  .table-container {
-    max-height: 25rem; /* Substitui os 400px */
-    overflow: auto;
-  }
+.ok {
+  color: var(--app-success);
 }
