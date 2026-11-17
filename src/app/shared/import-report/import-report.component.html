@@ -1,0 +1,68 @@
+<section class="import-report">
+  <p class="summary">
+    {{ report.dryRun ? 'Simulação' : 'Importação' }}:
+    <strong>{{ report.created.length }}</strong> {{ report.dryRun ? 'a criar' : 'criados' }}
+    @if (report.mode === 'upsert') {
+      · <strong>{{ report.updated?.length ?? 0 }}</strong> {{ report.dryRun ? 'a atualizar' : 'atualizados' }}
+      · <strong>{{ report.unchanged?.length ?? 0 }}</strong> sem mudança
+    }
+    · <strong>{{ pending.length + ignored.length }}</strong> ignorados
+    · <strong [class.error]="report.failed.length">{{ report.failed.length }}</strong> com erro
+  </p>
+
+  @if (report.failed.length) {
+    <h3 class="error">Erros (nada é gravado enquanto houver erro)</h3>
+    <table class="report-table">
+      <thead><tr><th>Linha</th><th>{{ keyLabel }}</th><th>Campo</th><th>Erro</th></tr></thead>
+      <tbody>
+        @for (f of report.failed; track $index) {
+          <tr><td>{{ f.line }}</td><td>{{ key(f) || '—' }}</td><td>{{ fieldName(f.field) }}</td><td>{{ f.error }}</td></tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  @if (missing.length) {
+    <h3 class="error">{{ missingLabel }}</h3>
+    <p>{{ missing.join(', ') }}</p>
+  }
+
+  @if (pending.length) {
+    <h3>Diferenças a confirmar</h3>
+    <mat-checkbox (change)="toggleAll($event.checked)">Confirmar todas</mat-checkbox>
+    <ul class="report-list">
+      @for (item of pending; track id(item)) {
+        <li>
+          <mat-checkbox [checked]="isConfirmed(item)" (change)="toggle(item, $event.checked)">
+            Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}
+          </mat-checkbox>
+          <ul>
+            @for (c of item.changes; track c.field) { <li>{{ describe(c) }}</li> }
+          </ul>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (report.updated?.length) {
+    <h3>{{ report.dryRun ? 'Serão atualizados' : 'Atualizados' }}</h3>
+    <ul class="report-list">
+      @for (item of report.updated; track id(item)) {
+        <li>Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}: @for (c of item.changes; track c.field) { {{ describe(c) }}; }</li>
+      }
+    </ul>
+  }
+
+  @if (ignored.length) {
+    <h3>Ignorados</h3>
+    <ul class="report-list">
+      @for (item of ignored; track $index) { <li>Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}: {{ item.reason }}</li> }
+    </ul>
+  }
+
+  @if (outside.length) {
+    <h3>Na base e fora da planilha ({{ outside.length }})</h3>
+    <p class="muted">Só informativo: nada é desativado.</p>
+    <p>{{ outside.join(', ') }}</p>
+  }
+</section>
