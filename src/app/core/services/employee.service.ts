@@ -30,8 +30,4 @@ export class EmployeeService {
     const params = { mode: 'upsert', dryRun: String(dryRun) };
     return this.http.post<{ data: ImportReport }>(`${this.API}/bulk`, { companyId, employees, confirmIds }, { params });
   }
-
-  bulkInsert(payload: any): Observable<any> {
-  return this.http.post(`${this.API}/bulk`, payload);
-}
 }
