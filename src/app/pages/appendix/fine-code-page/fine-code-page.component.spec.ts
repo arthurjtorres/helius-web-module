@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FineCodePageComponent } from './fine-code-page.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AppendixModule } from '../appendix.module';
 
 describe('FineCodePageComponent', () => {
   let component: FineCodePageComponent;
@@ -8,7 +12,8 @@ describe('FineCodePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FineCodePageComponent]
+      imports: [AppendixModule, NoopAnimationsModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     })
     .compileComponents();
 
