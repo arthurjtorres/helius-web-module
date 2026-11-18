@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FineCodeFormComponent } from './fine-code-form.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AppendixModule } from '../appendix.module';
 
 describe('FineCodeFormComponent', () => {
   let component: FineCodeFormComponent;
@@ -8,7 +13,8 @@ describe('FineCodeFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FineCodeFormComponent]
+      imports: [AppendixModule, NoopAnimationsModule],
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: MatDialogRef, useValue: { close: () => undefined } }, { provide: MAT_DIALOG_DATA, useValue: {} }]
     })
     .compileComponents();
 

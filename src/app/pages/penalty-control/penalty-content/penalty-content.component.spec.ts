@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PenaltyContentComponent } from './penalty-content.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PenaltyControlModule } from '../penalty-control.module';
 
 describe('PenaltyContentComponent', () => {
   let component: PenaltyContentComponent;
@@ -8,7 +12,8 @@ describe('PenaltyContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PenaltyContentComponent]
+      imports: [PenaltyControlModule, NoopAnimationsModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     })
     .compileComponents();
 

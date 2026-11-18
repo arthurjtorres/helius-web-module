@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CompanyPageContentComponent } from './company-page-content.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CompanyModule } from '../company.module';
 
 describe('CompanyPageContentComponent', () => {
   let component: CompanyPageContentComponent;
@@ -8,7 +10,7 @@ describe('CompanyPageContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CompanyPageContentComponent]
+      imports: [CompanyModule, NoopAnimationsModule]
     })
     .compileComponents();
 
