@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EmployeePageContentComponent } from './employee-page-content.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { EmployeeModule } from '../employee.module';
 
 describe('EmployeePageContentComponent', () => {
   let component: EmployeePageContentComponent;
@@ -8,7 +12,8 @@ describe('EmployeePageContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EmployeePageContentComponent]
+      imports: [EmployeeModule, NoopAnimationsModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     })
     .compileComponents();
 
