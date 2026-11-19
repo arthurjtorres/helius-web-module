@@ -37,6 +37,7 @@ export function decodeText(data: ArrayBuffer): string {
 })
 export class EmployeePageImportComponent implements OnInit {
   readonly previewRows = PREVIEW_ROWS;
+  readonly previewColumns = ['line', 'registration', 'fullName', 'admissionDate', 'position', 'birthDate', 'cpf'];
   readonly fieldLabels: Record<string, string> = {
     registration: 'Matrícula', fullName: 'Nome', admissionDate: 'Admissão', position: 'Cargo', birthDate: 'Nascimento',
     cpf: 'CPF', companyId: 'Empresa', activated: 'Ativo',

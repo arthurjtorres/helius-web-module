@@ -1,36 +1,37 @@
-.hint {
-  color: var(--app-text-muted);
-}
-
-.defaults {
+.form-container {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1rem;
 }
 
-.preview {
-  max-height: 20rem;
-  overflow: auto;
+.import-config-card mat-card-content {
+  padding: 1rem 3rem;
+}
 
-  table {
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4rem;
+  align-items: start;
+}
+
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  height: 3.5rem; /* altura do mat-form-field outline, para alinhar com o select */
+
+  .full-width-button {
     width: 100%;
-    border-collapse: collapse;
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 0.2rem 0.5rem;
-    border-bottom: 1px solid var(--app-border);
+    height: 100%;
+    font-weight: 500;
   }
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0.75rem 0;
+.table-container {
+  max-height: 25rem;
+  overflow: auto;
+  padding: 0;
 }
 
 .error {
