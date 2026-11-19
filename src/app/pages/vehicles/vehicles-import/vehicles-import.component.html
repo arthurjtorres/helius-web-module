@@ -3,34 +3,39 @@
 <mat-dialog-content class="form-container">
   <mat-card class="import-config-card" appearance="outlined">
     <mat-card-header>
-      <mat-card-subtitle>Planilha .xlsx com uma aba por empresa. Cada aba é importada sozinha, tudo ou nada.</mat-card-subtitle>
+      <mat-card-subtitle>Planilha .xlsx de uma única aba, uma empresa por vez. A importação é tudo ou nada.</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
-      <input type="file" #fileInput hidden accept=".xlsx,.xls" aria-label="Arquivo da planilha" (change)="onFile($event)" />
-      <button mat-stroked-button color="primary" class="file-button" (click)="fileInput.click()">
-        <mat-icon>attach_file</mat-icon>
-        {{ sheets.length ? 'Trocar arquivo' : 'Selecionar arquivo' }}
-      </button>
+    <mat-card-content class="grid-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Empresa</mat-label>
+        <mat-select [(ngModel)]="companyId" (selectionChange)="companyChanged()" [disabled]="!!(state?.imported || state?.busy)">
+          @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }} ({{ c.companyAcronym }})</mat-option> }
+        </mat-select>
+        @if (!companyId) { <mat-hint>Selecione uma empresa para importar</mat-hint> }
+      </mat-form-field>
+
+      <div class="file-input-wrapper">
+        <input type="file" #fileInput hidden accept=".xlsx,.xls" aria-label="Arquivo da planilha" (change)="onFile($event)" />
+        <button mat-stroked-button color="primary" class="full-width-button" (click)="fileInput.click()"
+          [disabled]="!companyId || !!(state?.busy || state?.imported)">
+          <mat-icon>attach_file</mat-icon>
+          {{ state ? 'Trocar arquivo' : 'Selecionar arquivo' }}
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 
-  @for (state of sheets; track state.sheet.name) {
-    <mat-card class="sheet" appearance="outlined">
+  @if (state; as state) {
+    <mat-card class="table-preview-card" appearance="outlined">
       <mat-card-header>
-        <mat-card-title>Aba {{ state.sheet.name }} · {{ state.sheet.rows.length }} veículos @if (state.imported) { <span class="ok">(importada)</span> }</mat-card-title>
+        <mat-card-title>{{ state.sheet.rows.length }} veículos @if (state.imported) { <span class="ok">(importados)</span> }</mat-card-title>
       </mat-card-header>
 
       <mat-card-content>
         @if (state.sheet.error) {
-          <p class="error">Ignorada: {{ state.sheet.error }}</p>
+          <p class="error">{{ state.sheet.error }}</p>
         } @else {
           <div class="defaults">
-            <mat-form-field appearance="outline">
-              <mat-label>Empresa</mat-label>
-              <mat-select [(ngModel)]="state.companyId" (selectionChange)="changed(state)" [disabled]="state.imported">
-                @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }}</mat-option> }
-              </mat-select>
-            </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Wi-Fi padrão</mat-label>
               <mat-select [(ngModel)]="state.hasWifi" (selectionChange)="changed(state)" [disabled]="state.imported">
@@ -102,34 +107,30 @@
               <tr mat-row *matRowDef="let row; columns: previewColumns" [class.attention]="badCapacity(row)"></tr>
             </table>
           </div>
-
-          @if (blocker(state); as reason) { <p class="error">{{ reason }}</p> }
-          @if (state.busy) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
-
-          @if (state.report) {
-            <app-import-report [report]="state.report" keyField="vehicleNumber" idField="vehicleId" keyLabel="Prefixo"
-              [fieldLabels]="fieldLabels" missingLabel="Tipos de veículo não cadastrados" [outside]="state.outside"
-              (confirmChange)="state.confirmIds = $event"></app-import-report>
-          }
         }
       </mat-card-content>
-
-      @if (!state.sheet.error) {
-        <mat-card-actions align="end">
-          <button mat-stroked-button color="primary" (click)="simulate(state)" [disabled]="!!blocker(state) || state.busy || state.imported">
-            <mat-icon>fact_check</mat-icon>
-            Simular
-          </button>
-          <button mat-flat-button color="primary" (click)="import(state)" [disabled]="!canImport(state) || state.imported">
-            <mat-icon>cloud_upload</mat-icon>
-            Importar
-          </button>
-        </mat-card-actions>
-      }
     </mat-card>
+
+    @if (blocker(state); as reason) { <p class="error">{{ reason }}</p> }
+    @if (state.busy) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
+
+    @if (state.report) {
+      <app-import-report [report]="state.report" keyField="vehicleNumber" idField="vehicleId" keyLabel="Prefixo"
+        [fieldLabels]="fieldLabels" missingLabel="Tipos de veículo não cadastrados" [outside]="state.outside"
+        (confirmChange)="state.confirmIds = $event"></app-import-report>
+    }
   }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="close()">Fechar</button>
+  <button mat-button (click)="close()" [disabled]="!!state?.busy">Fechar</button>
+  <button mat-stroked-button color="primary" (click)="state && simulate(state)"
+    [disabled]="!state || !!blocker(state) || state.busy || state.imported">
+    <mat-icon>fact_check</mat-icon>
+    Simular
+  </button>
+  <button mat-flat-button color="primary" (click)="state && import(state)" [disabled]="!state || !canImport(state) || state.imported">
+    <mat-icon>cloud_upload</mat-icon>
+    Importar
+  </button>
 </mat-dialog-actions>

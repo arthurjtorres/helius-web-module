@@ -5,10 +5,27 @@
   padding-top: 1rem;
 }
 
-.file-button {
-  height: 3.5rem;
-  min-width: 16rem;
-  font-weight: 500;
+.import-config-card mat-card-content {
+  padding: 1rem 3rem;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4rem;
+  align-items: start;
+}
+
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  height: 3.5rem; /* altura do mat-form-field outline, para alinhar com o select */
+
+  .full-width-button {
+    width: 100%;
+    height: 100%;
+    font-weight: 500;
+  }
 }
 
 .defaults {
@@ -18,7 +35,7 @@
 }
 
 .table-container {
-  max-height: 20rem;
+  max-height: 25rem;
   overflow: auto;
 
   .cell-field {
@@ -28,10 +45,6 @@
   .attention {
     background-color: color-mix(in srgb, var(--app-warning) 20%, transparent);
   }
-}
-
-mat-card-actions {
-  gap: 0.5rem;
 }
 
 .error {

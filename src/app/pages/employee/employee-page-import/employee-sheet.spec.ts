@@ -62,10 +62,11 @@ describe('employee-sheet', () => {
     expect(formatDate(new Date(1959, 11, 31, 23, 53, 32))).toBe('01/01/1960');
   });
 
-  it('pasta de trabalho: usa a primeira aba que tem o cabeçalho', () => {
+  it('pasta de trabalho: aceita só uma aba', () => {
     const capa: SheetData = { name: 'Capa', rows: [['ZZ_TEST_']] };
     const dados = txtToSheet(TXT);
-    expect(parseEmployeeWorkbook([capa, dados]).rows.length).toBe(2);
+    expect(parseEmployeeWorkbook([dados]).rows.length).toBe(2);
+    expect(parseEmployeeWorkbook([capa, dados]).error).toBe('O arquivo deve ter uma única aba.');
     expect(parseEmployeeWorkbook([capa]).error).toContain('Cabeçalho');
   });
 });
