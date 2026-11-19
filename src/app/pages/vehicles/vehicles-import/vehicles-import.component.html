@@ -1,72 +1,132 @@
 <h2 mat-dialog-title>Importar veículos</h2>
 
-<mat-dialog-content>
-  <p class="hint">Planilha .xlsx com uma aba por empresa. Cada aba é importada sozinha, tudo ou nada.</p>
-  <input type="file" accept=".xlsx,.xls" aria-label="Arquivo da planilha" (change)="onFile($event)">
+<mat-dialog-content class="form-container">
+  <mat-card class="import-config-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-subtitle>Planilha .xlsx com uma aba por empresa. Cada aba é importada sozinha, tudo ou nada.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <input type="file" #fileInput hidden accept=".xlsx,.xls" aria-label="Arquivo da planilha" (change)="onFile($event)" />
+      <button mat-stroked-button color="primary" class="file-button" (click)="fileInput.click()">
+        <mat-icon>attach_file</mat-icon>
+        {{ sheets.length ? 'Trocar arquivo' : 'Selecionar arquivo' }}
+      </button>
+    </mat-card-content>
+  </mat-card>
 
   @for (state of sheets; track state.sheet.name) {
-    <section class="sheet">
-      <h3>Aba {{ state.sheet.name }} · {{ state.sheet.rows.length }} veículos @if (state.imported) { <span class="ok">(importada)</span> }</h3>
+    <mat-card class="sheet" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Aba {{ state.sheet.name }} · {{ state.sheet.rows.length }} veículos @if (state.imported) { <span class="ok">(importada)</span> }</mat-card-title>
+      </mat-card-header>
 
-      @if (state.sheet.error) {
-        <p class="error">Ignorada: {{ state.sheet.error }}</p>
-      } @else {
-        <div class="defaults">
-          <mat-form-field appearance="outline">
-            <mat-label>Empresa</mat-label>
-            <mat-select [(ngModel)]="state.companyId" (selectionChange)="changed(state)" [disabled]="state.imported">
-              @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }}</mat-option> }
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Wi-Fi padrão</mat-label>
-            <mat-select [(ngModel)]="state.hasWifi" (selectionChange)="changed(state)" [disabled]="state.imported">
-              <mat-option [value]="true">Sim</mat-option>
-              <mat-option [value]="false">Não</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Câmera padrão</mat-label>
-            <mat-select [(ngModel)]="state.cameraType" (selectionChange)="changed(state)" [disabled]="state.imported">
-              @for (cam of cameraTypes; track cam) { <mat-option [value]="cam">{{ cam }}</mat-option> }
-            </mat-select>
-          </mat-form-field>
-        </div>
+      <mat-card-content>
+        @if (state.sheet.error) {
+          <p class="error">Ignorada: {{ state.sheet.error }}</p>
+        } @else {
+          <div class="defaults">
+            <mat-form-field appearance="outline">
+              <mat-label>Empresa</mat-label>
+              <mat-select [(ngModel)]="state.companyId" (selectionChange)="changed(state)" [disabled]="state.imported">
+                @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }}</mat-option> }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Wi-Fi padrão</mat-label>
+              <mat-select [(ngModel)]="state.hasWifi" (selectionChange)="changed(state)" [disabled]="state.imported">
+                <mat-option [value]="true">Sim</mat-option>
+                <mat-option [value]="false">Não</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Câmera padrão</mat-label>
+              <mat-select [(ngModel)]="state.cameraType" (selectionChange)="changed(state)" [disabled]="state.imported">
+                @for (cam of cameraTypes; track cam) { <mat-option [value]="cam">{{ cam }}</mat-option> }
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-        <div class="preview">
-          <table>
-            <thead><tr><th>Linha</th><th>Prefixo</th><th>Placa</th><th>Tipo</th><th>Capacidade</th><th>Wi-Fi</th><th>Câmera</th></tr></thead>
-            <tbody>
-              @for (row of state.sheet.rows; track row.line) {
-                <tr [class.attention]="badCapacity(row)">
-                  <td>{{ row.line }}</td><td>{{ row.vehicleNumber }}</td><td>{{ row.licensePlate }}</td><td>{{ row.typeVehicleName }}</td>
-                  <td><input type="number" min="1" max="300" [attr.aria-label]="'Capacidade da linha ' + row.line" [disabled]="state.imported"
-                      [(ngModel)]="row.capacity" (ngModelChange)="changed(state)"></td>
-                  <td><select [attr.aria-label]="'Wi-Fi da linha ' + row.line" [disabled]="state.imported" [(ngModel)]="row.hasWifi" (ngModelChange)="changed(state)">
-                      <option [ngValue]="null">Padrão</option><option [ngValue]="true">Sim</option><option [ngValue]="false">Não</option></select></td>
-                  <td><select [attr.aria-label]="'Câmera da linha ' + row.line" [disabled]="state.imported" [(ngModel)]="row.cameraType" (ngModelChange)="changed(state)">
-                      <option [ngValue]="null">Padrão</option>
-                      @for (cam of cameraTypes; track cam) { <option [ngValue]="cam">{{ cam }}</option> }</select></td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+          <div class="table-container">
+            <table mat-table [dataSource]="state.sheet.rows">
+              <ng-container matColumnDef="line">
+                <th mat-header-cell *matHeaderCellDef>Linha</th>
+                <td mat-cell *matCellDef="let row">{{ row.line }}</td>
+              </ng-container>
+              <ng-container matColumnDef="vehicleNumber">
+                <th mat-header-cell *matHeaderCellDef>Prefixo</th>
+                <td mat-cell *matCellDef="let row">{{ row.vehicleNumber }}</td>
+              </ng-container>
+              <ng-container matColumnDef="licensePlate">
+                <th mat-header-cell *matHeaderCellDef>Placa</th>
+                <td mat-cell *matCellDef="let row">{{ row.licensePlate }}</td>
+              </ng-container>
+              <ng-container matColumnDef="typeVehicleName">
+                <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                <td mat-cell *matCellDef="let row">{{ row.typeVehicleName }}</td>
+              </ng-container>
+              <ng-container matColumnDef="capacity">
+                <th mat-header-cell *matHeaderCellDef>Capacidade</th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cell-field">
+                    <input matInput type="number" min="1" max="300" [attr.aria-label]="'Capacidade da linha ' + row.line"
+                      [disabled]="state.imported" [(ngModel)]="row.capacity" (ngModelChange)="changed(state)">
+                  </mat-form-field>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="hasWifi">
+                <th mat-header-cell *matHeaderCellDef>Wi-Fi</th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cell-field">
+                    <mat-select placeholder="Padrão" [attr.aria-label]="'Wi-Fi da linha ' + row.line" [disabled]="state.imported"
+                      [(ngModel)]="row.hasWifi" (ngModelChange)="changed(state)">
+                      <mat-option [value]="null">Padrão</mat-option>
+                      <mat-option [value]="true">Sim</mat-option>
+                      <mat-option [value]="false">Não</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="cameraType">
+                <th mat-header-cell *matHeaderCellDef>Câmera</th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cell-field">
+                    <mat-select placeholder="Padrão" [attr.aria-label]="'Câmera da linha ' + row.line" [disabled]="state.imported"
+                      [(ngModel)]="row.cameraType" (ngModelChange)="changed(state)">
+                      <mat-option [value]="null">Padrão</mat-option>
+                      @for (cam of cameraTypes; track cam) { <mat-option [value]="cam">{{ cam }}</mat-option> }
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="previewColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: previewColumns" [class.attention]="badCapacity(row)"></tr>
+            </table>
+          </div>
 
-        @if (blocker(state); as reason) { <p class="error">{{ reason }}</p> }
-        <div class="actions">
-          <button mat-stroked-button (click)="simulate(state)" [disabled]="!!blocker(state) || state.busy || state.imported">Simular</button>
-          <button mat-raised-button color="primary" (click)="import(state)" [disabled]="!canImport(state) || state.imported">Importar</button>
+          @if (blocker(state); as reason) { <p class="error">{{ reason }}</p> }
           @if (state.busy) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
-        </div>
 
-        @if (state.report) {
-          <app-import-report [report]="state.report" keyField="vehicleNumber" idField="vehicleId" keyLabel="Prefixo"
-            [fieldLabels]="fieldLabels" missingLabel="Tipos de veículo não cadastrados" [outside]="state.outside"
-            (confirmChange)="state.confirmIds = $event"></app-import-report>
+          @if (state.report) {
+            <app-import-report [report]="state.report" keyField="vehicleNumber" idField="vehicleId" keyLabel="Prefixo"
+              [fieldLabels]="fieldLabels" missingLabel="Tipos de veículo não cadastrados" [outside]="state.outside"
+              (confirmChange)="state.confirmIds = $event"></app-import-report>
+          }
         }
+      </mat-card-content>
+
+      @if (!state.sheet.error) {
+        <mat-card-actions align="end">
+          <button mat-stroked-button color="primary" (click)="simulate(state)" [disabled]="!!blocker(state) || state.busy || state.imported">
+            <mat-icon>fact_check</mat-icon>
+            Simular
+          </button>
+          <button mat-flat-button color="primary" (click)="import(state)" [disabled]="!canImport(state) || state.imported">
+            <mat-icon>cloud_upload</mat-icon>
+            Importar
+          </button>
+        </mat-card-actions>
       }
-    </section>
+    </mat-card>
   }
 </mat-dialog-content>
 
