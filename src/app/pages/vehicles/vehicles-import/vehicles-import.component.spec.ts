@@ -30,8 +30,9 @@ describe('VehiclesImportComponent', () => {
 
   /** Aba pronta para simular (empresa e padrões escolhidos). */
   function ready(s = sheet()): SheetState {
+    component.companyId = 'c1';
     component.load([s]);
-    const state = component.sheets[0];
+    const state = component.state!;
     state.hasWifi = false;
     state.cameraType = 'TACOM';
     return state;
@@ -57,22 +58,41 @@ describe('VehiclesImportComponent', () => {
     fixture.detectChanges();
   });
 
-  it('pré-seleciona a empresa pelo nome da coluna EMPRESA (sem acento nem caixa)', () => {
-    component.load([sheet()]);
-    expect(component.sheets[0].companyId).toBe('c1');
+  it('recusa arquivo com mais de uma aba', () => {
+    component.companyId = 'c1';
+    component.load([sheet(), sheet({ name: 'B' })]);
+    expect(component.state).toBeUndefined();
+    expect(TestBed.inject(NotificationService).error).toHaveBeenCalledWith('O arquivo deve ter uma única aba.');
+  });
+
+  it('usa a empresa do combobox e bloqueia se a coluna EMPRESA indicar outra (sem acento nem caixa)', () => {
+    expect(component.blocker(ready())).toBeNull();
+    expect(component.blocker(ready(sheet({ companyName: 'Outra empresa' })))).toContain('EMPRESA');
+  });
+
+  it('trocar a empresa depois de carregar vale para a aba e invalida a simulação', () => {
+    vehicleService.bulkImport.and.returnValue(of({ data: report() }));
+    const state = ready();
+    component.simulate(state);
+    component.companyId = 'c2';
+    component.companyChanged();
+    expect(state.companyId).toBe('c2');
+    expect(component.canImport(state)).toBeFalse();
   });
 
   it('bloqueia simulação sem padrões, com capacidade inválida ou acima de 500 linhas', () => {
+    component.companyId = 'c1';
     component.load([sheet()]);
-    expect(component.blocker(component.sheets[0])).toContain('Wi-Fi');
+    expect(component.blocker(component.state!)).toContain('Wi-Fi');
     expect(component.blocker(ready(sheet({ rows: [row({ capacity: null })] })))).toContain('capacidade');
     expect(component.blocker(ready(sheet({ rows: Array.from({ length: 501 }, (_, i) => row({ line: i })) })))).toContain('500');
     expect(component.blocker(ready())).toBeNull();
   });
 
   it('linha com Wi-Fi e câmera próprios dispensa o padrão', () => {
+    component.companyId = 'c1';
     component.load([sheet({ rows: [row({ hasWifi: true, cameraType: 'ENGIS' })] })]);
-    expect(component.blocker(component.sheets[0])).toBeNull();
+    expect(component.blocker(component.state!)).toBeNull();
   });
 
   it('simula com os padrões aplicados, sem a linha, e calcula os fora da planilha', () => {
