@@ -53,7 +53,8 @@ export class EmployeePageFormComponent implements OnInit {
 
       employeeId: [this.data?.employeeId || null],
       registration: [this.data?.registration || '', [Validators.required]],
-      fullName: [this.data?.fullName || '', [Validators.required]],
+      // nome e sobrenome, como na importação (o registry exige lastName)
+      fullName: [this.data?.fullName || '', [Validators.required, Validators.pattern(/\S+\s+\S+/)]],
       birthDate: [this.data?.birthDate || '', [Validators.required]],
       admissionDate: [this.data?.admissionDate || '', [Validators.required]],
 
@@ -93,7 +94,7 @@ export class EmployeePageFormComponent implements OnInit {
   }
 
   private createNewPersonAndDocument(raw: any): Observable<string> {
-    const nameParts = raw.fullName.trim().split(' ');
+    const nameParts = raw.fullName.trim().split(/\s+/);
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(' ') || '';
 
