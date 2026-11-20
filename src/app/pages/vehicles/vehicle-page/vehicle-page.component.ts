@@ -91,14 +91,14 @@ export class VehiclePageComponent implements OnInit {
 
   /** Desativa o veículo (exclusão lógica), após confirmação. */
   deleteVehicle(vehicle: VehicleInterface): void {
-    if (!vehicle.vehicleId || !confirm(`Deseja realmente excluir o veículo ${vehicle.vehicleNumber}?`)) return;
+    if (!vehicle.vehicleId || !confirm(`Deseja realmente desativar o veículo ${vehicle.vehicleNumber}?`)) return;
     this.vehicleService.deleteVehicle(vehicle.vehicleId).subscribe({
       next: () => {
-        this.notification.info('Veículo excluído.');
+        this.notification.info('Veículo desativado.');
         this.loadData();
       },
       error: (err: HttpErrorResponse) => {
-        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível excluir o veículo.');
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desativar o veículo.');
       }
     });
   }

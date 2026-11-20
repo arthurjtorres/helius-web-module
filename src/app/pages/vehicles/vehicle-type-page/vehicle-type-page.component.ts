@@ -48,14 +48,14 @@ export class VehicleTypePageComponent implements OnInit {
 
   /** Desativa após confirmação. O backend recusa (409) se houver veículos ativos do tipo. */
   deleteType(type: VehicleTypeInterface): void {
-    if (!type.typeVehicleId || !confirm(`Deseja realmente excluir o tipo ${type.typeVehicleName}?`)) return;
+    if (!type.typeVehicleId || !confirm(`Deseja realmente desativar o tipo ${type.typeVehicleName}?`)) return;
     this.service.delete(type.typeVehicleId).subscribe({
       next: () => {
-        this.notification.info('Tipo de veículo excluído.');
+        this.notification.info('Tipo de veículo desativado.');
         this.loadData();
       },
       error: (err: HttpErrorResponse) => {
-        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível excluir o tipo de veículo.');
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desativar o tipo de veículo.');
       }
     });
   }
