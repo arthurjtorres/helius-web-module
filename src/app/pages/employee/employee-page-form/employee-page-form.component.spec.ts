@@ -6,6 +6,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EmployeeModule } from '../employee.module';
+import { of } from 'rxjs';
+import { EmployeeService } from '../../../core/services/employee.service';
 
 describe('EmployeePageFormComponent', () => {
   let component: EmployeePageFormComponent;
@@ -25,5 +27,18 @@ describe('EmployeePageFormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('cargo, setor e departamento são opcionais e, vazios, saem do payload (a API recusa "")', () => {
+    const create = spyOn(TestBed.inject(EmployeeService), 'create').and.returnValue(of({ registration: '900001', fkPersonId: 'p1' }));
+    component.isEdit = false;
+    component.employeeForm.patchValue({
+      personId: 'p1', cpf: '52998224725', registration: '900001', fullName: 'ZZ_TEST_ Demissao',
+      birthDate: '1990-01-01', admissionDate: '2026-01-02', company: 'c1',
+    });
+    expect(component.employeeForm.valid).toBeTrue();
+    component.onSave();
+    const payload = create.calls.mostRecent().args[0];
+    expect(JSON.parse(JSON.stringify(payload))).toEqual({ registration: '900001', admissionDate: '2026-01-02', fkPersonId: 'p1', fkCompanyId: 'c1' });
   });
 });
