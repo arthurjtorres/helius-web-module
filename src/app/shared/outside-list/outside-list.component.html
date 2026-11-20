@@ -1,0 +1,27 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Na base e fora da planilha ({{ items.length }})</mat-card-title>
+    <mat-card-subtitle>Ativos da empresa que não vieram no arquivo. Marque os que devem ser desativados.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-checkbox [checked]="allSelected" [indeterminate]="selected.size > 0 && !allSelected"
+      [disabled]="busy" (change)="toggleAll($event.checked)">Selecionar todos</mat-checkbox>
+    <mat-list class="outside-list">
+      @for (item of items; track item.id) {
+        <mat-list-item>
+          <mat-checkbox [checked]="selected.has(item.id)" [disabled]="busy" (change)="toggle(item.id, $event.checked)">
+            {{ keyLabel }} {{ item.key }}
+          </mat-checkbox>
+        </mat-list-item>
+      }
+    </mat-list>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <button mat-flat-button color="warn" [disabled]="!selected.size || busy" (click)="confirmDeactivate()">
+      <mat-icon>block</mat-icon>
+      Desativar selecionados ({{ selected.size }})
+    </button>
+  </mat-card-actions>
+</mat-card>

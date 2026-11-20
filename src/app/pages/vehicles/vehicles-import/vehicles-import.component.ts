@@ -11,6 +11,7 @@ import { VehicleService } from '../../../core/services/vehicle.service';
 import { normalizeText } from '../../../core/utils/normalize-text';
 import { readWorkbook } from '../../../core/utils/sheet-reader';
 import { ImportReport, withFileLines } from '../../../shared/import-report/import-report.model';
+import { OutsideItem } from '../../../shared/outside-list/outside-list.component';
 import { VehicleRow, VehicleSheet, parseCapacity, parseVehicleSheet } from './vehicle-sheet';
 
 /** Máximo de veículos por requisição no `/vehicle/bulk`. */
@@ -24,7 +25,11 @@ export interface SheetState {
   cameraType: string | null;
   report?: ImportReport;
   confirmIds: string[];
+  /** Prefixos ativos na base fora da aba (informativo na simulação). */
   outside: string[];
+  /** Os mesmos, com id, para desativar depois de importar (T19). */
+  outsideItems: OutsideItem[];
+  deactivating: boolean;
   busy: boolean;
   imported: boolean;
 }
@@ -87,7 +92,7 @@ export class VehiclesImportComponent implements OnInit {
       this.notification.error('O arquivo deve ter uma única aba.');
       return;
     }
-    this.state = { sheet: sheets[0], companyId: this.companyId, hasWifi: null, cameraType: null, confirmIds: [], outside: [], busy: false, imported: false };
+    this.state = { sheet: sheets[0], companyId: this.companyId, hasWifi: null, cameraType: null, confirmIds: [], outside: [], outsideItems: [], deactivating: false, busy: false, imported: false };
   }
 
   /** Troca de empresa no combobox vale para a aba carregada e invalida a simulação. */
@@ -153,8 +158,8 @@ export class VehiclesImportComponent implements OnInit {
       next: res => {
         state.busy = false;
         state.report = withFileLines(res.data, lines);
-        if (dryRun) this.loadOutside(state);
-        else state.imported = true;
+        if (!dryRun) state.imported = true;
+        this.loadOutside(state);
       },
       error: (err: HttpErrorResponse) => {
         state.busy = false;
@@ -164,13 +169,33 @@ export class VehiclesImportComponent implements OnInit {
     });
   }
 
-  /** Veículos ativos da empresa que não estão na aba (informativo; nada é desativado). */
+  /** Veículos ativos da empresa que não estão na aba: informativo na simulação, desativáveis depois de importar. */
   private loadOutside(state: SheetState): void {
     const inSheet = new Set(state.sheet.rows.map(r => r.vehicleNumber));
     this.vehicleService.getVehiclesByCompany(state.companyId).pipe(
-      map(res => (res.data ?? []).map(v => v.vehicleNumber).filter(n => !inSheet.has(n))),
-      catchError(() => of([])),
-    ).subscribe(outside => state.outside = outside);
+      map(res => (res.data ?? []).filter(v => v.vehicleId && !inSheet.has(v.vehicleNumber)).map(v => ({ id: v.vehicleId!, key: v.vehicleNumber }))),
+      catchError(() => of([] as OutsideItem[])),
+    ).subscribe(items => {
+      state.outsideItems = items;
+      state.outside = items.map(i => i.key);
+    });
+  }
+
+  /** Desativa em lote os veículos marcados na lista "fora da planilha" (tudo ou nada). */
+  deactivate(state: SheetState, ids: string[]): void {
+    state.deactivating = true;
+    this.vehicleService.bulkDeactivate(ids).subscribe({
+      next: res => {
+        state.deactivating = false;
+        state.outsideItems = state.outsideItems.filter(i => !ids.includes(i.id));
+        this.notification.info(res.message || 'Veículos desativados.');
+      },
+      error: (err: HttpErrorResponse) => {
+        state.deactivating = false;
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desativar os veículos.');
+        if (err.status === 409) this.loadOutside(state);
+      }
+    });
   }
 
   close(): void {

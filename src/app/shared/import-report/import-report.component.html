@@ -87,7 +87,7 @@
 
     @if (outside.length) {
       <h3>Na base e fora da planilha ({{ outside.length }})</h3>
-      <p class="muted">Só informativo: nada é desativado.</p>
+      <p class="muted">Nada é desativado agora; depois de importar, você poderá escolher quais desativar.</p>
       <mat-chip-set aria-label="Na base e fora da planilha">
         @for (o of outside; track o) { <mat-chip>{{ o }}</mat-chip> }
       </mat-chip-set>
