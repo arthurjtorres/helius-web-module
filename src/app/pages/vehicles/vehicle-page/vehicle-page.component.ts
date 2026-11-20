@@ -35,6 +35,9 @@ export class VehiclePageComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  /** Empresa escolhida no combobox; a tabela fica vazia até a escolha. */
+  companyId = '';
+
   constructor(
     private vehicleService: VehicleService,
     private dialog: MatDialog,
@@ -45,9 +48,10 @@ export class VehiclePageComponent implements OnInit {
     this.loadData();
   }
 
-  /** Carrega os veículos ativos. 404 = nenhum veículo; 403 já é avisado pelo interceptor. */
+  /** Veículos ativos da empresa escolhida; vazio até escolher (T19). 404 = nenhum; 403 já é avisado pelo interceptor. */
   loadData() {
-    this.vehicleService.getAllVehicles().subscribe({
+    if (!this.companyId) return this.showVehicles([]);
+    this.vehicleService.getVehiclesByCompany(this.companyId).subscribe({
       next: (response) => this.showVehicles(response.data ?? []),
       error: (err: HttpErrorResponse) => {
         if (err.status === 404) return this.showVehicles([]);

@@ -20,6 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { ImportReportModule } from '../../shared/import-report/import-report.module';
+import { CompanySelectModule } from '../../shared/company-select/company-select.module';
 import { VehiclesImportComponent } from './vehicles-import/vehicles-import.component';
 import { VehiclesFormComponent } from './vehicles-form/vehicles-form.component';
 import { VehicleTypePageComponent } from './vehicle-type-page/vehicle-type-page.component';
@@ -55,6 +56,7 @@ import { VehicleTypeFormComponent } from './vehicle-type-form/vehicle-type-form.
     MatProgressBarModule,
     MatCardModule,
     ImportReportModule,
+    CompanySelectModule,
   ]
 })
 export class VehiclesModule { }

@@ -6,13 +6,8 @@
       <mat-card-subtitle>Planilha .xlsx de uma única aba, uma empresa por vez. A importação é tudo ou nada.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content class="grid-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Empresa</mat-label>
-        <mat-select [(ngModel)]="companyId" (selectionChange)="companyChanged()" [disabled]="!!(state?.imported || state?.busy)">
-          @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }} ({{ c.companyAcronym }})</mat-option> }
-        </mat-select>
-        @if (!companyId) { <mat-hint>Selecione uma empresa para importar</mat-hint> }
-      </mat-form-field>
+      <app-company-select [(ngModel)]="companyId" (ngModelChange)="companyChanged()" [disabled]="!!(state?.imported || state?.busy)"
+        hint="Selecione uma empresa para importar"></app-company-select>
 
       <div class="file-input-wrapper">
         <input type="file" #fileInput hidden accept=".xlsx,.xls" aria-label="Arquivo da planilha" (change)="onFile($event)" />

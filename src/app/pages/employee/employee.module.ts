@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ImportReportModule } from '../../shared/import-report/import-report.module';
+import { CompanySelectModule } from '../../shared/company-select/company-select.module';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { ImportReportModule } from '../../shared/import-report/import-report.mod
     MatSelectModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    ImportReportModule
+    ImportReportModule,
+    CompanySelectModule
   ]
 })
 export class EmployeeModule { }

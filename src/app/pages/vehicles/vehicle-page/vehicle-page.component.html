@@ -4,6 +4,9 @@
       <mat-icon>cloud_upload</mat-icon>Importar Arquivo
     </button>
 
+    <app-company-select class="header-company" [(ngModel)]="companyId" (ngModelChange)="loadData()"
+      hint="Selecione uma empresa"></app-company-select>
+
     <mat-form-field class="vehicle-search" appearance="outline">
       <input matInput type="search" />
       <button matSuffix mat-icon-button aria-label="Search">
@@ -73,4 +76,10 @@
       <mat-row *matRowDef="let row; columns: vehicleHeader"></mat-row>
     </mat-table>
   </div>
+
+  @if (!vehicleDataSource.data.length) {
+    <p class="empty">{{ companyId ? 'Nenhum veículo ativo nesta empresa.' : 'Selecione uma empresa para ver os veículos.' }}</p>
+  }
+
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons aria-label="Selecionar página"></mat-paginator>
 </ng-container>

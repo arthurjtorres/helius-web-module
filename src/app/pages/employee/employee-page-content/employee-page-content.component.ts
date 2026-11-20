@@ -1,3 +1,5 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '../../../core/services/notification.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeDTO, EmployeeView } from '../../../core/interfaces/employee.interface';
@@ -31,52 +33,54 @@ export class EmployeePageContentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  /** Empresa escolhida no combobox; a tabela fica vazia até a escolha. */
+  companyId = '';
+
   constructor(
     private service: EmployeeService,
-    private dialog: MatDialog
-  ) {
-
-  }
+    private dialog: MatDialog,
+    private notification: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
   }
 
+  /** Funcionários ativos da empresa escolhida; vazio até escolher (T19). 404 = nenhum; 403 já é avisado pelo interceptor. */
   loadData() {
-    this.service.getAll().subscribe({
+    if (!this.companyId) return this.showEmployees([]);
+    this.service.getByCompany(this.companyId).subscribe({
       next: (response: any) => {
-        const rawData = response.data || [];
-
-        const mappedData: EmployeeView[] = rawData.map((item: any) => {
-          return {
-            employeeId: item.employeeId,
-            fkPersonId: item.fkPersonId,
-            fkCompanyId: item.fkCompanyId,
-            fkPositionId: item.fkPositionId,
-            fkSectorId: item.fkSectorId,
-            fkDepartmentId: item.fkDepartmentId,
-
-            // Dados para a tabela (exibição)
-            registration: item.registration,
-            admissionDate: item.admissionDate,
-            fullName: item.Person?.fullName,
-            birthDate: item.Person?.birthDate,
-            company: item.Company?.companyName,
-            position: item.Position?.positionName,
-            activated: item.activated,
-          };
-        });
-
-        const activeData = mappedData.filter(emp => emp.activated !== false);
-
-        this.employeeDataSource.data = activeData;
-        setTimeout(() => {
-          this.employeeDataSource.paginator = this.paginator;
-          this.employeeDataSource.sort = this.sort;
-        });
+        const mappedData: EmployeeView[] = (response.data || []).map((item: any) => ({
+          employeeId: item.employeeId,
+          fkPersonId: item.fkPersonId,
+          fkCompanyId: item.fkCompanyId,
+          fkPositionId: item.fkPositionId,
+          fkSectorId: item.fkSectorId,
+          fkDepartmentId: item.fkDepartmentId,
+          registration: item.registration,
+          admissionDate: item.admissionDate,
+          fullName: item.Person?.fullName,
+          birthDate: item.Person?.birthDate,
+          company: item.Company?.companyName,
+          position: item.Position?.positionName,
+          activated: item.activated,
+        }));
+        this.showEmployees(mappedData);
       },
-      error: (err) => console.error('Erro ao buscar funcionários:', err)
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 404) return this.showEmployees([]);
+        if (err.status !== 403) this.notification.error('Não foi possível carregar os funcionários.');
+      }
     })
+  }
+
+  private showEmployees(employees: EmployeeView[]): void {
+    this.employeeDataSource.data = employees;
+    setTimeout(() => {
+      this.employeeDataSource.paginator = this.paginator;
+      this.employeeDataSource.sort = this.sort;
+    });
   }
 
   addEmployee(): void {
@@ -118,41 +122,17 @@ export class EmployeePageContentComponent implements OnInit {
     });
   }
 
+  /** Desativa o funcionário (exclusão lógica, `DELETE`), após confirmação. 409 = possui usuário ativo. */
   deleteEmployee(item: EmployeeView): void {
-    if (confirm(`Deseja Realmente excluir o funcionário ${item.registration}?`)) {
-      if (item.employeeId) {
-        const payload: any = { ...item };
-
-        delete payload.employeeId;
-        delete payload.registration;
-        delete payload.admissionDate;
-        delete payload.fullName;
-        delete payload.birthDate;
-        delete payload.companyName;
-        delete payload.positionName;
-        delete payload.company;
-        delete payload.position;
-        delete payload.fkPersonId;
-        delete payload.fkCompanyId;
-        delete payload.fkPositionId;
-        delete payload.fkSectorId;
-        delete payload.fkDepartmentId;
-
-
-        payload.activated = false;
-
-        this.service.update(item.employeeId, payload).subscribe({
-          next: () => {
-            this.loadData();
-          },
-          error: (err) => {
-            console.error('Erro ao excluir:', err);
-            alert('Não foi possível excluir o item.');
-          }
-        });
-      } else {
-        console.error('Item sem ID não pode ser excluído');
+    if (!item.employeeId || !confirm(`Deseja realmente excluir o funcionário ${item.registration}?`)) return;
+    this.service.delete(item.employeeId).subscribe({
+      next: () => {
+        this.notification.info('Funcionário excluído.');
+        this.loadData();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível excluir o funcionário.');
       }
-    }
+    });
   }
 }
