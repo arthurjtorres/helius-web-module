@@ -12,6 +12,8 @@ import { EmployeeView } from '../../../core/interfaces/employee.interface';
 export class EmployeePageTerminationComponent {
   /** Padrão: hoje, no fuso do navegador. */
   terminationDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+  /** Máximo do seletor: amanhã (o backend também confere). */
+  maxDate = formatDate(Date.now() + 86_400_000, 'yyyy-MM-dd', 'en-US');
   /** Mínimo do seletor: a admissão (o backend também confere). */
   minDate: string;
 

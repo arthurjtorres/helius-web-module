@@ -19,5 +19,7 @@ describe('EmployeePageTerminationComponent', () => {
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     expect(component.terminationDate).toBe(today);
     expect(component.minDate).toBe('2020-02-01');
+    const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    expect(component.maxDate).toBe(`${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, '0')}-${String(next.getDate()).padStart(2, '0')}`);
   });
 });
