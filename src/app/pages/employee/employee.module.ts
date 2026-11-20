@@ -5,6 +5,7 @@ import { EmployeeRoutingModule } from './employee-routing.module';
 import { EmployeePageContentComponent } from './employee-page-content/employee-page-content.component';
 import { EmployeePageImportComponent } from './employee-page-import/employee-page-import.component';
 import { EmployeePageFormComponent } from './employee-page-form/employee-page-form.component';
+import { EmployeePageTerminationComponent } from './employee-page-termination/employee-page-termination.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
@@ -28,7 +29,8 @@ import { CompanySelectModule } from '../../shared/company-select/company-select.
   declarations: [
     EmployeePageContentComponent,
     EmployeePageImportComponent,
-    EmployeePageFormComponent
+    EmployeePageFormComponent,
+    EmployeePageTerminationComponent
   ],
   imports: [
     CommonModule,

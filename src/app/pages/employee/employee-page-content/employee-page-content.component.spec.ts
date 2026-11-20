@@ -58,20 +58,42 @@ describe('EmployeePageContentComponent', () => {
     expect(notification.error).not.toHaveBeenCalled();
   }));
 
-  it('exclui pelo DELETE após confirmação e recarrega', fakeAsync(() => {
+  /** Simula o diálogo de rescisão devolvendo `date` (undefined = cancelou). */
+  const closeDialogWith = (date?: string) =>
+    (TestBed.inject(MatDialog).open as jasmine.Spy).and.returnValue({ afterClosed: () => of(date) });
+
+  it('desliga com a data escolhida no diálogo e recarrega', fakeAsync(() => {
     const fixture = create('c1');
-    spyOn(window, 'confirm').and.returnValue(true);
-    service.delete.and.returnValue(of({}));
+    closeDialogWith('2026-11-19');
+    service.delete.and.returnValue(of({ message: 'ok', data: { deactivatedUsers: [], pendingEmployeeIds: [] } }));
     fixture.componentInstance.deleteEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
-    expect(service.delete).toHaveBeenCalledWith('e1');
+    expect(service.delete).toHaveBeenCalledWith('e1', '2026-11-19');
+    expect(notification.info).toHaveBeenCalled();
     expect(service.getByCompany).toHaveBeenCalledTimes(2);
   }));
 
-  it('mostra a mensagem do backend quando a exclusão é recusada (409)', fakeAsync(() => {
+  it('cancelar o diálogo não chama a API', fakeAsync(() => {
     const fixture = create('c1');
-    spyOn(window, 'confirm').and.returnValue(true);
-    service.delete.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409, error: { message: 'Não é possível desativar: o funcionário possui usuário ativo.' } })));
+    closeDialogWith(undefined);
     fixture.componentInstance.deleteEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
-    expect(notification.error).toHaveBeenCalledOnceWith('Não é possível desativar: o funcionário possui usuário ativo.');
+    expect(service.delete).not.toHaveBeenCalled();
+  }));
+
+  it('avisa quando o usuário ficou pendente (control fora)', fakeAsync(() => {
+    const fixture = create('c1');
+    closeDialogWith('2026-11-19');
+    const message = 'Funcionário desligado, mas o usuário dele não foi desativado.';
+    service.delete.and.returnValue(of({ message, data: { deactivatedUsers: [], pendingEmployeeIds: ['e1'] } }));
+    fixture.componentInstance.deleteEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
+    expect(notification.error).toHaveBeenCalledOnceWith(message);
+    expect(service.getByCompany).toHaveBeenCalledTimes(2);
+  }));
+
+  it('mostra a mensagem do backend quando o desligamento é recusado', fakeAsync(() => {
+    const fixture = create('c1');
+    closeDialogWith('2019-01-01');
+    service.delete.and.returnValue(throwError(() => new HttpErrorResponse({ status: 400, error: { message: 'A data de rescisão não pode ser anterior à admissão.' } })));
+    fixture.componentInstance.deleteEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
+    expect(notification.error).toHaveBeenCalledOnceWith('A data de rescisão não pode ser anterior à admissão.');
   }));
 });
