@@ -45,6 +45,8 @@ describe('LandingpageComponent', () => {
   it('login recusado mostra a mensagem genérica', () => {
     submitFailing(401, { status: 401, message: 'Usuário ou senha inválidos' });
     expect(component.errorMessage).toBe('Falha na autenticação. Verifique seus dados.');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent).toContain('Falha na autenticação. Verifique seus dados.');
   });
 
   it('429 mostra a mensagem do backend', () => {
