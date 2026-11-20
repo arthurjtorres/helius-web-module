@@ -1,41 +1,78 @@
 <h2 mat-dialog-title>Importar funcionários</h2>
 
-<mat-dialog-content>
-  <p class="hint">Arquivo .txt do RH ou planilha .xlsx, uma empresa por vez. A importação é tudo ou nada.</p>
-  <div class="defaults">
-    <mat-form-field appearance="outline">
-      <mat-label>Empresa</mat-label>
-      <mat-select [(ngModel)]="companyId" (selectionChange)="changed()" [disabled]="imported || busy">
-        @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }} ({{ c.companyAcronym }})</mat-option> }
-      </mat-select>
-    </mat-form-field>
-    <input type="file" accept=".txt,.xlsx,.xls" aria-label="Arquivo de funcionários" (change)="onFile($event)" [disabled]="busy">
-  </div>
+<mat-dialog-content class="form-container">
+  <mat-card class="import-config-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-subtitle>Arquivo .txt do RH ou planilha .xlsx, uma empresa por vez. A importação é tudo ou nada.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="grid-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Empresa</mat-label>
+        <mat-select [(ngModel)]="companyId" (selectionChange)="changed()" [disabled]="imported || busy">
+          @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }} ({{ c.companyAcronym }})</mat-option> }
+        </mat-select>
+        @if (!companyId) { <mat-hint>Selecione uma empresa para importar</mat-hint> }
+      </mat-form-field>
+
+      <div class="file-input-wrapper">
+        <input type="file" #fileInput hidden accept=".txt,.xlsx,.xls" aria-label="Arquivo de funcionários"
+          (change)="onFile($event)" [disabled]="busy" />
+        <button mat-stroked-button color="primary" class="full-width-button" (click)="fileInput.click()"
+          [disabled]="!companyId || busy || imported">
+          <mat-icon>attach_file</mat-icon>
+          {{ file ? 'Trocar arquivo' : 'Selecionar arquivo' }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
   @if (file && !file.error) {
-    <h3>{{ file.rows.length }} funcionários @if (imported) { <span class="ok">(importados)</span> }</h3>
-    <div class="preview">
-      <table>
-        <thead><tr><th>Linha</th><th>Matrícula</th><th>Nome</th><th>Admissão</th><th>Cargo</th><th>Nascimento</th><th>CPF</th></tr></thead>
-        <tbody>
-          @for (row of file.rows.slice(0, previewRows); track row.line) {
-            <tr>
-              <td>{{ row.line }}</td><td>{{ row.registration }}</td><td>{{ row.fullName }}</td><td>{{ row.admissionDate }}</td>
-              <td>{{ row.position }}</td><td>{{ row.birthDate }}</td><td>{{ row.cpf || '—' }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    @if (file.rows.length > previewRows) { <p class="hint">Mostrando {{ previewRows }} de {{ file.rows.length }}; a simulação confere todas.</p> }
+    <mat-card class="table-preview-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ file.rows.length }} funcionários @if (imported) { <span class="ok">(importados)</span> }</mat-card-title>
+        @if (file.rows.length > previewRows) {
+          <mat-card-subtitle>Mostrando {{ previewRows }} de {{ file.rows.length }}; a simulação confere todas.</mat-card-subtitle>
+        }
+      </mat-card-header>
+      <mat-card-content class="table-container">
+        <table mat-table [dataSource]="file.rows | slice: 0 : previewRows">
+          <ng-container matColumnDef="line">
+            <th mat-header-cell *matHeaderCellDef>Linha</th>
+            <td mat-cell *matCellDef="let row">{{ row.line }}</td>
+          </ng-container>
+          <ng-container matColumnDef="registration">
+            <th mat-header-cell *matHeaderCellDef>Matrícula</th>
+            <td mat-cell *matCellDef="let row">{{ row.registration }}</td>
+          </ng-container>
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef>Nome</th>
+            <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="admissionDate">
+            <th mat-header-cell *matHeaderCellDef>Admissão</th>
+            <td mat-cell *matCellDef="let row">{{ row.admissionDate }}</td>
+          </ng-container>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>Cargo</th>
+            <td mat-cell *matCellDef="let row">{{ row.position }}</td>
+          </ng-container>
+          <ng-container matColumnDef="birthDate">
+            <th mat-header-cell *matHeaderCellDef>Nascimento</th>
+            <td mat-cell *matCellDef="let row">{{ row.birthDate }}</td>
+          </ng-container>
+          <ng-container matColumnDef="cpf">
+            <th mat-header-cell *matHeaderCellDef>CPF</th>
+            <td mat-cell *matCellDef="let row">{{ row.cpf || '—' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="previewColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: previewColumns"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
   }
 
   @if (blocker(); as reason) { <p class="error">{{ reason }}</p> }
-  <div class="actions">
-    <button mat-stroked-button (click)="simulate()" [disabled]="!!blocker() || busy || imported">Simular</button>
-    <button mat-raised-button color="primary" (click)="import()" [disabled]="!canImport() || imported">Importar</button>
-    @if (busy) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
-  </div>
+  @if (busy) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
 
   @if (report) {
     <app-import-report [report]="report" keyField="registration" idField="employeeId" keyLabel="Matrícula"
@@ -46,4 +83,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()" [disabled]="busy">Fechar</button>
+  <button mat-stroked-button color="primary" (click)="simulate()" [disabled]="!!blocker() || busy || imported">
+    <mat-icon>fact_check</mat-icon>
+    Simular
+  </button>
+  <button mat-flat-button color="primary" (click)="import()" [disabled]="!canImport() || imported">
+    <mat-icon>cloud_upload</mat-icon>
+    Importar
+  </button>
 </mat-dialog-actions>

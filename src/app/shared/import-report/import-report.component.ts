@@ -28,6 +28,8 @@ export class ImportReportComponent implements OnChanges {
   @Input() outside: string[] = [];
   /** Ids das diferenças confirmadas pelo usuário. */
   @Output() confirmChange = new EventEmitter<string[]>();
+  /** Colunas da tabela de erros. */
+  readonly failedColumns = ['line', 'key', 'field', 'error'];
 
   pending: ImportItem[] = [];
   ignored: ImportItem[] = [];
