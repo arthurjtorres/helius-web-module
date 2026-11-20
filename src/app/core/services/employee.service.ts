@@ -21,8 +21,14 @@ export class EmployeeService {
     return this.http.put<EmployeeDTO>(`${this.API}/${employeeId}`, employee);
   }
 
-  getAll(): Observable<any>{
-    return this.http.get<any>(this.API)
+  /** Funcionários ativos de uma empresa (`?fkCompanyId`). */
+  getByCompany(companyId: string): Observable<any> {
+    return this.http.get<any>(this.API, { params: { fkCompanyId: companyId } });
+  }
+
+  /** Desativa o funcionário (exclusão lógica). */
+  delete(employeeId: string): Observable<unknown> {
+    return this.http.delete(`${this.API}/${employeeId}`);
   }
 
   /** Importação em lote (`upsert`, tudo ou nada); `dryRun` só simula. */

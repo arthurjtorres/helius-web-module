@@ -27,9 +27,6 @@ export class VehicleService {
     return this.http.delete(`${this.vehiclesAPI}/${vehicleId}`);
   }
 
-  getAllVehicles(): Observable<{ data: VehicleInterface[] }> {
-    return this.http.get<{ data: VehicleInterface[] }>(this.vehiclesAPI);
-  }
 
   /** Veículos ativos de uma empresa (404 quando não há nenhum). */
   getVehiclesByCompany(companyId: string): Observable<{ data: VehicleInterface[] }> {

@@ -4,6 +4,9 @@
       <mat-icon>cloud_upload</mat-icon>Importar Arquivo
     </button>
 
+    <app-company-select class="header-company" [(ngModel)]="companyId" (ngModelChange)="loadData()"
+      hint="Selecione uma empresa"></app-company-select>
+
     <mat-form-field class="header-search" appearance="outline">
       <input matInput type="search" />
       <button matSuffix mat-icon-button aria-label="Search">
@@ -77,6 +80,10 @@
       <mat-row *matRowDef="let row; columns: employeeHeader"></mat-row>
     </mat-table>
   </div>
+
+  @if (!employeeDataSource.data.length) {
+    <p class="empty">{{ companyId ? 'Nenhum funcionário ativo nesta empresa.' : 'Selecione uma empresa para ver os funcionários.' }}</p>
+  }
 
   <mat-paginator
     [pageSizeOptions]="[10, 20, 50]"
