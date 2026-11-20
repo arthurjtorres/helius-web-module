@@ -39,8 +39,8 @@ describe('VehiclesImportComponent', () => {
   }
 
   beforeEach(async () => {
-    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['bulkImport', 'getVehiclesByCompany']);
-    vehicleService.getVehiclesByCompany.and.returnValue(of({ data: [{ vehicleNumber: 'ZZ_TEST_101' }, { vehicleNumber: 'ZZ_TEST_999' }] }));
+    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['bulkImport', 'getVehiclesByCompany', 'bulkDeactivate']);
+    vehicleService.getVehiclesByCompany.and.returnValue(of({ data: [{ vehicleId: 'v1', vehicleNumber: 'ZZ_TEST_101' }, { vehicleId: 'v9', vehicleNumber: 'ZZ_TEST_999' }] as never }));
     dialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
     const companyService = jasmine.createSpyObj<CompanyService>('CompanyService', ['getAll']);
     companyService.getAll.and.returnValue(of({ data: [{ companyId: 'c1', companyName: 'ZZ_TEST EMPRESA', companyAcronym: 'ZT' } as never] }));
@@ -129,6 +129,29 @@ describe('VehiclesImportComponent', () => {
     expect(state.imported).toBeTrue();
     component.close();
     expect(dialogRef.close).toHaveBeenCalledWith(true);
+  });
+
+  it('depois de importar, lista os de fora da planilha com id e desativa os marcados', () => {
+    vehicleService.bulkImport.and.returnValue(of({ data: report({ dryRun: false }) }));
+    vehicleService.bulkDeactivate.and.returnValue(of({ message: '1 veículo(s) desativado(s).', data: { deactivated: 1 } }));
+    const state = ready();
+    component.import(state);
+    expect(state.outsideItems).toEqual([{ id: 'v9', key: 'ZZ_TEST_999' }]);
+    component.deactivate(state, ['v9']);
+    expect(vehicleService.bulkDeactivate).toHaveBeenCalledWith(['v9']);
+    expect(state.outsideItems).toEqual([]);
+    expect(TestBed.inject(NotificationService).info).toHaveBeenCalledWith('1 veículo(s) desativado(s).');
+  });
+
+  it('409 na desativação avisa e recarrega a lista', () => {
+    vehicleService.bulkImport.and.returnValue(of({ data: report({ dryRun: false }) }));
+    vehicleService.bulkDeactivate.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409, error: { message: 'Nada foi desativado.' } })));
+    const state = ready();
+    component.import(state);
+    component.deactivate(state, ['v9']);
+    expect(TestBed.inject(NotificationService).error).toHaveBeenCalledWith('Nada foi desativado.');
+    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledTimes(2);
+    expect(state.deactivating).toBeFalse();
   });
 
   it('editar depois de simular exige nova simulação', () => {
