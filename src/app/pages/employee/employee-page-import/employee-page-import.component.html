@@ -71,8 +71,19 @@
 
   @if (report) {
     <app-import-report [report]="report" keyField="registration" idField="employeeId" keyLabel="Matrícula"
-      [fieldLabels]="fieldLabels" missingLabel="Cargos não cadastrados"
+      [fieldLabels]="fieldLabels" missingLabel="Cargos não cadastrados" [outside]="imported ? [] : outsideKeys"
       (confirmChange)="confirmIds = $event"></app-import-report>
+  }
+
+  @if (imported && outsideItems.length) {
+    <mat-form-field appearance="outline">
+      <mat-label>Data de rescisão</mat-label>
+      <input matInput type="date" name="terminationDate" required [max]="maxTerminationDate"
+        [(ngModel)]="terminationDate" [disabled]="deactivating" />
+      <mat-hint>Vale para todos os desligados da lista abaixo.</mat-hint>
+    </mat-form-field>
+    <app-outside-list [items]="outsideItems" keyLabel="Matrícula" noun="funcionários"
+      [busy]="deactivating || !terminationDate" (deactivate)="deactivate($event)"></app-outside-list>
   }
 </mat-dialog-content>
 
