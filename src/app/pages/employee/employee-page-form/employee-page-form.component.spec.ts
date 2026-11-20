@@ -8,6 +8,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EmployeeModule } from '../employee.module';
 import { of } from 'rxjs';
 import { EmployeeService } from '../../../core/services/employee.service';
+import { PersonService } from '../../../core/services/person.service';
+import { DocumentService } from '../../../core/services/document.service';
+import { PersonInterface } from '../../../core/interfaces/person.interface';
+import { DocumentInterface } from '../../../core/interfaces/document.interface';
 
 describe('EmployeePageFormComponent', () => {
   let component: EmployeePageFormComponent;
@@ -40,5 +44,26 @@ describe('EmployeePageFormComponent', () => {
     component.onSave();
     const payload = create.calls.mostRecent().args[0];
     expect(JSON.parse(JSON.stringify(payload))).toEqual({ registration: '900001', admissionDate: '2026-01-02', fkPersonId: 'p1', fkCompanyId: 'c1' });
+  });
+
+  it('exige nome e sobrenome, como a importação (o registry recusa lastName vazio)', () => {
+    const fullName = component.employeeForm.get('fullName')!;
+    fullName.setValue('ZZ_TEST_Demissao');
+    expect(fullName.valid).toBeFalse();
+    fullName.setValue('ZZ_TEST_ Demissao');
+    expect(fullName.valid).toBeTrue();
+  });
+
+  it('divide o nome por qualquer espaço em branco', () => {
+    const create = spyOn(TestBed.inject(PersonService), 'create').and.returnValue(of({ data: { personId: 'p1' } } as never as PersonInterface));
+    spyOn(TestBed.inject(DocumentService), 'create').and.returnValue(of({} as DocumentInterface));
+    spyOn(TestBed.inject(EmployeeService), 'create').and.returnValue(of({ registration: '900001', fkPersonId: 'p1' }));
+    component.isEdit = false;
+    component.employeeForm.patchValue({
+      cpf: '52998224725', registration: '900001', fullName: ' ZZ_TEST_   Demissao  Silva ',
+      birthDate: '1990-01-01', admissionDate: '2026-01-02', company: 'c1',
+    });
+    component.onSave();
+    expect(create.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({ firstName: 'ZZ_TEST_', lastName: 'Demissao Silva' }));
   });
 });
