@@ -7,6 +7,7 @@ import { of, throwError } from 'rxjs';
 import { VehiclePageComponent } from './vehicle-page.component';
 import { VehiclesModule } from '../vehicles.module';
 import { VehicleService } from '../../../core/services/vehicle.service';
+import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { VehicleInterface } from '../../../core/interfaces/vehicle.interface';
 
@@ -26,9 +27,11 @@ describe('VehiclePageComponent', () => {
     company: { companyName: 'ZZ_TEST_EMPRESA' },
   };
 
-  function render(response: ReturnType<VehicleService['getAllVehicles']>): HTMLElement {
-    vehicleService.getAllVehicles.and.returnValue(response);
+  /** Renderiza com a empresa `c1` escolhida (a tabela só carrega com empresa). */
+  function render(response: ReturnType<VehicleService['getVehiclesByCompany']>): HTMLElement {
+    vehicleService.getVehiclesByCompany.and.returnValue(response);
     fixture = TestBed.createComponent(VehiclePageComponent);
+    fixture.componentInstance.companyId = 'c1';
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
@@ -39,13 +42,14 @@ describe('VehiclePageComponent', () => {
     Array.from(el.querySelectorAll(`mat-cell.${column}`)).map(c => c.textContent?.trim());
 
   beforeEach(async () => {
-    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['getAllVehicles', 'deleteVehicle']);
+    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['getVehiclesByCompany', 'deleteVehicle']);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
       imports: [VehiclesModule, NoopAnimationsModule],
       providers: [
         { provide: VehicleService, useValue: vehicleService },
         { provide: NotificationService, useValue: notification },
+        { provide: CompanyService, useValue: { getAll: () => of({ data: [] }) } },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
       ],
     }).compileComponents();
@@ -88,7 +92,21 @@ describe('VehiclePageComponent', () => {
     fixture.componentInstance.deleteVehicle(vehicle);
     tick();
     expect(vehicleService.deleteVehicle).toHaveBeenCalledWith('v1');
-    expect(vehicleService.getAllVehicles).toHaveBeenCalledTimes(2);
+    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledTimes(2);
+  }));
+
+  it('fica vazia, sem chamar a API, até escolher a empresa', fakeAsync(() => {
+    fixture = TestBed.createComponent(VehiclePageComponent);
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+    expect(vehicleService.getVehiclesByCompany).not.toHaveBeenCalled();
+    expect((fixture.nativeElement as HTMLElement).querySelector('.empty')?.textContent).toContain('Selecione uma empresa');
+  }));
+
+  it('carrega os veículos da empresa escolhida', fakeAsync(() => {
+    render(of({ data: [vehicle] }));
+    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledWith('c1');
   }));
 
   it('não exclui sem confirmação', fakeAsync(() => {

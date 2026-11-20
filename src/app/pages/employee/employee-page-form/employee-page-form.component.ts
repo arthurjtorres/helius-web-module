@@ -5,12 +5,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import { DepartmentService } from '../../../core/services/department.service';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { CompanyService } from '../../../core/services/company.service';
 import { PositionService } from '../../../core/services/position.service';
 import { SectorService } from '../../../core/services/sector.service';
 import { DocumentService } from '../../../core/services/document.service';
 import { DocumentTypeEnum } from '../../../core/interfaces/document.interface';
 import { PersonService } from '../../../core/services/person.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-employee-page-form',
@@ -22,7 +23,6 @@ export class EmployeePageFormComponent implements OnInit {
   employeeForm!: FormGroup;
   isEdit: boolean = false;
 
-  companies: any[] = [];
   positions: any[] = [];
   sectors: any[] = [];
   departments: any[] = [];
@@ -30,12 +30,12 @@ export class EmployeePageFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
-    private companyService: CompanyService,
     private positionService: PositionService,
     private sectorService: SectorService,
     private departmentService: DepartmentService,
     private documentService: DocumentService,
     private personService: PersonService,
+    private notification: NotificationService,
     private dialogRef: MatDialogRef<EmployeePageFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
@@ -65,25 +65,24 @@ export class EmployeePageFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.employeeForm.get('cpf')?.disable();
+      // troca de empresa é demissão e recontratação (T16); o backend também recusa
+      this.employeeForm.get('company')?.disable();
     }
   }
 
   loadResources() {
     forkJoin({
-      companies: this.companyService.getAll(),
       positions: this.positionService.getAll(),
       sectors: this.sectorService.getAll(),
       departments: this.departmentService.getAll(),
     }).subscribe({
       next: (response: any) => {
-        this.companies = response.companies.data;
         this.positions = response.positions.data;
         this.sectors = response.sectors.data;
         this.departments = response.departments.data;
 
         if (this.isEdit) {
           this.employeeForm.patchValue({
-            company: this.data.fkCompanyId,
             position: this.data.fkPositionId,
             sector: this.data.fkSectorId,
             department: this.data.fkDepartmentId
@@ -149,7 +148,10 @@ export class EmployeePageFormComponent implements OnInit {
       })
     ).subscribe({
       next: () => this.dialogRef.close(true),
-      error: (err) => alert("Erro ao salvar: " + err.message)
+      // 400/409 do backend trazem a mensagem (empresa, matrícula ocupada); 403 já é avisado pelo interceptor
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível salvar o funcionário.');
+      }
     });
   }
 

@@ -10,16 +10,11 @@
       <mat-form-field appearance="outline">
         <mat-label>Matrícula</mat-label>
         <input matInput formControlName="registration" />
+        <mat-hint>Número da chapa; o sistema completa com a sigla da empresa.</mat-hint>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Empresa</mat-label>
-        <mat-select formControlName="company">
-          <mat-option *ngFor="let c of companies" [value]="c.companyId">
-            {{ c.companyName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <app-company-select formControlName="company"
+        [hint]="isEdit ? '' : 'A empresa não muda depois do cadastro.'"></app-company-select>
 
       <mat-form-field appearance="outline">
         <mat-label>Data de Admissão</mat-label>
