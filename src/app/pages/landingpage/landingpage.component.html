@@ -62,6 +62,8 @@
           <a href="#" class="forgot-link">Esqueceu sua senha?</a>
         </div>
 
+        @if (errorMessage) { <p class="login-error" role="alert">{{ errorMessage }}</p> }
+
         <button mat-flat-button color="primary" class="btn-block bnt-enter">
           Entrar
         </button>
