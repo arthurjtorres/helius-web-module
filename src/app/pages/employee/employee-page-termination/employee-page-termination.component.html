@@ -3,7 +3,7 @@
   <p>{{ data.fullName }}: o usuário vinculado também será desativado e perderá as permissões.</p>
   <mat-form-field appearance="outline">
     <mat-label>Data de rescisão</mat-label>
-    <input matInput type="date" name="terminationDate" required [min]="minDate" [(ngModel)]="terminationDate" #date="ngModel" />
+    <input matInput type="date" name="terminationDate" required [min]="minDate" [max]="maxDate" [(ngModel)]="terminationDate" #date="ngModel" />
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
