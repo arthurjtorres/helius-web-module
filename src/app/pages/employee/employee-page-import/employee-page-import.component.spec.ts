@@ -33,7 +33,8 @@ describe('EmployeePageImportComponent', () => {
   }
 
   beforeEach(async () => {
-    employeeService = jasmine.createSpyObj<EmployeeService>('EmployeeService', ['bulkImport']);
+    employeeService = jasmine.createSpyObj<EmployeeService>('EmployeeService', ['bulkImport', 'getByCompany', 'bulkDeactivate']);
+    employeeService.getByCompany.and.returnValue(of({ data: [] }));
     dialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
     const companyService = jasmine.createSpyObj<CompanyService>('CompanyService', ['getAll']);
     companyService.getAll.and.returnValue(of({ data: [{ companyId: 'c1', companyName: 'ZZ_TEST EMPRESA', companyAcronym: 'ZT' } as never] }));
@@ -116,5 +117,56 @@ describe('EmployeePageImportComponent', () => {
     const bytes = new Uint8Array([0x46, 0x55, 0x4e, 0xc7, 0xc3, 0x4f]); // "FUNÇÃO" em Windows-1252
     expect(decodeText(bytes.buffer)).toBe('FUNÇÃO');
     expect(decodeText(new TextEncoder().encode('FUNÇÃO').buffer as ArrayBuffer)).toBe('FUNÇÃO');
+  });
+
+  describe('lista "fora da planilha" (T19)', () => {
+    const notification = () => TestBed.inject(NotificationService) as jasmine.SpyObj<NotificationService>;
+    const active = { data: [{ employeeId: 'n1', registration: 'ZT001234' }, { employeeId: 'e9', registration: 'ZT009999' }] };
+
+    function importNow(): void {
+      employeeService.getByCompany.and.returnValue(of(active));
+      employeeService.bulkImport.and.returnValue(of({ data: report({ dryRun: false }) }));
+      ready();
+      component.import();
+    }
+
+    it('lista os ativos da empresa cuja matrícula não veio no relatório', () => {
+      importNow();
+      expect(employeeService.getByCompany).toHaveBeenCalledWith('c1');
+      expect(component.outsideItems).toEqual([{ id: 'e9', key: 'ZT009999' }]);
+    });
+
+    it('desliga os marcados com a data de rescisão do campo e tira da lista', () => {
+      importNow();
+      component.terminationDate = '2026-11-19';
+      employeeService.bulkDeactivate.and.returnValue(of({ message: '1 funcionário(s) desligado(s).', data: { deactivated: 1, pendingEmployeeIds: [] } }));
+      component.deactivate(['e9']);
+      expect(employeeService.bulkDeactivate).toHaveBeenCalledWith(['e9'], '2026-11-19');
+      expect(component.outsideItems).toEqual([]);
+      expect(notification().info).toHaveBeenCalledWith('1 funcionário(s) desligado(s).');
+    });
+
+    it('control fora: avisa como erro que os usuários seguem ativos', () => {
+      importNow();
+      employeeService.bulkDeactivate.and.returnValue(of({ message: 'Desligados, mas os usuários não.', data: { deactivated: 1, pendingEmployeeIds: ['e9'] } }));
+      component.deactivate(['e9']);
+      expect(notification().error).toHaveBeenCalledWith('Desligados, mas os usuários não.');
+    });
+
+    it('409: mostra a mensagem e recarrega a lista', () => {
+      importNow();
+      employeeService.getByCompany.calls.reset();
+      employeeService.bulkDeactivate.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409, error: { message: 'Nada foi desligado.' } })));
+      component.deactivate(['e9']);
+      expect(notification().error).toHaveBeenCalledWith('Nada foi desligado.');
+      expect(employeeService.getByCompany).toHaveBeenCalledWith('c1');
+    });
+
+    it('a data de rescisão começa em hoje e vai no máximo até amanhã', () => {
+      const now = new Date();
+      const day = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      expect(component.terminationDate).toBe(day(now));
+      expect(component.maxTerminationDate).toBe(day(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)));
+    });
   });
 });
