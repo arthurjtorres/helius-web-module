@@ -42,4 +42,9 @@ export class VehicleService {
     const params = { mode: 'upsert', dryRun: String(dryRun) };
     return this.http.post<{ data: ImportReport }>(`${this.vehiclesAPI}/bulk`, { companyId, vehicles, confirmIds }, { params });
   }
+
+  /** Desativa vários veículos, tudo ou nada (409 lista os ids que bloquearam). */
+  bulkDeactivate(ids: string[]): Observable<{ message: string; data: { deactivated: number } }> {
+    return this.http.post<{ message: string; data: { deactivated: number } }>(`${this.vehiclesAPI}/bulk-deactivate`, { ids });
+  }
 }

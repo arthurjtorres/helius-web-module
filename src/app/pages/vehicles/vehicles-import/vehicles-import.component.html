@@ -111,8 +111,13 @@
 
     @if (state.report) {
       <app-import-report [report]="state.report" keyField="vehicleNumber" idField="vehicleId" keyLabel="Prefixo"
-        [fieldLabels]="fieldLabels" missingLabel="Tipos de veículo não cadastrados" [outside]="state.outside"
+        [fieldLabels]="fieldLabels" missingLabel="Tipos de veículo não cadastrados" [outside]="state.imported ? [] : state.outside"
         (confirmChange)="state.confirmIds = $event"></app-import-report>
+    }
+
+    @if (state.imported && state.outsideItems.length) {
+      <app-outside-list [items]="state.outsideItems" keyLabel="Prefixo" noun="veículos" [busy]="state.deactivating"
+        (deactivate)="deactivate(state, $event)"></app-outside-list>
     }
   }
 </mat-dialog-content>
