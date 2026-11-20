@@ -34,6 +34,14 @@ export class EmployeeService {
     return this.http.delete<{ message: string; data?: { pendingEmployeeIds: string[] } }>(`${this.API}/${employeeId}`, { params: { terminationDate } });
   }
 
+  /**
+   * Desligamento em lote (T19, lista "fora da planilha"): tudo ou nada, uma data de rescisão para todos.
+   * `pendingEmployeeIds` vem preenchido se o `control` falhou (usuários não desativados).
+   */
+  bulkDeactivate(ids: string[], terminationDate: string): Observable<{ message: string; data: { deactivated: number; pendingEmployeeIds: string[] } }> {
+    return this.http.post<{ message: string; data: { deactivated: number; pendingEmployeeIds: string[] } }>(`${this.API}/bulk-deactivate`, { ids, terminationDate });
+  }
+
   /** Importação em lote (`upsert`, tudo ou nada); `dryRun` só simula. */
   bulkImport(companyId: string, employees: object[], dryRun: boolean, confirmIds: string[] = []): Observable<{ data: ImportReport }> {
     const params = { mode: 'upsert', dryRun: String(dryRun) };

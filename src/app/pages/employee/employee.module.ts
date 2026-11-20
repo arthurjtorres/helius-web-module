@@ -23,6 +23,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ImportReportModule } from '../../shared/import-report/import-report.module';
 import { CompanySelectModule } from '../../shared/company-select/company-select.module';
+import { OutsideListModule } from '../../shared/outside-list/outside-list.module';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { CompanySelectModule } from '../../shared/company-select/company-select.
     MatProgressSpinnerModule,
     MatProgressBarModule,
     ImportReportModule,
-    CompanySelectModule
+    CompanySelectModule,
+    OutsideListModule
   ]
 })
 export class EmployeeModule { }
