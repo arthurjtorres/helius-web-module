@@ -43,6 +43,7 @@ export interface SheetState {
 })
 export class VehiclesImportComponent implements OnInit {
   readonly cameraTypes = Object.values(CameraTypeEnum);
+  readonly previewColumns = ['line', 'vehicleNumber', 'licensePlate', 'typeVehicleName', 'capacity', 'hasWifi', 'cameraType'];
   readonly fieldLabels: Record<string, string> = {
     vehicleNumber: 'Prefixo', brand: 'Marca', model: 'Modelo', licensePlate: 'Placa', chassisNumber: 'Chassi',
     fabricationYear: 'Ano fab.', modelYear: 'Ano mod.', renavan: 'Renavam', typeVehicleName: 'Tipo',

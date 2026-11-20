@@ -1,68 +1,96 @@
-<section class="import-report">
-  <p class="summary">
-    {{ report.dryRun ? 'Simulação' : 'Importação' }}:
-    <strong>{{ report.created.length }}</strong> {{ report.dryRun ? 'a criar' : 'criados' }}
-    @if (report.mode === 'upsert') {
-      · <strong>{{ report.updated?.length ?? 0 }}</strong> {{ report.dryRun ? 'a atualizar' : 'atualizados' }}
-      · <strong>{{ report.unchanged?.length ?? 0 }}</strong> sem mudança
+<mat-card class="import-report" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ report.dryRun ? 'Simulação' : 'Importação' }}</mat-card-title>
+    <mat-card-subtitle>
+      <strong>{{ report.created.length }}</strong> {{ report.dryRun ? 'a criar' : 'criados' }}
+      @if (report.mode === 'upsert') {
+        · <strong>{{ report.updated?.length ?? 0 }}</strong> {{ report.dryRun ? 'a atualizar' : 'atualizados' }}
+        · <strong>{{ report.unchanged?.length ?? 0 }}</strong> sem mudança
+      }
+      · <strong>{{ pending.length + ignored.length }}</strong> ignorados
+      · <strong [class.error]="report.failed.length">{{ report.failed.length }}</strong> com erro
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (report.failed.length) {
+      <h3 class="error">Erros (nada é gravado enquanto houver erro)</h3>
+      <div class="table-container">
+        <table mat-table [dataSource]="report.failed">
+          <ng-container matColumnDef="line">
+            <th mat-header-cell *matHeaderCellDef>Linha</th>
+            <td mat-cell *matCellDef="let f">{{ f.line }}</td>
+          </ng-container>
+          <ng-container matColumnDef="key">
+            <th mat-header-cell *matHeaderCellDef>{{ keyLabel }}</th>
+            <td mat-cell *matCellDef="let f">{{ key(f) || '—' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="field">
+            <th mat-header-cell *matHeaderCellDef>Campo</th>
+            <td mat-cell *matCellDef="let f">{{ fieldName(f.field) }}</td>
+          </ng-container>
+          <ng-container matColumnDef="error">
+            <th mat-header-cell *matHeaderCellDef>Erro</th>
+            <td mat-cell *matCellDef="let f">{{ f.error }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="failedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: failedColumns"></tr>
+        </table>
+      </div>
     }
-    · <strong>{{ pending.length + ignored.length }}</strong> ignorados
-    · <strong [class.error]="report.failed.length">{{ report.failed.length }}</strong> com erro
-  </p>
 
-  @if (report.failed.length) {
-    <h3 class="error">Erros (nada é gravado enquanto houver erro)</h3>
-    <table class="report-table">
-      <thead><tr><th>Linha</th><th>{{ keyLabel }}</th><th>Campo</th><th>Erro</th></tr></thead>
-      <tbody>
-        @for (f of report.failed; track $index) {
-          <tr><td>{{ f.line }}</td><td>{{ key(f) || '—' }}</td><td>{{ fieldName(f.field) }}</td><td>{{ f.error }}</td></tr>
+    @if (missing.length) {
+      <h3 class="error">{{ missingLabel }}</h3>
+      <mat-chip-set [attr.aria-label]="missingLabel">
+        @for (m of missing; track m) { <mat-chip>{{ m }}</mat-chip> }
+      </mat-chip-set>
+    }
+
+    @if (pending.length) {
+      <h3>Diferenças a confirmar</h3>
+      <mat-checkbox (change)="toggleAll($event.checked)">Confirmar todas</mat-checkbox>
+      <mat-list class="report-list">
+        @for (item of pending; track id(item)) {
+          <mat-list-item lines="3">
+            <mat-checkbox matListItemTitle [checked]="isConfirmed(item)" (change)="toggle(item, $event.checked)">
+              Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}
+            </mat-checkbox>
+            @for (c of item.changes; track c.field) { <span matListItemLine>{{ describe(c) }}</span> }
+          </mat-list-item>
         }
-      </tbody>
-    </table>
-  }
+      </mat-list>
+    }
 
-  @if (missing.length) {
-    <h3 class="error">{{ missingLabel }}</h3>
-    <p>{{ missing.join(', ') }}</p>
-  }
+    @if (report.updated?.length) {
+      <h3>{{ report.dryRun ? 'Serão atualizados' : 'Atualizados' }}</h3>
+      <mat-list class="report-list">
+        @for (item of report.updated; track id(item)) {
+          <mat-list-item lines="3">
+            <span matListItemTitle>Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}</span>
+            @for (c of item.changes; track c.field) { <span matListItemLine>{{ describe(c) }}</span> }
+          </mat-list-item>
+        }
+      </mat-list>
+    }
 
-  @if (pending.length) {
-    <h3>Diferenças a confirmar</h3>
-    <mat-checkbox (change)="toggleAll($event.checked)">Confirmar todas</mat-checkbox>
-    <ul class="report-list">
-      @for (item of pending; track id(item)) {
-        <li>
-          <mat-checkbox [checked]="isConfirmed(item)" (change)="toggle(item, $event.checked)">
-            Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}
-          </mat-checkbox>
-          <ul>
-            @for (c of item.changes; track c.field) { <li>{{ describe(c) }}</li> }
-          </ul>
-        </li>
-      }
-    </ul>
-  }
+    @if (ignored.length) {
+      <h3>Ignorados</h3>
+      <mat-list class="report-list">
+        @for (item of ignored; track $index) {
+          <mat-list-item>
+            <span matListItemTitle>Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}</span>
+            <span matListItemLine>{{ item.reason }}</span>
+          </mat-list-item>
+        }
+      </mat-list>
+    }
 
-  @if (report.updated?.length) {
-    <h3>{{ report.dryRun ? 'Serão atualizados' : 'Atualizados' }}</h3>
-    <ul class="report-list">
-      @for (item of report.updated; track id(item)) {
-        <li>Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}: @for (c of item.changes; track c.field) { {{ describe(c) }}; }</li>
-      }
-    </ul>
-  }
-
-  @if (ignored.length) {
-    <h3>Ignorados</h3>
-    <ul class="report-list">
-      @for (item of ignored; track $index) { <li>Linha {{ item.line }} · {{ keyLabel }} {{ key(item) }}: {{ item.reason }}</li> }
-    </ul>
-  }
-
-  @if (outside.length) {
-    <h3>Na base e fora da planilha ({{ outside.length }})</h3>
-    <p class="muted">Só informativo: nada é desativado.</p>
-    <p>{{ outside.join(', ') }}</p>
-  }
-</section>
+    @if (outside.length) {
+      <h3>Na base e fora da planilha ({{ outside.length }})</h3>
+      <p class="muted">Só informativo: nada é desativado.</p>
+      <mat-chip-set aria-label="Na base e fora da planilha">
+        @for (o of outside; track o) { <mat-chip>{{ o }}</mat-chip> }
+      </mat-chip-set>
+    }
+  </mat-card-content>
+</mat-card>
