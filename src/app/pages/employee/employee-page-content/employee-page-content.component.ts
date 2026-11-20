@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmployeePageFormComponent } from '../employee-page-form/employee-page-form.component';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeePageImportComponent } from '../employee-page-import/employee-page-import.component';
+import { EmployeePageTerminationComponent } from '../employee-page-termination/employee-page-termination.component';
 
 @Component({
   selector: 'app-employee-page-content',
@@ -122,17 +123,23 @@ export class EmployeePageContentComponent implements OnInit {
     });
   }
 
-  /** Desativa o funcionário (exclusão lógica, `DELETE`), após confirmação. 409 = possui usuário ativo. */
+  /** Desliga o funcionário (demissão, T20): pede a data de rescisão no diálogo e chama o `DELETE`. */
   deleteEmployee(item: EmployeeView): void {
-    if (!item.employeeId || !confirm(`Deseja realmente excluir o funcionário ${item.registration}?`)) return;
-    this.service.delete(item.employeeId).subscribe({
-      next: () => {
-        this.notification.info('Funcionário excluído.');
-        this.loadData();
-      },
-      error: (err: HttpErrorResponse) => {
-        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível excluir o funcionário.');
-      }
+    const employeeId = item.employeeId;
+    if (!employeeId) return;
+    this.dialog.open(EmployeePageTerminationComponent, { width: '480px', data: item }).afterClosed().subscribe((date?: string) => {
+      if (!date) return;
+      this.service.delete(employeeId, date).subscribe({
+        next: (response) => {
+          // `control` fora: funcionário desligado, usuário ainda ativo
+          if (response.data?.pendingEmployeeIds?.length) this.notification.error(response.message);
+          else this.notification.info('Funcionário desligado.');
+          this.loadData();
+        },
+        error: (err: HttpErrorResponse) => {
+          if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desligar o funcionário.');
+        }
+      });
     });
   }
 }

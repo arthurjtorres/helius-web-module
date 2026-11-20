@@ -26,9 +26,12 @@ export class EmployeeService {
     return this.http.get<any>(this.API, { params: { fkCompanyId: companyId } });
   }
 
-  /** Desativa o funcionário (exclusão lógica). */
-  delete(employeeId: string): Observable<unknown> {
-    return this.http.delete(`${this.API}/${employeeId}`);
+  /**
+   * Desliga o funcionário (demissão, T20): grava a rescisão e desativa o usuário no `control`.
+   * `pendingEmployeeIds` vem preenchido se o `control` falhou (usuário não desativado).
+   */
+  delete(employeeId: string, terminationDate: string): Observable<{ message: string; data?: { pendingEmployeeIds: string[] } }> {
+    return this.http.delete<{ message: string; data?: { pendingEmployeeIds: string[] } }>(`${this.API}/${employeeId}`, { params: { terminationDate } });
   }
 
   /** Importação em lote (`upsert`, tudo ou nada); `dryRun` só simula. */
