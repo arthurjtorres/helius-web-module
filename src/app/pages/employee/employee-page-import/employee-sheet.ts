@@ -75,10 +75,10 @@ export function parseEmployeeSheet(sheet: SheetData): EmployeeFile {
   };
 }
 
-/** Primeira aba da planilha que tem o cabeçalho de funcionários. */
+/** Planilha de uma única aba (T16); mais de uma aba é recusada. */
 export function parseEmployeeWorkbook(sheets: SheetData[]): EmployeeFile {
-  const parsed = sheets.map(parseEmployeeSheet);
-  return parsed.find(p => !p.error?.startsWith('Cabeçalho')) ?? parsed[0] ?? { rows: [], error: 'Planilha vazia.' };
+  if (sheets.length > 1) return { rows: [], error: 'O arquivo deve ter uma única aba.' };
+  return sheets.length ? parseEmployeeSheet(sheets[0]) : { rows: [], error: 'Planilha vazia.' };
 }
 
 /**

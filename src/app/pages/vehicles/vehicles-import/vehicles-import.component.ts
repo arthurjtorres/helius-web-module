@@ -30,9 +30,9 @@ export interface SheetState {
 }
 
 /**
- * Importação de veículos por planilha (uma aba por empresa): pré-visualização com Wi-Fi, câmera e
- * capacidade editáveis, simulação (`dryRun`) com relatório e diferenças a confirmar, e gravação em
- * `upsert`, tudo ou nada por aba. As regras de formato ficam com o backend (o `dryRun` aponta erro
+ * Importação de veículos de uma empresa por planilha de uma única aba: pré-visualização com Wi-Fi,
+ * câmera e capacidade editáveis, simulação (`dryRun`) com relatório e diferenças a confirmar, e
+ * gravação em `upsert`, tudo ou nada. As regras de formato ficam com o backend (o `dryRun` aponta erro
  * por linha e campo); a tela só exige o que o backend não sabe dizer.
  */
 @Component({
@@ -50,7 +50,9 @@ export class VehiclesImportComponent implements OnInit {
     capacity: 'Capacidade', hasWifi: 'Wi-Fi', cameraType: 'Câmera', companyId: 'Empresa', activated: 'Ativo',
   };
   companies: CompanyInterface[] = [];
-  sheets: SheetState[] = [];
+  /** Empresa escolhida antes do arquivo (T16: uma empresa e uma aba por importação). */
+  companyId = '';
+  state?: SheetState;
 
   constructor(
     private vehicleService: VehicleService,
@@ -78,13 +80,28 @@ export class VehiclesImportComponent implements OnInit {
     }
   }
 
-  /** Monta o estado das abas, pré-selecionando a empresa pelo nome ou sigla da coluna `EMPRESA`. */
+  /** Aceita só arquivo de uma aba; a empresa vem do combobox. */
   load(sheets: VehicleSheet[]): void {
-    this.sheets = sheets.map(sheet => {
-      const key = normalizeText(sheet.companyName);
-      const company = key ? this.companies.find(c => [c.companyName, c.companyAcronym].some(n => n && normalizeText(n) === key)) : undefined;
-      return { sheet, companyId: company?.companyId ?? '', hasWifi: null, cameraType: null, confirmIds: [], outside: [], busy: false, imported: false };
-    });
+    this.state = undefined;
+    if (sheets.length !== 1) {
+      this.notification.error('O arquivo deve ter uma única aba.');
+      return;
+    }
+    this.state = { sheet: sheets[0], companyId: this.companyId, hasWifi: null, cameraType: null, confirmIds: [], outside: [], busy: false, imported: false };
+  }
+
+  /** Troca de empresa no combobox vale para a aba carregada e invalida a simulação. */
+  companyChanged(): void {
+    if (!this.state) return;
+    this.state.companyId = this.companyId;
+    this.changed(this.state);
+  }
+
+  /** A coluna `EMPRESA` da aba (nome ou sigla) não bate com a empresa escolhida. */
+  private companyMismatch(state: SheetState): boolean {
+    const key = normalizeText(state.sheet.companyName);
+    const company = this.companies.find(c => c.companyId === state.companyId);
+    return !!key && !!company && ![company.companyName, company.companyAcronym].some(n => n && normalizeText(n) === key);
   }
 
   /** O que impede simular a aba (o resto o `dryRun` aponta). `null` = pode simular. */
@@ -92,8 +109,9 @@ export class VehiclesImportComponent implements OnInit {
     const { sheet } = state;
     if (sheet.error) return sheet.error;
     if (!sheet.rows.length) return 'Nenhuma linha com prefixo.';
-    if (sheet.rows.length > MAX_ROWS) return `A aba tem ${sheet.rows.length} veículos; o máximo por importação é ${MAX_ROWS}.`;
+    if (sheet.rows.length > MAX_ROWS) return `O arquivo tem ${sheet.rows.length} veículos; o máximo por importação é ${MAX_ROWS}.`;
     if (!state.companyId) return 'Escolha a empresa.';
+    if (this.companyMismatch(state)) return `A coluna EMPRESA da planilha indica "${sheet.companyName}"; confira a empresa escolhida.`;
     if (sheet.rows.some(r => this.badCapacity(r))) return 'Preencha a capacidade (1 a 300) das linhas destacadas.';
     if (sheet.rows.some(r => (r.hasWifi ?? state.hasWifi) === null)) return 'Escolha o Wi-Fi padrão.';
     if (sheet.rows.some(r => !(r.cameraType ?? state.cameraType))) return 'Escolha a câmera padrão.';
@@ -156,6 +174,6 @@ export class VehiclesImportComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close(this.sheets.some(s => s.imported));
+    this.dialogRef.close(!!this.state?.imported);
   }
 }
