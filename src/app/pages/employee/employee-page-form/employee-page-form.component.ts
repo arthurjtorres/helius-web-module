@@ -58,9 +58,9 @@ export class EmployeePageFormComponent implements OnInit {
       admissionDate: [this.data?.admissionDate || '', [Validators.required]],
 
       company: [this.data?.fkCompanyId || '', [Validators.required]],
-      position: [this.data?.fkPositionId || '', [Validators.required]],
-      sector: [this.data?.fkSectorId || '', [Validators.required]],
-      department: [this.data?.fkDepartmentId || '', [Validators.required]],
+      position: [this.data?.fkPositionId || ''],
+      sector: [this.data?.fkSectorId || ''],
+      department: [this.data?.fkDepartmentId || ''],
     });
 
     if (this.isEdit) {
@@ -136,9 +136,10 @@ export class EmployeePageFormComponent implements OnInit {
           admissionDate: raw.admissionDate,
           fkPersonId: personId,
           fkCompanyId: raw.company,
-          fkPositionId: raw.position,
-          fkSectorId: raw.sector,
-          fkDepartmentId: raw.department
+          // Opcionais como na API, que recusa '' (vazio sai do JSON)
+          fkPositionId: raw.position || undefined,
+          fkSectorId: raw.sector || undefined,
+          fkDepartmentId: raw.department || undefined
           
         };
 
