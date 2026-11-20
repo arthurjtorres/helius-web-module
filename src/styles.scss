@@ -78,6 +78,9 @@ html {
     typography: Roboto,
     density: 0,
   ));
+
+  /* O Material limita o diálogo a 560px e ignora o `width` maior do `dialog.open` */
+  @include mat.dialog-overrides((container-max-width: 95vw));
 }
 
 /* Escolha explícita do usuário (definida pelo ThemeService) */
