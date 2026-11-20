@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import CompanyInterface from '../../../core/interfaces/company.interface';
-import { CompanyService } from '../../../core/services/company.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { readWorkbook } from '../../../core/utils/sheet-reader';
@@ -35,14 +33,13 @@ export function decodeText(data: ArrayBuffer): string {
   templateUrl: './employee-page-import.component.html',
   styleUrl: './employee-page-import.component.scss'
 })
-export class EmployeePageImportComponent implements OnInit {
+export class EmployeePageImportComponent {
   readonly previewRows = PREVIEW_ROWS;
   readonly previewColumns = ['line', 'registration', 'fullName', 'admissionDate', 'position', 'birthDate', 'cpf'];
   readonly fieldLabels: Record<string, string> = {
     registration: 'Matrícula', fullName: 'Nome', admissionDate: 'Admissão', position: 'Cargo', birthDate: 'Nascimento',
     cpf: 'CPF', companyId: 'Empresa', activated: 'Ativo',
   };
-  companies: CompanyInterface[] = [];
   companyId = '';
   file?: EmployeeFile;
   report?: ImportReport;
@@ -52,19 +49,9 @@ export class EmployeePageImportComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-    private companyService: CompanyService,
     private notification: NotificationService,
     private dialogRef: MatDialogRef<EmployeePageImportComponent>,
   ) { }
-
-  ngOnInit(): void {
-    this.companyService.getAll().subscribe({
-      next: res => this.companies = res.data ?? [],
-      error: (err: HttpErrorResponse) => {
-        if (err.status !== 404 && err.status !== 403) this.notification.error('Não foi possível carregar as empresas.');
-      }
-    });
-  }
 
   async onFile(event: Event): Promise<void> {
     const file = (event.target as HTMLInputElement).files?.[0];
