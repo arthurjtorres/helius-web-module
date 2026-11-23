@@ -17,6 +17,7 @@ import { EmployeePageContentComponent } from './pages/employee/employee-page-con
 import { VehiclesContentComponent } from './pages/vehicles/vehicles-content/vehicles-content.component';
 import { CompanyPageContentComponent } from './pages/company/company-page-content/company-page-content.component';
 import { PositionPageComponent } from './pages/position/position-page/position-page.component';
+import { UserCompaniesPageComponent } from './pages/control/user-companies-page/user-companies-page.component';
 
 
 const routes: Routes = [
@@ -47,6 +48,10 @@ const routes: Routes = [
       {
         path: 'human-resources/positions',
         component: PositionPageComponent,
+      },
+      {
+        path: 'control/user-companies',
+        component: UserCompaniesPageComponent,
       },
       {
         path: 'operations/vehicles',

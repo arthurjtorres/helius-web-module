@@ -95,6 +95,18 @@ export class SidebarComponent  {
       ]
     },
     {
+      label: 'Controle',
+      route: 'control',
+      icon: 'admin_panel_settings',
+      children: [
+        {
+          label: 'Empresas do usuário',
+          route: 'user-companies',
+          icon: 'domain',
+        },
+      ]
+    },
+    {
       label: 'Monitora',
       route: '/monitoring',
       icon: 'visibility', // Icon Material

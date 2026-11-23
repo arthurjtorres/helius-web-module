@@ -16,6 +16,7 @@ import { EmployeeModule } from './pages/employee/employee.module';
 import { VehiclesModule } from './pages/vehicles/vehicles.module';
 import { CompanyModule } from './pages/company/company.module';
 import { PositionModule } from './pages/position/position.module';
+import { ControlModule } from './pages/control/control.module';
 
 
 
@@ -38,7 +39,8 @@ import { PositionModule } from './pages/position/position.module';
     EmployeeModule,
     VehiclesModule,
     CompanyModule,
-    PositionModule
+    PositionModule,
+    ControlModule
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
