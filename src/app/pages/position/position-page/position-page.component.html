@@ -1,6 +1,6 @@
 <ng-container class="vehicle-container">
   <header class="vehicle-header">
-    <span></span>
+    <app-inactive-toggle menu="ORGANOGRAMA" (includeInactiveChange)="includeInactive = $event; loadData()"></app-inactive-toggle>
     <button mat-fab extended class="button-import" (click)="openForm()">
       <mat-icon>add_circle_outline</mat-icon>Adicionar
     </button>
@@ -19,15 +19,26 @@
         <mat-cell *matCellDef="let item" class="type">{{ item.positionName }}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef class="type">Status</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="type status">{{ item.activated !== false ? 'Ativo' : 'Inativo' }}</mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef class="actions">Ações</mat-header-cell>
         <mat-cell *matCellDef="let item" class="actions">
-          <button mat-icon-button color="primary" matTooltip="Editar" aria-label="Editar" (click)="openForm(item)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" matTooltip="Excluir" aria-label="Excluir" (click)="deletePosition(item)">
-            <mat-icon>delete</mat-icon>
-          </button>
+          @if (item.activated !== false) {
+            <button mat-icon-button color="primary" matTooltip="Editar" aria-label="Editar" (click)="openForm(item)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Excluir" aria-label="Excluir" (click)="deletePosition(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button color="primary" matTooltip="Reativar" aria-label="Reativar" (click)="reactivatePosition(item)">
+              <mat-icon>restore</mat-icon>
+            </button>
+          }
         </mat-cell>
       </ng-container>
 
