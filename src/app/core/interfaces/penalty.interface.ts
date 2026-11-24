@@ -2,6 +2,9 @@ export interface PenaltyCompositeView {
   
   // Dados do PenaltyDoc (O Conector)
   docId: string;
+  activated?: boolean;         // documento ativo (T17)
+  penaltyInfoId?: string;      // penalidade do documento (pai: reativar antes do documento)
+  penaltyActivated?: boolean;
   docRegistration?: string; // ex: AS28780
   docType?: string;
 
