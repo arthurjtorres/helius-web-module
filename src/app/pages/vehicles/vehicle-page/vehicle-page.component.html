@@ -7,6 +7,8 @@
     <app-company-select class="header-company" [(ngModel)]="companyId" (ngModelChange)="loadData()"
       hint="Selecione uma empresa"></app-company-select>
 
+    <app-inactive-toggle menu="VEICULOS" (includeInactiveChange)="includeInactive = $event; loadData()"></app-inactive-toggle>
+
     <mat-form-field class="vehicle-search" appearance="outline">
       <input matInput type="search" />
       <button matSuffix mat-icon-button aria-label="Search">
@@ -59,16 +61,27 @@
         <mat-cell *matCellDef="let item" class="model">{{ item.model }}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef class="status">Status</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="status">{{ item.activated !== false ? 'Ativo' : 'Inativo' }}</mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef class="actions">Ações</mat-header-cell>
         <mat-cell *matCellDef="let item" class="actions">
-          <button mat-icon-button color="primary" matTooltip="Editar" aria-label="Editar" (click)="editVehicle(item)">
-            <mat-icon>edit</mat-icon>
-          </button>
+          @if (item.activated !== false) {
+            <button mat-icon-button color="primary" matTooltip="Editar" aria-label="Editar" (click)="editVehicle(item)">
+              <mat-icon>edit</mat-icon>
+            </button>
 
-          <button mat-icon-button color="warn" matTooltip="Desativar" aria-label="Desativar" (click)="deleteVehicle(item)">
-            <mat-icon>delete</mat-icon>
-          </button>
+            <button mat-icon-button color="warn" matTooltip="Desativar" aria-label="Desativar" (click)="deleteVehicle(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button color="primary" matTooltip="Reativar" aria-label="Reativar" (click)="reactivateVehicle(item)">
+              <mat-icon>restore</mat-icon>
+            </button>
+          }
         </mat-cell>
       </ng-container>
 
@@ -78,7 +91,7 @@
   </div>
 
   @if (!vehicleDataSource.data.length) {
-    <p class="empty">{{ companyId ? 'Nenhum veículo ativo nesta empresa.' : 'Selecione uma empresa para ver os veículos.' }}</p>
+    <p class="empty">{{ !companyId ? 'Selecione uma empresa para ver os veículos.' : includeInactive ? 'Nenhum veículo nesta empresa.' : 'Nenhum veículo ativo nesta empresa.' }}</p>
   }
 
   <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons aria-label="Selecionar página"></mat-paginator>

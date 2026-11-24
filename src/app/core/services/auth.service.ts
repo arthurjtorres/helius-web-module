@@ -64,6 +64,21 @@ export class AuthService {
     return Date.now() > expirationDate;
   }
 
+  /**
+   * Se o usuário pode ver inativos no menu (T17, regra 2): acesso total (clearance `SUPER_ADMIN` ou
+   * acima, ou role `DESENVOLVEDOR`, como o `hasFullAccess` do backend) ou `CREATE`/`UPDATE`/`DELETE`
+   * no menu. Só mostra ou esconde o controle: quem autoriza é o backend.
+   * @param menu Nome do menu (`menu.menu_name`), ex.: `FUNCIONARIOS`.
+   */
+  canSeeInactive(menu: string): boolean {
+    const user = this.userData.value;
+    if (!user) return false;
+    if (['SYSTEM_ADMIN', 'SUPER_ADMIN'].includes(user.clearance)) return true;
+    if ((user.roles ?? []).some((r: { role: string }) => r.role === 'DESENVOLVEDOR')) return true;
+    const permissions: string[] = (user.allowedMenus ?? []).find((m: { menu: string }) => m.menu === menu)?.permissions ?? [];
+    return permissions.some(p => ['CREATE', 'UPDATE', 'DELETE'].includes(p));
+  }
+
   isLoggedIn(): boolean {
     const token = localStorage.getItem('access_token');
     if (!token) return false;

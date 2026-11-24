@@ -28,9 +28,16 @@ export class VehicleService {
   }
 
 
-  /** Veículos ativos de uma empresa (404 quando não há nenhum). */
-  getVehiclesByCompany(companyId: string): Observable<{ data: VehicleInterface[] }> {
-    return this.http.get<{ data: VehicleInterface[] }>(this.vehiclesAPI, { params: { fkVehicleCompanyId: companyId } });
+  /** Veículos de uma empresa (404 quando não há nenhum); só ativos, exceto com `includeInactive` (T17). */
+  getVehiclesByCompany(companyId: string, includeInactive = false): Observable<{ data: VehicleInterface[] }> {
+    const params: Record<string, string> = { fkVehicleCompanyId: companyId };
+    if (includeInactive) params['includeInactive'] = 'true';
+    return this.http.get<{ data: VehicleInterface[] }>(this.vehiclesAPI, { params });
+  }
+
+  /** Reativa o veículo (T17). */
+  reactivateVehicle(vehicleId: string): Observable<unknown> {
+    return this.http.patch(`${this.vehiclesAPI}/${vehicleId}/reactivate`, {});
   }
 
   /**

@@ -21,9 +21,16 @@ export class EmployeeService {
     return this.http.put<EmployeeDTO>(`${this.API}/${employeeId}`, employee);
   }
 
-  /** Funcionários ativos de uma empresa (`?fkCompanyId`). */
-  getByCompany(companyId: string): Observable<any> {
-    return this.http.get<any>(this.API, { params: { fkCompanyId: companyId } });
+  /** Funcionários de uma empresa (`?fkCompanyId`); só ativos, exceto com `includeInactive` (T17). */
+  getByCompany(companyId: string, includeInactive = false): Observable<any> {
+    const params: Record<string, string> = { fkCompanyId: companyId };
+    if (includeInactive) params['includeInactive'] = 'true';
+    return this.http.get<any>(this.API, { params });
+  }
+
+  /** Reativa o funcionário e limpa a data de rescisão (T17); o usuário dele no `control` continua desativado. */
+  reactivate(employeeId: string): Observable<unknown> {
+    return this.http.patch(`${this.API}/${employeeId}/reactivate`, {});
   }
 
   /**
