@@ -45,4 +45,6 @@ Thumbs.db
 
 *.txt
 /environments
-/src/environments
+# só o de produção é versionado: endereço vem do host da página (T23)
+/src/environments/*
+!/src/environments/environment.production.ts
