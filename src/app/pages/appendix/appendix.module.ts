@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MotivePageComponent } from './motive-page/motive-page.component';
 import { MotiveFormComponent } from './motive-form/motive-form.component';
+import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-toggle.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { MotiveFormComponent } from './motive-form/motive-form.component';
   imports: [
     CommonModule,
     AppendixRoutingModule,
+    InactiveToggleModule,
     MatIconModule,
     MatFormFieldModule,
     MatDividerModule,
