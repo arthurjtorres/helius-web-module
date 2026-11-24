@@ -21,6 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { ImportReportModule } from '../../shared/import-report/import-report.module';
 import { CompanySelectModule } from '../../shared/company-select/company-select.module';
+import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-toggle.module';
 import { OutsideListModule } from '../../shared/outside-list/outside-list.module';
 import { VehiclesImportComponent } from './vehicles-import/vehicles-import.component';
 import { VehiclesFormComponent } from './vehicles-form/vehicles-form.component';
@@ -58,6 +59,7 @@ import { VehicleTypeFormComponent } from './vehicle-type-form/vehicle-type-form.
     MatCardModule,
     ImportReportModule,
     CompanySelectModule,
+    InactiveToggleModule,
     OutsideListModule,
   ]
 })

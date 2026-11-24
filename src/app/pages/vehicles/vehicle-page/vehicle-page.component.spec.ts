@@ -10,6 +10,7 @@ import { VehicleService } from '../../../core/services/vehicle.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { VehicleInterface } from '../../../core/interfaces/vehicle.interface';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('VehiclePageComponent', () => {
   let fixture: ComponentFixture<VehiclePageComponent>;
@@ -42,7 +43,7 @@ describe('VehiclePageComponent', () => {
     Array.from(el.querySelectorAll(`mat-cell.${column}`)).map(c => c.textContent?.trim());
 
   beforeEach(async () => {
-    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['getVehiclesByCompany', 'deleteVehicle']);
+    vehicleService = jasmine.createSpyObj<VehicleService>('VehicleService', ['getVehiclesByCompany', 'deleteVehicle', 'reactivateVehicle']);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
       imports: [VehiclesModule, NoopAnimationsModule],
@@ -51,6 +52,7 @@ describe('VehiclePageComponent', () => {
         { provide: NotificationService, useValue: notification },
         { provide: CompanyService, useValue: { getAll: () => of({ data: [] }) } },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
+        { provide: AuthService, useValue: { canSeeInactive: () => true } },
       ],
     }).compileComponents();
   });
@@ -106,7 +108,7 @@ describe('VehiclePageComponent', () => {
 
   it('carrega os veículos da empresa escolhida', fakeAsync(() => {
     render(of({ data: [vehicle] }));
-    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledWith('c1');
+    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledWith('c1', false);
   }));
 
   it('não exclui sem confirmação', fakeAsync(() => {
@@ -114,5 +116,30 @@ describe('VehiclePageComponent', () => {
     spyOn(window, 'confirm').and.returnValue(false);
     fixture.componentInstance.deleteVehicle(vehicle);
     expect(vehicleService.deleteVehicle).not.toHaveBeenCalled();
+  }));
+
+  it('mostra a coluna de status e "Reativar" só no inativo (T17)', fakeAsync(() => {
+    const el = render(of({ data: [{ ...vehicle, activated: true }, { ...vehicle, vehicleId: 'v2', activated: false }] }));
+    expect(cells(el, 'status')).toEqual(['Ativo', 'Inativo']);
+    expect(el.querySelectorAll('button[aria-label="Reativar"]').length).toBe(1);
+  }));
+
+  it('desmarcar "Ocultar inativos" recarrega com includeInactive (T17)', fakeAsync(() => {
+    render(of({ data: [vehicle] }));
+    fixture.componentInstance.includeInactive = true;
+    fixture.componentInstance.loadData();
+    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledWith('c1', true);
+  }));
+
+  it('reativa após confirmação e mostra a mensagem do 409 (T17)', fakeAsync(() => {
+    render(of({ data: [vehicle] }));
+    spyOn(window, 'confirm').and.returnValue(true);
+    vehicleService.reactivateVehicle.and.returnValue(of({}));
+    fixture.componentInstance.reactivateVehicle(vehicle);
+    expect(vehicleService.reactivateVehicle).toHaveBeenCalledWith('v1');
+    expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledTimes(2);
+    vehicleService.reactivateVehicle.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409, error: { message: 'Tipo de veículo inativo.' } })));
+    fixture.componentInstance.reactivateVehicle(vehicle);
+    expect(notification.error).toHaveBeenCalledWith('Tipo de veículo inativo.');
   }));
 });
