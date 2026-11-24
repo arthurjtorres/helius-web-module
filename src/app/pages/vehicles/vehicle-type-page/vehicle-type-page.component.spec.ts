@@ -8,6 +8,7 @@ import { VehicleTypePageComponent } from './vehicle-type-page.component';
 import { VehiclesModule } from '../vehicles.module';
 import { VehicleTypeService } from '../../../core/services/vehicle-type.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('VehicleTypePageComponent', () => {
   let service: jasmine.SpyObj<VehicleTypeService>;
@@ -22,7 +23,7 @@ describe('VehicleTypePageComponent', () => {
   }
 
   beforeEach(async () => {
-    service = jasmine.createSpyObj<VehicleTypeService>('VehicleTypeService', ['list', 'delete']);
+    service = jasmine.createSpyObj<VehicleTypeService>('VehicleTypeService', ['list', 'delete', 'reactivate']);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
       imports: [VehiclesModule, NoopAnimationsModule],
@@ -30,6 +31,7 @@ describe('VehicleTypePageComponent', () => {
         { provide: VehicleTypeService, useValue: service },
         { provide: NotificationService, useValue: notification },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
+        { provide: AuthService, useValue: { canSeeInactive: () => true } },
       ],
     }).compileComponents();
   });
@@ -60,6 +62,28 @@ describe('VehicleTypePageComponent', () => {
     service.delete.and.returnValue(of({}));
     fixture.componentInstance.deleteType(type);
     expect(service.delete).toHaveBeenCalledWith('t1');
+    expect(service.list).toHaveBeenCalledTimes(2);
+  });
+
+  it('mostra a coluna de status e "Reativar" só no inativo (T17)', () => {
+    const el: HTMLElement = render(of({ data: [{ ...type, activated: true }, { ...type, activated: false }] })).nativeElement;
+    expect(Array.from(el.querySelectorAll('mat-cell.status')).map(c => c.textContent?.trim())).toEqual(['Ativo', 'Inativo']);
+    expect(el.querySelectorAll('button[aria-label="Reativar"]').length).toBe(1);
+  });
+
+  it('desmarcar "Ocultar inativos" recarrega com includeInactive (T17)', () => {
+    const fixture = render(of({ data: [type] }));
+    fixture.componentInstance.includeInactive = true;
+    fixture.componentInstance.loadData();
+    expect(service.list).toHaveBeenCalledWith(true);
+  });
+
+  it('reativa após confirmação e recarrega (T17)', () => {
+    const fixture = render(of({ data: [type] }));
+    spyOn(window, 'confirm').and.returnValue(true);
+    service.reactivate.and.returnValue(of({}));
+    fixture.componentInstance.reactivateType(type);
+    expect(service.reactivate).toHaveBeenCalled();
     expect(service.list).toHaveBeenCalledTimes(2);
   });
 });
