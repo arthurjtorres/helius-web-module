@@ -21,8 +21,19 @@ export class FineCodeService {
     return this.http.put<FineCodeInterface>(`${this.API}/${fineCodeId}`, fineCode);
   }
 
-  getAll() : Observable<FineCodeInterface[]> {
-    return this.http.get<FineCodeInterface[]>(this.API);
+  /** Lista os códigos; só ativos, exceto com `includeInactive` (T17). */
+  getAll(includeInactive = false) : Observable<FineCodeInterface[]> {
+    return this.http.get<FineCodeInterface[]>(this.API, includeInactive ? { params: { includeInactive: 'true' } } : {});
+  }
+
+  /** Desativa o código (exclusão lógica; 409 se houver penalidades ativas). */
+  delete(fineCodeId: string): Observable<unknown> {
+    return this.http.delete(`${this.API}/${fineCodeId}`);
+  }
+
+  /** Reativa o código (T17). */
+  reactivate(fineCodeId: string): Observable<unknown> {
+    return this.http.patch(`${this.API}/${fineCodeId}/reactivate`, {});
   }
 }
 
