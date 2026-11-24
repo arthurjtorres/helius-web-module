@@ -10,6 +10,7 @@ import { VehiclesFormComponent } from '../vehicles-form/vehicles-form.component'
 import { VehiclesImportComponent } from '../vehicles-import/vehicles-import.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-vehicle-page',
@@ -38,20 +39,27 @@ export class VehiclePageComponent implements OnInit {
   /** Empresa escolhida no combobox; a tabela fica vazia até a escolha. */
   companyId = '';
 
+  /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
+  includeInactive = false;
+
   constructor(
     private vehicleService: VehicleService,
     private dialog: MatDialog,
     private notification: NotificationService,
-  ) { }
+    auth: AuthService,
+  ) {
+    // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
+    if (auth.canSeeInactive('VEICULOS')) this.vehicleHeader.splice(this.vehicleHeader.length - 1, 0, 'status');
+  }
 
   ngOnInit(): void {
     this.loadData();
   }
 
-  /** Veículos ativos da empresa escolhida; vazio até escolher (T19). 404 = nenhum; 403 já é avisado pelo interceptor. */
+  /** Veículos da empresa escolhida (só ativos, exceto com `includeInactive`); vazio até escolher (T19). 404 = nenhum; 403 já é avisado pelo interceptor. */
   loadData() {
     if (!this.companyId) return this.showVehicles([]);
-    this.vehicleService.getVehiclesByCompany(this.companyId).subscribe({
+    this.vehicleService.getVehiclesByCompany(this.companyId, this.includeInactive).subscribe({
       next: (response) => this.showVehicles(response.data ?? []),
       error: (err: HttpErrorResponse) => {
         if (err.status === 404) return this.showVehicles([]);
@@ -99,6 +107,20 @@ export class VehiclePageComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desativar o veículo.');
+      }
+    });
+  }
+
+  /** Reativa o veículo (T17); 409 (tipo de veículo inativo, unicidade) mostra a mensagem da API. */
+  reactivateVehicle(vehicle: VehicleInterface): void {
+    if (!vehicle.vehicleId || !confirm(`Deseja reativar o veículo ${vehicle.vehicleNumber}?`)) return;
+    this.vehicleService.reactivateVehicle(vehicle.vehicleId).subscribe({
+      next: () => {
+        this.notification.info('Veículo reativado.');
+        this.loadData();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível reativar o veículo.');
       }
     });
   }

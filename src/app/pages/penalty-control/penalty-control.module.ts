@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PenaltyDetailsComponent } from './penalty-details/penalty-details.component';
+import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-toggle.module';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { PenaltyDetailsComponent } from './penalty-details/penalty-details.compo
   imports: [
     CommonModule,
     PenaltyControlRoutingModule,
+    InactiveToggleModule,
     MatIconModule,
     MatFormFieldModule,
     MatDividerModule,
