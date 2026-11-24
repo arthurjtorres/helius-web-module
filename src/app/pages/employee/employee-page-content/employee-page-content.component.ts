@@ -10,6 +10,7 @@ import { EmployeePageFormComponent } from '../employee-page-form/employee-page-f
 import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeePageImportComponent } from '../employee-page-import/employee-page-import.component';
 import { EmployeePageTerminationComponent } from '../employee-page-termination/employee-page-termination.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-employee-page-content',
@@ -37,20 +38,27 @@ export class EmployeePageContentComponent implements OnInit {
   /** Empresa escolhida no combobox; a tabela fica vazia até a escolha. */
   companyId = '';
 
+  /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
+  includeInactive = false;
+
   constructor(
     private service: EmployeeService,
     private dialog: MatDialog,
     private notification: NotificationService,
-  ) { }
+    auth: AuthService,
+  ) {
+    // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
+    if (auth.canSeeInactive('FUNCIONARIOS')) this.employeeHeader.splice(this.employeeHeader.length - 1, 0, 'status');
+  }
 
   ngOnInit(): void {
     this.loadData();
   }
 
-  /** Funcionários ativos da empresa escolhida; vazio até escolher (T19). 404 = nenhum; 403 já é avisado pelo interceptor. */
+  /** Funcionários da empresa escolhida (só ativos, exceto com `includeInactive`); vazio até escolher (T19). 404 = nenhum; 403 já é avisado pelo interceptor. */
   loadData() {
     if (!this.companyId) return this.showEmployees([]);
-    this.service.getByCompany(this.companyId).subscribe({
+    this.service.getByCompany(this.companyId, this.includeInactive).subscribe({
       next: (response: any) => {
         const mappedData: EmployeeView[] = (response.data || []).map((item: any) => ({
           employeeId: item.employeeId,
@@ -140,6 +148,20 @@ export class EmployeePageContentComponent implements OnInit {
           if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desligar o funcionário.');
         }
       });
+    });
+  }
+
+  /** Reativa o funcionário (desfaz o desligamento, T17). 409 (pessoa com vínculo ativo) mostra a mensagem da API. */
+  reactivateEmployee(item: EmployeeView): void {
+    if (!item.employeeId || !confirm(`Deseja reativar o funcionário ${item.registration}? A data de rescisão será apagada.`)) return;
+    this.service.reactivate(item.employeeId).subscribe({
+      next: () => {
+        this.notification.info('Funcionário reativado. O usuário dele, se houver, continua desativado.');
+        this.loadData();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível reativar o funcionário.');
+      }
     });
   }
 }

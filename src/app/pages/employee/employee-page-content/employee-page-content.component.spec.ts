@@ -9,6 +9,7 @@ import { EmployeeModule } from '../employee.module';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('EmployeePageContentComponent', () => {
   let service: jasmine.SpyObj<EmployeeService>;
@@ -25,7 +26,7 @@ describe('EmployeePageContentComponent', () => {
   }
 
   beforeEach(async () => {
-    service = jasmine.createSpyObj<EmployeeService>('EmployeeService', ['getByCompany', 'delete']);
+    service = jasmine.createSpyObj<EmployeeService>('EmployeeService', ['getByCompany', 'delete', 'reactivate']);
     service.getByCompany.and.returnValue(of({ data: [apiEmployee] }));
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
@@ -35,6 +36,7 @@ describe('EmployeePageContentComponent', () => {
         { provide: CompanyService, useValue: { getAll: () => of({ data: [] }) } },
         { provide: NotificationService, useValue: notification },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
+        { provide: AuthService, useValue: { canSeeInactive: () => true } },
       ],
     }).compileComponents();
   });
@@ -47,7 +49,7 @@ describe('EmployeePageContentComponent', () => {
 
   it('carrega os funcionários da empresa escolhida', fakeAsync(() => {
     const fixture = create('c1');
-    expect(service.getByCompany).toHaveBeenCalledWith('c1');
+    expect(service.getByCompany).toHaveBeenCalledWith('c1', false);
     expect(fixture.componentInstance.employeeDataSource.data[0]).toEqual(jasmine.objectContaining({ registration: 'ZZT000001', fullName: 'ZZ_TEST_ MARIA' }));
   }));
 
@@ -95,5 +97,29 @@ describe('EmployeePageContentComponent', () => {
     service.delete.and.returnValue(throwError(() => new HttpErrorResponse({ status: 400, error: { message: 'A data de rescisão não pode ser anterior à admissão.' } })));
     fixture.componentInstance.deleteEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
     expect(notification.error).toHaveBeenCalledOnceWith('A data de rescisão não pode ser anterior à admissão.');
+  }));
+
+  it('mostra a coluna de status e "Reativar" só no inativo (T17)', fakeAsync(() => {
+    service.getByCompany.and.returnValue(of({ data: [{ ...apiEmployee, activated: true }, { ...apiEmployee, employeeId: 'e2', activated: false }] }));
+    const el = create('c1').nativeElement as HTMLElement;
+    const status = Array.from(el.querySelectorAll('mat-cell.status')).map(c => c.textContent?.trim());
+    expect(status).toEqual(['Ativo', 'Inativo']);
+    expect(el.querySelectorAll('button[aria-label="Reativar"]').length).toBe(1);
+  }));
+
+  it('reativa após confirmação e recarrega (T17)', fakeAsync(() => {
+    const fixture = create('c1');
+    spyOn(window, 'confirm').and.returnValue(true);
+    service.reactivate.and.returnValue(of({}));
+    fixture.componentInstance.reactivateEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
+    expect(service.reactivate).toHaveBeenCalledWith('e1');
+    expect(service.getByCompany).toHaveBeenCalledTimes(2);
+  }));
+
+  it('não reativa sem confirmação (T17)', fakeAsync(() => {
+    const fixture = create('c1');
+    spyOn(window, 'confirm').and.returnValue(false);
+    fixture.componentInstance.reactivateEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
+    expect(service.reactivate).not.toHaveBeenCalled();
   }));
 });
