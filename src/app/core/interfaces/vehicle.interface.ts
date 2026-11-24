@@ -36,6 +36,7 @@ export interface VehicleInterface {
   typeVehicleId?: string;
   typeVehicleName: string;
   airConditioner: boolean;
+  activated?: boolean;
 
   createdAt?: Date;
   createdBy?: string;
