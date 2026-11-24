@@ -9,6 +9,9 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # Versões ditadas pelo Angular (peer): sobem junto com o major dele, à mão
+      - dependency-name: "typescript"
+      - dependency-name: "zone.js"
     groups:
       npm:
         update-types: ["minor", "patch"]
