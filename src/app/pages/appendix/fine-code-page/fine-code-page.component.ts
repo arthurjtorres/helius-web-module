@@ -6,6 +6,9 @@ import { FineCodeService } from '../../../core/services/fine-code.service';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { FineCodeFormComponent } from '../fine-code-form/fine-code-form.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-fine-code-page',
@@ -29,22 +32,28 @@ export class FineCodePageComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
+  includeInactive = false;
+
   constructor(
     private service: FineCodeService,
-    private dialog: MatDialog
-  ) { }
+    private dialog: MatDialog,
+    private notification: NotificationService,
+    auth: AuthService,
+  ) {
+    // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
+    if (auth.canSeeInactive('AUXILIARES')) this.fineCodeHeader.splice(this.fineCodeHeader.length - 1, 0, 'status');
+  }
 
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData() {
-    this.service.getAll().subscribe({
+    this.service.getAll(this.includeInactive).subscribe({
       next: (response: any) => {
-        const rawData = response.data || response;
-        const activeData = rawData.filter((item: FineCodeInterface) => item.activated !== false);
-
-        this.fineCodeSource.data = activeData;
+        // o backend já filtra os ativos (T17: inativos só com includeInactive)
+        this.fineCodeSource.data = response.data || response;
         this.fineCodeSource.paginator = this.paginator;
         this.fineCodeSource.sort = this.sort;
 
@@ -52,7 +61,10 @@ export class FineCodePageComponent implements OnInit {
           this.sort.sort({ id: 'fineNumber', start: 'asc', disableClear: false });
         }
       },
-      error: (err) => console.error('Erro:', err)
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 404) this.fineCodeSource.data = [];
+        else console.error('Erro:', err);
+      }
     });
   }
 
@@ -83,32 +95,35 @@ export class FineCodePageComponent implements OnInit {
     });
   }
 
+  /**
+   * Desativa após confirmação pelo `DELETE` (exclusão lógica). Antes era um `PUT` com
+   * `activated: false`, que o `juristic` recusa (400): o excluir sempre falhava (achado da T17).
+   */
   deleteFineCode(item: FineCodeInterface) {
-    if (confirm(`Deseja Realmente excluir o código de multa ${item.fineNumber}?`)) {
-      if (item.fineCodeId) {
-        const payload: any = { ...item};
-
-        delete payload.fineCodeId;
-        delete payload.createdAt;
-
-        delete payload.createdBy;
-        delete payload.updatedAt;
-        delete payload.updatedBy;
-        payload.activated = false;
-
-        this.service.update(item.fineCodeId, payload).subscribe({
-          next: () => {
-            this.loadData();
-          },
-          error: (err) => {
-            console.error('Erro ao excluir:', err);
-            alert('Não foi possível excluir o item.');
-          }
-        });
-      } else {
-        console.error('Item sem ID não pode ser excluído');
+    if (!item.fineCodeId || !confirm(`Deseja Realmente excluir o código de multa ${item.fineNumber}?`)) return;
+    this.service.delete(item.fineCodeId).subscribe({
+      next: () => {
+        this.notification.info('Código de multa excluído.');
+        this.loadData();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível excluir o código de multa.');
       }
-    }
+    });
+  }
+
+  /** Reativa após confirmação (T17); 409 mostra a mensagem da API. */
+  reactivateFineCode(item: FineCodeInterface) {
+    if (!item.fineCodeId || !confirm(`Deseja reativar o código de multa ${item.fineNumber}?`)) return;
+    this.service.reactivate(item.fineCodeId).subscribe({
+      next: () => {
+        this.notification.info('Código de multa reativado.');
+        this.loadData();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível reativar o código de multa.');
+      }
+    });
   }
 
   applyFilter(event: Event) {
