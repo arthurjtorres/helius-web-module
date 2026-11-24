@@ -1,0 +1,28 @@
+# CI das PRs: roda nos runners do GitHub (repositório público), nunca na VM
+name: CI
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      # src/environments é ignorado no git (endereço real fica fora do repo público); o CI usa valores fictícios
+      - name: Gera environments de CI
+        run: |
+          mkdir -p src/environments
+          for f in environment environment.development environment.production; do
+            prod=false; [ "$f" = environment.production ] && prod=true
+            printf "export const environment = { production: %s, baseUrl: 'http://localhost', registry_port: '1000', control_port: '1010', juristic_port: '1030', operations_port: '1020' };\n" "$prod" > "src/environments/$f.ts"
+          done
+      - run: yarn build
+      # o runner já traz o Chrome; --watch=false encerra após uma execução
+      - run: yarn test --watch=false --browsers=ChromeHeadless --no-progress
