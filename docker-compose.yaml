@@ -1,0 +1,21 @@
+services:
+  application:
+    build: .
+    image: helius/web:${VERSION:-latest}
+    ports:
+      - "${PORT_WEB_APP}:80"
+    # Roda só a imagem: sem bind mount
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    container_name: modulo-web
+    restart: always
+    networks:
+      - helius_net
+
+networks:
+  helius_net:
+    external: true

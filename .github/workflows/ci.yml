@@ -12,16 +12,15 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: yarn
       - run: yarn install --frozen-lockfile
-      # src/environments é ignorado no git (endereço real fica fora do repo público); o CI usa valores fictícios
+      # environment.ts e .development.ts são ignorados no git (locais do dev); o CI usa valores fictícios. O de produção é versionado (T23)
       - name: Gera environments de CI
         run: |
           mkdir -p src/environments
-          for f in environment environment.development environment.production; do
-            prod=false; [ "$f" = environment.production ] && prod=true
-            printf "export const environment = { production: %s, baseUrl: 'http://localhost', registry_port: '1000', control_port: '1010', juristic_port: '1030', operations_port: '1020' };\n" "$prod" > "src/environments/$f.ts"
+          for f in environment environment.development; do
+            printf "export const environment = { production: false, baseUrl: 'http://localhost', registry_port: '1000', control_port: '1010', juristic_port: '1030', operations_port: '1020' };\n" > "src/environments/$f.ts"
           done
       - run: yarn build
       # o runner já traz o Chrome; --watch=false encerra após uma execução
