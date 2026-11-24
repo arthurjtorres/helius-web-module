@@ -14,9 +14,9 @@ export class PositionService {
 
   constructor(private http: HttpClient) { }
 
-  /** Lista os cargos ativos (envelope `{ data }`). Responde 404 quando não há nenhum. */
-  getAll(): Observable<{ data: PositionInterface[] }> {
-    return this.http.get<{ data: PositionInterface[] }>(this.API);
+  /** Lista os cargos (envelope `{ data }`); só ativos, exceto com `includeInactive` (T17). Responde 404 quando não há nenhum. */
+  getAll(includeInactive = false): Observable<{ data: PositionInterface[] }> {
+    return this.http.get<{ data: PositionInterface[] }>(this.API, includeInactive ? { params: { includeInactive: 'true' } } : {});
   }
 
   /** Cria um cargo. 409 se o nome já existir (com `data.id` quando o existente estiver inativo). */

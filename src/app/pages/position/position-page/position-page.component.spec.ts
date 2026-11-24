@@ -8,6 +8,7 @@ import { PositionPageComponent } from './position-page.component';
 import { PositionModule } from '../position.module';
 import { PositionService } from '../../../core/services/position.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('PositionPageComponent', () => {
   let service: jasmine.SpyObj<PositionService>;
@@ -22,7 +23,7 @@ describe('PositionPageComponent', () => {
   }
 
   beforeEach(async () => {
-    service = jasmine.createSpyObj<PositionService>('PositionService', ['getAll', 'delete']);
+    service = jasmine.createSpyObj<PositionService>('PositionService', ['getAll', 'delete', 'reactivate']);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
       imports: [PositionModule, NoopAnimationsModule],
@@ -30,6 +31,7 @@ describe('PositionPageComponent', () => {
         { provide: PositionService, useValue: service },
         { provide: NotificationService, useValue: notification },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
+        { provide: AuthService, useValue: { canSeeInactive: () => true } },
       ],
     }).compileComponents();
   });
@@ -60,6 +62,28 @@ describe('PositionPageComponent', () => {
     service.delete.and.returnValue(of({}));
     fixture.componentInstance.deletePosition(position);
     expect(service.delete).toHaveBeenCalledWith('p1');
+    expect(service.getAll).toHaveBeenCalledTimes(2);
+  });
+
+  it('mostra a coluna de status e "Reativar" só no inativo (T17)', () => {
+    const el: HTMLElement = render(of({ data: [{ ...position, activated: true }, { ...position, activated: false }] })).nativeElement;
+    expect(Array.from(el.querySelectorAll('mat-cell.status')).map(c => c.textContent?.trim())).toEqual(['Ativo', 'Inativo']);
+    expect(el.querySelectorAll('button[aria-label="Reativar"]').length).toBe(1);
+  });
+
+  it('desmarcar "Ocultar inativos" recarrega com includeInactive (T17)', () => {
+    const fixture = render(of({ data: [position] }));
+    fixture.componentInstance.includeInactive = true;
+    fixture.componentInstance.loadData();
+    expect(service.getAll).toHaveBeenCalledWith(true);
+  });
+
+  it('reativa após confirmação e recarrega (T17)', () => {
+    const fixture = render(of({ data: [position] }));
+    spyOn(window, 'confirm').and.returnValue(true);
+    service.reactivate.and.returnValue(of({}));
+    fixture.componentInstance.reactivatePosition(position);
+    expect(service.reactivate).toHaveBeenCalled();
     expect(service.getAll).toHaveBeenCalledTimes(2);
   });
 });

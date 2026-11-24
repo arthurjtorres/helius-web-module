@@ -13,9 +13,9 @@ export class VehicleTypeService {
 
   constructor(private http: HttpClient) { }
 
-  /** Lista os tipos ativos. Responde 404 quando não há nenhum. */
-  list(): Observable<{ data: VehicleTypeInterface[] }> {
-    return this.http.get<{ data: VehicleTypeInterface[] }>(this.API);
+  /** Lista os tipos; só ativos, exceto com `includeInactive` (T17). Responde 404 quando não há nenhum. */
+  list(includeInactive = false): Observable<{ data: VehicleTypeInterface[] }> {
+    return this.http.get<{ data: VehicleTypeInterface[] }>(this.API, includeInactive ? { params: { includeInactive: 'true' } } : {});
   }
 
   /** Cria um tipo. 409 se o nome já existir (com `data.id` quando o existente estiver inativo). */

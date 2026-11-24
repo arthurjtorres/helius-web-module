@@ -2,6 +2,7 @@ export default interface PositionInterface {
   positionId?: string;
   positionName: string;
   positionCode?: number;
+  activated?: boolean;
 
   createdAt?: Date;
   createdBy?: string;
