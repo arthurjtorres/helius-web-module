@@ -1,15 +1,19 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { FineCodeService } from '../../../core/services/fine-code.service';
 import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-fine-code-form',
-  standalone: false,
-  templateUrl: './fine-code-form.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './fine-code-form.component.scss'
+    selector: 'app-fine-code-form',
+    templateUrl: './fine-code-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './fine-code-form.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton, MatIcon]
 })
 export class FineCodeFormComponent implements OnInit {
   private fb = inject(FormBuilder);

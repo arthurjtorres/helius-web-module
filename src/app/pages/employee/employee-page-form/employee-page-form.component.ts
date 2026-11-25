@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import PositionInterface from '../../../core/interfaces/position.interface';
 import SectorInterface from '../../../core/interfaces/sector.interface';
@@ -15,13 +15,20 @@ import { DocumentTypeEnum } from '../../../core/interfaces/document.interface';
 import { PersonService } from '../../../core/services/person.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCard } from '@angular/material/card';
+import { MatFormField, MatLabel, MatInput, MatHint, MatError } from '@angular/material/input';
+import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-employee-page-form',
-  standalone: false,
-  templateUrl: './employee-page-form.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './employee-page-form.component.scss'
+    selector: 'app-employee-page-form',
+    templateUrl: './employee-page-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './employee-page-form.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatCard, MatFormField, MatLabel, MatInput, MatHint, CompanySelectComponent, MatSelect, MatOption, MatError, MatDialogActions, MatButton, MatIcon]
 })
 export class EmployeePageFormComponent implements OnInit {
   private fb = inject(FormBuilder);

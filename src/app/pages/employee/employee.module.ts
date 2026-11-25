@@ -28,35 +28,33 @@ import { OutsideListModule } from '../../shared/outside-list/outside-list.module
 
 
 @NgModule({
-  declarations: [
-    EmployeePageContentComponent,
-    EmployeePageImportComponent,
-    EmployeePageFormComponent,
-    EmployeePageTerminationComponent
-  ],
-  imports: [
-    CommonModule,
-    EmployeeRoutingModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatTabsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    ImportReportModule,
-    CompanySelectModule,
-    InactiveToggleModule,
-    OutsideListModule
-  ]
+    imports: [
+        CommonModule,
+        EmployeeRoutingModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTabsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCardModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        ImportReportModule,
+        CompanySelectModule,
+        InactiveToggleModule,
+        OutsideListModule,
+        EmployeePageContentComponent,
+        EmployeePageImportComponent,
+        EmployeePageFormComponent,
+        EmployeePageTerminationComponent
+    ]
 })
 export class EmployeeModule { }

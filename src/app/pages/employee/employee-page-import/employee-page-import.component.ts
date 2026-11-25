@@ -1,15 +1,25 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { formatDate } from '@angular/common';
+import { formatDate, SlicePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 import { EmployeeService } from '../../../core/services/employee.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { readWorkbook } from '../../../core/utils/sheet-reader';
 import { ImportReport, withFileLines } from '../../../shared/import-report/import-report.model';
-import { OutsideItem } from '../../../shared/outside-list/outside-list.component';
+import { OutsideItem, OutsideListComponent } from '../../../shared/outside-list/outside-list.component';
 import { EmployeeFile, parseEmployeeSheet, parseEmployeeWorkbook, txtToSheet } from './employee-sheet';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatCardTitle } from '@angular/material/card';
+import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { ImportReportComponent } from '../../../shared/import-report/import-report.component';
+import { MatFormField, MatLabel, MatInput, MatHint } from '@angular/material/input';
 
 /** Máximo de funcionários por requisição no `/employee/bulk` (a maior empresa tem ~5000). */
 export const MAX_ROWS = 5000;
@@ -31,11 +41,11 @@ export function decodeText(data: ArrayBuffer): string {
  * numa requisição só. As regras de formato ficam com o backend (o `dryRun` aponta erro por linha).
  */
 @Component({
-  selector: 'app-employee-page-import',
-  standalone: false,
-  templateUrl: './employee-page-import.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './employee-page-import.component.scss'
+    selector: 'app-employee-page-import',
+    templateUrl: './employee-page-import.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './employee-page-import.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, CompanySelectComponent, FormsModule, MatButton, MatIcon, MatCardTitle, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatProgressBar, ImportReportComponent, MatFormField, MatLabel, MatInput, MatHint, OutsideListComponent, MatDialogActions, SlicePipe]
 })
 export class EmployeePageImportComponent {
   private employeeService = inject(EmployeeService);

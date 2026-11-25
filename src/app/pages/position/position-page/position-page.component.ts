@@ -1,21 +1,26 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
 import PositionInterface from '../../../core/interfaces/position.interface';
 import { PositionService } from '../../../core/services/position.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { PositionFormComponent, PositionFormData } from '../position-form/position-form.component';
+import { InactiveToggleComponent } from '../../../shared/inactive-toggle/inactive-toggle.component';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/list';
+import { MatTooltip } from '@angular/material/tooltip';
 
 /** SRH › Cargos: lista, cria, edita e desativa cargos (`registry`). */
 @Component({
-  selector: 'app-position-page',
-  standalone: false,
-  templateUrl: './position-page.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss'
+    selector: 'app-position-page',
+    templateUrl: './position-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss',
+    imports: [InactiveToggleComponent, MatFabButton, MatIcon, MatDivider, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
 export class PositionPageComponent implements OnInit {
   private service = inject(PositionService);
