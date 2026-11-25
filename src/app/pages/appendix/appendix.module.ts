@@ -22,29 +22,27 @@ import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-togg
 
 
 @NgModule({
-  declarations: [
-    FineCodePageComponent,
-    AppendixContentComponent,
-    FineCodeFormComponent,
-    MotivePageComponent,
-    MotiveFormComponent
-  ],
-  imports: [
-    CommonModule,
-    AppendixRoutingModule,
-    InactiveToggleModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatTabsModule,
-    MatInputModule,
-    MatButtonModule
-]
+    imports: [
+        CommonModule,
+        AppendixRoutingModule,
+        InactiveToggleModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTabsModule,
+        MatInputModule,
+        MatButtonModule,
+        FineCodePageComponent,
+        AppendixContentComponent,
+        FineCodeFormComponent,
+        MotivePageComponent,
+        MotiveFormComponent
+    ]
 })
 export class AppendixModule { }

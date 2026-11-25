@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -11,13 +11,21 @@ import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeePageImportComponent } from '../employee-page-import/employee-page-import.component';
 import { EmployeePageTerminationComponent } from '../employee-page-termination/employee-page-termination.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
+import { FormsModule } from '@angular/forms';
+import { InactiveToggleComponent } from '../../../shared/inactive-toggle/inactive-toggle.component';
+import { MatFormField, MatInput, MatSuffix } from '@angular/material/input';
+import { MatDivider } from '@angular/material/list';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-employee-page-content',
-  standalone: false,
-  templateUrl: './employee-page-content.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './employee-page-content.component.scss'
+    selector: 'app-employee-page-content',
+    templateUrl: './employee-page-content.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './employee-page-content.component.scss',
+    imports: [MatFabButton, MatIcon, CompanySelectComponent, FormsModule, InactiveToggleComponent, MatFormField, MatInput, MatIconButton, MatSuffix, MatDivider, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator, DatePipe]
 })
 export class EmployeePageContentComponent implements OnInit {
   private service = inject(EmployeeService);

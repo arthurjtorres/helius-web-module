@@ -1,21 +1,26 @@
 import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { FineCodeService } from '../../../core/services/fine-code.service';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { FineCodeFormComponent } from '../fine-code-form/fine-code-form.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { InactiveToggleComponent } from '../../../shared/inactive-toggle/inactive-toggle.component';
+import { MatFormField, MatInput, MatSuffix } from '@angular/material/input';
+import { MatDivider } from '@angular/material/list';
 
 @Component({
-  selector: 'app-fine-code-page',
-  standalone: false,
-  templateUrl: './fine-code-page.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './fine-code-page.component.scss'
+    selector: 'app-fine-code-page',
+    templateUrl: './fine-code-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './fine-code-page.component.scss',
+    imports: [MatFabButton, MatIcon, InactiveToggleComponent, MatFormField, MatInput, MatIconButton, MatSuffix, MatDivider, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator]
 })
 export class FineCodePageComponent implements OnInit {
   private service = inject(FineCodeService);

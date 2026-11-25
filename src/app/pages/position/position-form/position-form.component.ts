@@ -1,12 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 import PositionInterface from '../../../core/interfaces/position.interface';
 import { PositionService } from '../../../core/services/position.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { normalizeText } from '../../../core/utils/normalize-text';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 /** Dados do diálogo: o cargo a editar (ou nada, para criar) e os cargos ativos, para checar nome duplicado. */
 export interface PositionFormData {
@@ -20,11 +24,11 @@ export interface PositionFormData {
  * cargo inativo, devolve o id para reativar. O código do cargo é gerado pelo banco.
  */
 @Component({
-  selector: 'app-position-form',
-  standalone: false,
-  templateUrl: './position-form.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: '../../vehicles/vehicles-form/vehicles-form.component.scss'
+    selector: 'app-position-form',
+    templateUrl: './position-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: '../../vehicles/vehicles-form/vehicles-form.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, MatDialogActions, MatButton, MatIcon]
 })
 export class PositionFormComponent implements OnInit {
   private fb = inject(FormBuilder);

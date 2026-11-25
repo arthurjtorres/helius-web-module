@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
 
@@ -13,15 +13,40 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { of, switchMap } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { InactiveToggleComponent } from '../../../shared/inactive-toggle/inactive-toggle.component';
+import { MatFormField, MatInput, MatSuffix } from '@angular/material/input';
+import { MatDivider } from '@angular/material/list';
 
 
 @Component({
-  selector: 'app-penalty-page',
-  standalone: false,
-  templateUrl: './penalty-page.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './penalty-page.component.scss',
- 
+    selector: 'app-penalty-page',
+    templateUrl: './penalty-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './penalty-page.component.scss',
+    imports: [
+        MatFabButton,
+        MatIcon,
+        InactiveToggleComponent,
+        MatFormField,
+        MatInput,
+        MatIconButton,
+        MatSuffix,
+        MatDivider,
+        MatTable,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatPaginator,
+    ],
 })
 export class PenaltyPageComponent implements OnInit {
   private penaltyService = inject(PenaltyService);
