@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -9,10 +9,10 @@ import PositionInterface from '../interfaces/position.interface';
   providedIn: 'root'
 })
 export class PositionService {
+  private http = inject(HttpClient);
+
 
   private API: string = environment.baseUrl + ':' + environment.registry_port + '/position';
-
-  constructor(private http: HttpClient) { }
 
   /** Lista os cargos (envelope `{ data }`); só ativos, exceto com `includeInactive` (T17). Responde 404 quando não há nenhum. */
   getAll(includeInactive = false): Observable<{ data: PositionInterface[] }> {

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
@@ -38,6 +38,10 @@ export function decodeText(data: ArrayBuffer): string {
   styleUrl: './employee-page-import.component.scss'
 })
 export class EmployeePageImportComponent {
+  private employeeService = inject(EmployeeService);
+  private notification = inject(NotificationService);
+  private dialogRef = inject<MatDialogRef<EmployeePageImportComponent>>(MatDialogRef);
+
   readonly previewRows = PREVIEW_ROWS;
   readonly previewColumns = ['line', 'registration', 'fullName', 'admissionDate', 'position', 'birthDate', 'cpf'];
   readonly fieldLabels: Record<string, string> = {
@@ -56,12 +60,6 @@ export class EmployeePageImportComponent {
   /** Rescisão do lote: padrão hoje, no máximo amanhã (o backend confere também a admissão de cada um). */
   terminationDate = formatDate(Date.now(), 'yyyy-MM-dd', 'en-US');
   readonly maxTerminationDate = formatDate(Date.now() + 86_400_000, 'yyyy-MM-dd', 'en-US');
-
-  constructor(
-    private employeeService: EmployeeService,
-    private notification: NotificationService,
-    private dialogRef: MatDialogRef<EmployeePageImportComponent>,
-  ) { }
 
   async onFile(event: Event): Promise<void> {
     const file = (event.target as HTMLInputElement).files?.[0];
