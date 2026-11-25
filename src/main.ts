@@ -1,5 +1,4 @@
 import { provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './app/core/interceptors/auth.interceptor';
@@ -18,6 +17,8 @@ import { AppComponent } from './app/app.component';
 
 bootstrapApplication(AppComponent, {
     providers: [
+        // a migração standalone descartou esta opção (vinha do bootstrapModule); sem ela o app sobe zoneless
+        provideZoneChangeDetection({ eventCoalescing: true }),
         importProvidersFrom(BrowserModule, AppRoutingModule, TemplateModule, JuristicModule, AppendixModule, LandingpageModule, UserProfileModule, PenaltyControlModule, EmployeeModule, VehiclesModule, CompanyModule),
         {
             provide: HTTP_INTERCEPTORS,
