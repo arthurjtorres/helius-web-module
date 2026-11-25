@@ -8,8 +8,8 @@ describe('CtdopControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CTDOPControlComponent]
-    })
+    imports: [CTDOPControlComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(CTDOPControlComponent);

@@ -41,50 +41,41 @@ import { MatButtonModule } from "@angular/material/button";
 
 
 @NgModule({
-  declarations: [
-    DashboardComponent,
-    AppealControlComponent,
-    CTDOPControlComponent,
-    
-
-  ],
-  imports: [
-    
-
-    JuristicRoutingModule,
-    RouterModule,
-    CommonModule,
-    MatTableModule,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatHeaderRowDef,
-    MatTabsModule,
-    MatPaginator,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDivider,
-    MatInputModule,
-    MatIcon,
-    MatButtonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    FormsModule,
-    MatFormFieldModule,
-    HttpClientModule,
-    BrowserModule,
-    MatSort,
-    MatSortHeader,
-    MatSortModule,
-    ReactiveFormsModule
-],
-
-  exports: [
-
-  ]
+    imports: [
+        JuristicRoutingModule,
+        RouterModule,
+        CommonModule,
+        MatTableModule,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatHeaderRowDef,
+        MatTabsModule,
+        MatPaginator,
+        MatPaginatorModule,
+        MatSortModule,
+        MatDivider,
+        MatInputModule,
+        MatIcon,
+        MatButtonModule,
+        MatDialogTitle,
+        MatDialogContent,
+        MatDialogActions,
+        MatDialogClose,
+        FormsModule,
+        MatFormFieldModule,
+        HttpClientModule,
+        BrowserModule,
+        MatSort,
+        MatSortHeader,
+        MatSortModule,
+        ReactiveFormsModule,
+        DashboardComponent,
+        AppealControlComponent,
+        CTDOPControlComponent
+    ],
+    exports: []
 })
 export class JuristicModule { }
 
