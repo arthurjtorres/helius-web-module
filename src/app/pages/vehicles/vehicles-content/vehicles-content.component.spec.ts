@@ -9,10 +9,10 @@ describe('VehiclesContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VehiclesContentComponent],
-      // Só a casca de abas: os filhos têm specs próprios.
-      schemas: [NO_ERRORS_SCHEMA]
-    })
+    imports: [VehiclesContentComponent],
+    // Só a casca de abas: os filhos têm specs próprios.
+    schemas: [NO_ERRORS_SCHEMA]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(VehiclesContentComponent);

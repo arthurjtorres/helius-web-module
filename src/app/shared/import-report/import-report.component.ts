@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ImportFieldChange, ImportItem, ImportReport } from './import-report.model';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatList, MatListItem, MatListItemTitle, MatListItemLine } from '@angular/material/list';
 
 /**
  * Relatório de uma importação em lote (simulação ou gravação): contagens, falhas por linha,
@@ -7,11 +12,11 @@ import { ImportFieldChange, ImportItem, ImportReport } from './import-report.mod
  * Serve a veículos e funcionários; os nomes dos campos vêm por input.
  */
 @Component({
-  selector: 'app-import-report',
-  standalone: false,
-  templateUrl: './import-report.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './import-report.component.scss'
+    selector: 'app-import-report',
+    templateUrl: './import-report.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './import-report.component.scss',
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatChipSet, MatChip, MatCheckbox, MatList, MatListItem, MatListItemTitle, MatListItemLine]
 })
 export class ImportReportComponent implements OnChanges {
   @Input({ required: true }) report!: ImportReport;

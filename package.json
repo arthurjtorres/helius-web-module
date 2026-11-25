@@ -1,6 +1,6 @@
 {
   "name": "helius-web-portal",
-  "version": "0.18.8-beta",
+  "version": "0.18.9-beta",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

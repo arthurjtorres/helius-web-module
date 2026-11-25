@@ -1,22 +1,30 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
 import CompanyInterface from '../../../core/interfaces/company.interface';
 import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { UserCompanyLink, UserCompanyService, UserSummary } from '../../../core/services/user-company.service';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
+import { FormsModule } from '@angular/forms';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/list';
+import { MatTooltip } from '@angular/material/tooltip';
 
 /**
  * Controle › Empresas do usuário (T18, ADR-021): concede e retira empresas extras de um colaborador.
  * A empresa do próprio funcionário já vem no login e não aparece aqui.
  */
 @Component({
-  selector: 'app-user-companies-page',
-  standalone: false,
-  templateUrl: './user-companies-page.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss'
+    selector: 'app-user-companies-page',
+    templateUrl: './user-companies-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss',
+    imports: [MatFormField, MatLabel, MatSelect, MatOption, CompanySelectComponent, FormsModule, MatFabButton, MatIcon, MatDivider, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
 export class UserCompaniesPageComponent implements OnInit {
   private service = inject(UserCompanyService);

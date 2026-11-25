@@ -14,18 +14,18 @@ import { UserCompaniesPageComponent } from './user-companies-page/user-companies
 
 /** Telas do `control` (permissões e acessos). */
 @NgModule({
-  declarations: [UserCompaniesPageComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatSelectModule,
-    MatTableModule,
-    MatTooltipModule,
-    CompanySelectModule,
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatSelectModule,
+        MatTableModule,
+        MatTooltipModule,
+        CompanySelectModule,
+        UserCompaniesPageComponent,
+    ]
 })
 export class ControlModule { }

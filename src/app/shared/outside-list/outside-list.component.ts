@@ -1,4 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 /** Registro ativo da empresa que não veio no arquivo importado. */
 export interface OutsideItem {
@@ -11,11 +16,23 @@ export interface OutsideItem {
  * desativação em lote, sempre com confirmação da quantidade. Quem usa chama a rota `bulk-deactivate`.
  */
 @Component({
-  selector: 'app-outside-list',
-  standalone: false,
-  templateUrl: './outside-list.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styles: ['.actions { display: flex; justify-content: flex-end; }', '.outside-list { max-height: 20rem; overflow: auto; }'],
+    selector: 'app-outside-list',
+    templateUrl: './outside-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styles: ['.actions { display: flex; justify-content: flex-end; }', '.outside-list { max-height: 20rem; overflow: auto; }'],
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardSubtitle,
+        MatCardContent,
+        MatCheckbox,
+        MatList,
+        MatListItem,
+        MatCardActions,
+        MatButton,
+        MatIcon,
+    ],
 })
 export class OutsideListComponent implements OnChanges {
   @Input({ required: true }) items: OutsideItem[] = [];

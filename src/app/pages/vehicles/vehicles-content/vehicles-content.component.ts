@@ -1,11 +1,14 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { VehiclePageComponent } from '../vehicle-page/vehicle-page.component';
+import { VehicleTypePageComponent } from '../vehicle-type-page/vehicle-type-page.component';
 
 @Component({
-  selector: 'app-vehicles-content',
-  standalone: false,
-  templateUrl: './vehicles-content.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './vehicles-content.component.scss'
+    selector: 'app-vehicles-content',
+    templateUrl: './vehicles-content.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './vehicles-content.component.scss',
+    imports: [MatTabGroup, MatTab, VehiclePageComponent, VehicleTypePageComponent]
 })
 export class VehiclesContentComponent {
 

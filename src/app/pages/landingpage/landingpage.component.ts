@@ -1,18 +1,23 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatCard } from '@angular/material/card';
+import { MatFormField, MatPrefix, MatInput, MatSuffix } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 const LOGIN_FAILED_MESSAGE = 'Falha na autenticação. Verifique seus dados.';
 const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde.';
 
 @Component({
-  selector: 'app-landingpage',
-  standalone: false,
-  templateUrl: './landingpage.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './landingpage.component.scss'
+    selector: 'app-landingpage',
+    templateUrl: './landingpage.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './landingpage.component.scss',
+    imports: [MatCard, FormsModule, ReactiveFormsModule, MatFormField, MatIcon, MatPrefix, MatInput, MatButton, MatSuffix, MatCheckbox]
 })
 export class LandingpageComponent {
   private fb = inject(FormBuilder);

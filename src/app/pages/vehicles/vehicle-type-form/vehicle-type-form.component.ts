@@ -1,12 +1,17 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 import { VehicleTypeInterface } from '../../../core/interfaces/vehicle.interface';
 import { VehicleTypeService } from '../../../core/services/vehicle-type.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { normalizeText } from '../../../core/utils/normalize-text';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 /** Dados do diálogo: o tipo a editar (ou nada, para criar) e os tipos ativos, para checar nome duplicado. */
 export interface VehicleTypeFormData {
@@ -20,11 +25,11 @@ export interface VehicleTypeFormData {
  * tipo inativo, devolve o id para reativar.
  */
 @Component({
-  selector: 'app-vehicle-type-form',
-  standalone: false,
-  templateUrl: './vehicle-type-form.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: '../vehicles-form/vehicles-form.component.scss'
+    selector: 'app-vehicle-type-form',
+    templateUrl: './vehicle-type-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: '../vehicles-form/vehicles-form.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, MatSelect, MatOption, MatDialogActions, MatButton, MatIcon]
 })
 export class VehicleTypeFormComponent implements OnInit {
   private fb = inject(FormBuilder);

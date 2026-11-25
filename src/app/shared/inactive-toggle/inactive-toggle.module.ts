@@ -5,8 +5,7 @@ import { InactiveToggleComponent } from './inactive-toggle.component';
 
 /** Checkbox "Ocultar inativos" compartilhado pelas tabelas (T17). */
 @NgModule({
-  declarations: [InactiveToggleComponent],
-  imports: [CommonModule, MatCheckboxModule],
-  exports: [InactiveToggleComponent],
+    imports: [CommonModule, MatCheckboxModule, InactiveToggleComponent],
+    exports: [InactiveToggleComponent],
 })
 export class InactiveToggleModule { }

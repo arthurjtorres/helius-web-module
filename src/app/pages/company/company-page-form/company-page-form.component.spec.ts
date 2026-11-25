@@ -8,8 +8,8 @@ describe('CompanyPageFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CompanyPageFormComponent]
-    })
+    imports: [CompanyPageFormComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(CompanyPageFormComponent);
