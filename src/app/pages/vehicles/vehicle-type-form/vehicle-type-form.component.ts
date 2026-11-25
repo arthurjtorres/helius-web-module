@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -23,6 +23,7 @@ export interface VehicleTypeFormData {
   selector: 'app-vehicle-type-form',
   standalone: false,
   templateUrl: './vehicle-type-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: '../vehicles-form/vehicles-form.component.scss'
 })
 export class VehicleTypeFormComponent implements OnInit {

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -10,7 +10,7 @@ describe('AuthService.canSeeInactive (T17)', () => {
 
   function serviceFor(payload: object): AuthService {
     localStorage.setItem('access_token', tokenWith(payload));
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     return TestBed.inject(AuthService);
   }
 
@@ -32,7 +32,7 @@ describe('AuthService.canSeeInactive (T17)', () => {
     expect(serviceFor({ clearance: 'ADMIN', roles: [{ role: 'DESENVOLVEDOR' }], allowedMenus: [] }).canSeeInactive('VEICULOS')).toBeTrue();
     TestBed.resetTestingModule();
     localStorage.removeItem('access_token');
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     expect(TestBed.inject(AuthService).canSeeInactive('VEICULOS')).toBeFalse();
   });
 });

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PenaltyCompositeView } from '../../../core/interfaces/penalty.interface';
 
@@ -6,6 +6,7 @@ import { PenaltyCompositeView } from '../../../core/interfaces/penalty.interface
   selector: 'app-penalty-details',
   standalone: false,
   templateUrl: './penalty-details.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './penalty-details.component.scss'
 })
 export class PenaltyDetailsComponent {

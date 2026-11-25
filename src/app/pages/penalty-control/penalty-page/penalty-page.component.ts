@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-penalty-page',
   standalone: false,
   templateUrl: './penalty-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './penalty-page.component.scss',
  
 })

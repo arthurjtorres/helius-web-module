@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +14,7 @@ import { PositionFormComponent, PositionFormData } from '../position-form/positi
   selector: 'app-position-page',
   standalone: false,
   templateUrl: './position-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss'
 })
 export class PositionPageComponent implements OnInit {

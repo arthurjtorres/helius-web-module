@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -17,6 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-employee-page-form',
   standalone: false,
   templateUrl: './employee-page-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './employee-page-form.component.scss'
 })
 export class EmployeePageFormComponent implements OnInit {
