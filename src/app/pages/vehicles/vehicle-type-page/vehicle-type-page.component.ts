@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +14,7 @@ import { VehicleTypeFormComponent, VehicleTypeFormData } from '../vehicle-type-f
   selector: 'app-vehicle-type-page',
   standalone: false,
   templateUrl: './vehicle-type-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: '../vehicle-page/vehicle-page.component.scss'
 })
 export class VehicleTypePageComponent implements OnInit {

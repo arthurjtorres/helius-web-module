@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeDTO, EmployeeView } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
@@ -16,6 +16,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-employee-page-content',
   standalone: false,
   templateUrl: './employee-page-content.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './employee-page-content.component.scss'
 })
 export class EmployeePageContentComponent implements OnInit {

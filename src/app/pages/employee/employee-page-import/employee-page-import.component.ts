@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
@@ -34,6 +34,7 @@ export function decodeText(data: ArrayBuffer): string {
   selector: 'app-employee-page-import',
   standalone: false,
   templateUrl: './employee-page-import.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './employee-page-import.component.scss'
 })
 export class EmployeePageImportComponent {

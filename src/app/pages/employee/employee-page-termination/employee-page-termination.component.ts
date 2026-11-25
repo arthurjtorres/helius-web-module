@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
@@ -7,6 +7,7 @@ import { EmployeeView } from '../../../core/interfaces/employee.interface';
 @Component({
   selector: 'app-employee-page-termination',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './employee-page-termination.component.html',
 })
 export class EmployeePageTerminationComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -15,6 +15,7 @@ import { UserCompanyLink, UserCompanyService, UserSummary } from '../../../core/
   selector: 'app-user-companies-page',
   standalone: false,
   templateUrl: './user-companies-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss'
 })
 export class UserCompaniesPageComponent implements OnInit {

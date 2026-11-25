@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { AuthInterceptor, FORBIDDEN_FALLBACK_MESSAGE } from './auth.interceptor';
@@ -19,7 +19,7 @@ describe('AuthInterceptor', () => {
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: AuthService, useValue: authService },

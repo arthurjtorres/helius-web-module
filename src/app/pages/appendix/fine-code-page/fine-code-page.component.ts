@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
 import { MatPaginator } from '@angular/material/paginator';
@@ -14,6 +14,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-fine-code-page',
   standalone: false,
   templateUrl: './fine-code-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './fine-code-page.component.scss'
 })
 export class FineCodePageComponent implements OnInit {

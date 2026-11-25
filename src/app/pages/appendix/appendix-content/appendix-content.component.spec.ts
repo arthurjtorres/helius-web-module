@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AppendixContentComponent } from './appendix-content.component';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppendixModule } from '../appendix.module';
@@ -13,7 +13,7 @@ describe('AppendixContentComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppendixModule, NoopAnimationsModule],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting()]
     })
     .compileComponents();
 
