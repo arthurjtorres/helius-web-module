@@ -8,8 +8,8 @@ describe('AppealControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppealControlComponent]
-    })
+    imports: [AppealControlComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(AppealControlComponent);

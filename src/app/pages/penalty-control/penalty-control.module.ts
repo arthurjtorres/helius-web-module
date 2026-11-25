@@ -20,27 +20,25 @@ import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-togg
 
 
 @NgModule({
-  declarations: [
-    PenaltyPageComponent,
-    PenaltyContentComponent,
-    PenaltyDetailsComponent
-  ],
-  imports: [
-    CommonModule,
-    PenaltyControlRoutingModule,
-    InactiveToggleModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatTabsModule,
-    MatInputModule,
-    MatButtonModule
-  ]
+    imports: [
+        CommonModule,
+        PenaltyControlRoutingModule,
+        InactiveToggleModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTabsModule,
+        MatInputModule,
+        MatButtonModule,
+        PenaltyPageComponent,
+        PenaltyContentComponent,
+        PenaltyDetailsComponent
+    ]
 })
 export class PenaltyControlModule { }
