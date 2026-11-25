@@ -16,22 +16,20 @@ import { PositionFormComponent } from './position-form/position-form.component';
 
 /** Cadastro de cargos (SRH). */
 @NgModule({
-  declarations: [
-    PositionPageComponent,
-    PositionFormComponent,
-  ],
-  imports: [
-    CommonModule,
-    InactiveToggleModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatTableModule,
-    MatTooltipModule,
-  ]
+    imports: [
+        CommonModule,
+        InactiveToggleModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTableModule,
+        MatTooltipModule,
+        PositionPageComponent,
+        PositionFormComponent,
+    ]
 })
 export class PositionModule { }

@@ -8,8 +8,8 @@ describe('MotiveFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MotiveFormComponent]
-    })
+    imports: [MotiveFormComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(MotiveFormComponent);
