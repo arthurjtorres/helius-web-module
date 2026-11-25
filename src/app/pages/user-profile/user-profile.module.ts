@@ -9,15 +9,13 @@ import { MatDividerModule } from '@angular/material/divider';
 
 
 @NgModule({
-  declarations: [
-    ProfileComponent
-  ],
-  imports: [
-    CommonModule,
-    UserProfileRoutingModule,
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule,
-]
+    imports: [
+        CommonModule,
+        UserProfileRoutingModule,
+        MatCardModule,
+        MatIconModule,
+        MatDividerModule,
+        ProfileComponent,
+    ]
 })
 export class UserProfileModule { }

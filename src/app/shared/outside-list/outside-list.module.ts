@@ -9,8 +9,7 @@ import { OutsideListComponent } from './outside-list.component';
 
 /** Lista "fora da planilha" com desativação em lote, compartilhada por veículos e funcionários. */
 @NgModule({
-  declarations: [OutsideListComponent],
-  imports: [CommonModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatIconModule, MatListModule],
-  exports: [OutsideListComponent],
+    imports: [CommonModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatIconModule, MatListModule, OutsideListComponent],
+    exports: [OutsideListComponent],
 })
 export class OutsideListModule { }

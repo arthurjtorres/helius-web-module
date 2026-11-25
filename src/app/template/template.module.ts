@@ -22,29 +22,26 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
 
 
 @NgModule({
-  declarations: [
-    //BodyComponent,
-    LayoutComponent,
-    SidebarComponent,
-    MenuItemComponent,
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    TemplateRoutingModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    FormsModule,
-    MatSlideToggleModule,
-  ],
-  exports: [
-    LayoutComponent,
-    SidebarComponent,
-
-  ]
+    imports: [
+        CommonModule,
+        RouterModule,
+        TemplateRoutingModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        FormsModule,
+        MatSlideToggleModule,
+        //BodyComponent,
+        LayoutComponent,
+        SidebarComponent,
+        MenuItemComponent,
+    ],
+    exports: [
+        LayoutComponent,
+        SidebarComponent,
+    ]
 })
 export class TemplateModule { }

@@ -6,8 +6,7 @@ import { CompanySelectComponent } from './company-select.component';
 
 /** Combobox de empresa compartilhado (tabelas, formulários e importações). */
 @NgModule({
-  declarations: [CompanySelectComponent],
-  imports: [CommonModule, MatFormFieldModule, MatSelectModule],
-  exports: [CompanySelectComponent],
+    imports: [CommonModule, MatFormFieldModule, MatSelectModule, CompanySelectComponent],
+    exports: [CompanySelectComponent],
 })
 export class CompanySelectModule { }
