@@ -9,8 +9,7 @@ import { ImportReportComponent } from './import-report.component';
 
 /** Relatório de importação em lote, compartilhado por veículos e funcionários. */
 @NgModule({
-  declarations: [ImportReportComponent],
-  imports: [CommonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatListModule, MatTableModule],
-  exports: [ImportReportComponent],
+    imports: [CommonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatListModule, MatTableModule, ImportReportComponent],
+    exports: [ImportReportComponent],
 })
 export class ImportReportModule { }

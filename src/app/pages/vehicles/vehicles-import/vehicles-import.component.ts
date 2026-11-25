@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { catchError, map, of } from 'rxjs';
 
 import CompanyInterface from '../../../core/interfaces/company.interface';
@@ -11,8 +11,19 @@ import { VehicleService } from '../../../core/services/vehicle.service';
 import { normalizeText } from '../../../core/utils/normalize-text';
 import { readWorkbook } from '../../../core/utils/sheet-reader';
 import { ImportReport, withFileLines } from '../../../shared/import-report/import-report.model';
-import { OutsideItem } from '../../../shared/outside-list/outside-list.component';
+import { OutsideItem, OutsideListComponent } from '../../../shared/outside-list/outside-list.component';
 import { VehicleRow, VehicleSheet, parseCapacity, parseVehicleSheet } from './vehicle-sheet';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatCardTitle } from '@angular/material/card';
+import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { ImportReportComponent } from '../../../shared/import-report/import-report.component';
 
 /** Máximo de veículos por requisição no `/vehicle/bulk`. */
 export const MAX_ROWS = 500;
@@ -41,11 +52,11 @@ export interface SheetState {
  * por linha e campo); a tela só exige o que o backend não sabe dizer.
  */
 @Component({
-  selector: 'app-vehicles-import',
-  standalone: false,
-  templateUrl: './vehicles-import.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './vehicles-import.component.scss'
+    selector: 'app-vehicles-import',
+    templateUrl: './vehicles-import.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './vehicles-import.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, CompanySelectComponent, FormsModule, MatButton, MatIcon, MatCardTitle, MatFormField, MatLabel, MatSelect, MatOption, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatInput, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatProgressBar, ImportReportComponent, OutsideListComponent, MatDialogActions]
 })
 export class VehiclesImportComponent implements OnInit {
   private vehicleService = inject(VehicleService);
