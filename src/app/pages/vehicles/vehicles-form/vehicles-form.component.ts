@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 
 import { CameraTypeEnum, VehicleInterface, VehicleTypeInterface } from '../../../core/interfaces/vehicle.interface';
@@ -10,6 +10,11 @@ import { VehicleService } from '../../../core/services/vehicle.service';
 import { VehicleTypeService } from '../../../core/services/vehicle-type.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatHint, MatError, MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 /** Ano de fabricação/modelo: 4 dígitos, de 1950 até o ano seguinte (mesma regra do `/vehicle/bulk`). */
 export function yearValidator(control: AbstractControl): ValidationErrors | null {
@@ -24,11 +29,11 @@ export function yearValidator(control: AbstractControl): ValidationErrors | null
  * As regras de formato espelham as do `/vehicle/bulk`, para o formulário e a importação aceitarem o mesmo.
  */
 @Component({
-  selector: 'app-vehicles-form',
-  standalone: false,
-  templateUrl: './vehicles-form.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './vehicles-form.component.scss'
+    selector: 'app-vehicles-form',
+    templateUrl: './vehicles-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './vehicles-form.component.scss',
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatError, MatInput, MatDialogActions, MatButton, MatIcon]
 })
 export class VehiclesFormComponent implements OnInit {
   private fb = inject(FormBuilder);

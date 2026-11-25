@@ -14,20 +14,18 @@ import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
-  declarations: [
-    LandingpageComponent
-  ],
-  imports: [
-    CommonModule,
-    LandingpageRoutingModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatCardModule,
-    MatInputModule,
-    MatIconModule,
-    MatCheckboxModule,
-    MatButtonModule,
-  ]
+    imports: [
+        CommonModule,
+        LandingpageRoutingModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatCardModule,
+        MatInputModule,
+        MatIconModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        LandingpageComponent,
+    ]
 })
 export class LandingpageModule { }
