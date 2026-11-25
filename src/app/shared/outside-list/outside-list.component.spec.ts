@@ -2,14 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { OutsideListComponent } from './outside-list.component';
-import { OutsideListModule } from './outside-list.module';
 
 describe('OutsideListComponent', () => {
   let component: OutsideListComponent;
   const items = [{ id: 'v1', key: 'ZZ_TEST_101' }, { id: 'v2', key: 'ZZ_TEST_102' }];
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [OutsideListModule, NoopAnimationsModule] });
+    TestBed.configureTestingModule({ imports: [OutsideListComponent, NoopAnimationsModule] });
     const fixture = TestBed.createComponent(OutsideListComponent);
     component = fixture.componentInstance;
     component.items = items;

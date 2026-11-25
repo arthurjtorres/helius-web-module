@@ -4,7 +4,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
 
 import { UserCompaniesPageComponent } from './user-companies-page.component';
-import { ControlModule } from '../control.module';
 import { UserCompanyService } from '../../../core/services/user-company.service';
 import { CompanyService } from '../../../core/services/company.service';
 import CompanyInterface from '../../../core/interfaces/company.interface';
@@ -30,7 +29,7 @@ describe('UserCompaniesPageComponent', () => {
     const companies = jasmine.createSpyObj<CompanyService>('CompanyService', ['getAll']);
     companies.getAll.and.returnValue(of({ data: [company as unknown as CompanyInterface] }));
     await TestBed.configureTestingModule({
-      imports: [ControlModule, NoopAnimationsModule],
+      imports: [UserCompaniesPageComponent, NoopAnimationsModule],
       providers: [
         { provide: UserCompanyService, useValue: service },
         { provide: CompanyService, useValue: companies },

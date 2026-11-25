@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { of, throwError } from 'rxjs';
 
 import { PositionPageComponent } from './position-page.component';
-import { PositionModule } from '../position.module';
 import { PositionService } from '../../../core/services/position.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -26,7 +25,7 @@ describe('PositionPageComponent', () => {
     service = jasmine.createSpyObj<PositionService>('PositionService', ['getAll', 'delete', 'reactivate']);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
-      imports: [PositionModule, NoopAnimationsModule],
+      imports: [PositionPageComponent, NoopAnimationsModule],
       providers: [
         { provide: PositionService, useValue: service },
         { provide: NotificationService, useValue: notification },
