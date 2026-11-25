@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,10 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './vehicle-page.component.scss'
 })
 export class VehiclePageComponent implements OnInit {
+  private vehicleService = inject(VehicleService);
+  private dialog = inject(MatDialog);
+  private notification = inject(NotificationService);
+
 
   vehicleHeader: string[] = [
     'company',
@@ -43,12 +47,9 @@ export class VehiclePageComponent implements OnInit {
   /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
   includeInactive = false;
 
-  constructor(
-    private vehicleService: VehicleService,
-    private dialog: MatDialog,
-    private notification: NotificationService,
-    auth: AuthService,
-  ) {
+  constructor() {
+    const auth = inject(AuthService);
+
     // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
     if (auth.canSeeInactive('VEICULOS')) this.vehicleHeader.splice(this.vehicleHeader.length - 1, 0, 'status');
   }

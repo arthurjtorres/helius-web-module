@@ -20,7 +20,6 @@ module.exports = defineConfig([
       // `({ line, ...row })` descarta o campo de propósito
       "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
       // shortcut: migrações ainda não feitas (T21 item 4, PRs seguintes); cada PR religa a sua regra
-      "@angular-eslint/prefer-inject": "off",
       "@angular-eslint/prefer-standalone": "off",
       "@angular-eslint/prefer-on-push-component-change-detection": "off",
       "@angular-eslint/directive-selector": [

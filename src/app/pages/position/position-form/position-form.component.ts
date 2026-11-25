@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -27,17 +27,15 @@ export interface PositionFormData {
   styleUrl: '../../vehicles/vehicles-form/vehicles-form.component.scss'
 })
 export class PositionFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private service = inject(PositionService);
+  private notification = inject(NotificationService);
+  private dialogRef = inject<MatDialogRef<PositionFormComponent>>(MatDialogRef);
+  data = inject<PositionFormData>(MAT_DIALOG_DATA);
+
   form!: FormGroup;
   isEdit = false;
   saving = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private service: PositionService,
-    private notification: NotificationService,
-    private dialogRef: MatDialogRef<PositionFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PositionFormData
-  ) { }
 
   ngOnInit(): void {
     const position = this.data.position;

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -27,17 +27,15 @@ export interface VehicleTypeFormData {
   styleUrl: '../vehicles-form/vehicles-form.component.scss'
 })
 export class VehicleTypeFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private service = inject(VehicleTypeService);
+  private notification = inject(NotificationService);
+  private dialogRef = inject<MatDialogRef<VehicleTypeFormComponent>>(MatDialogRef);
+  data = inject<VehicleTypeFormData>(MAT_DIALOG_DATA);
+
   form!: FormGroup;
   isEdit = false;
   saving = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private service: VehicleTypeService,
-    private notification: NotificationService,
-    private dialogRef: MatDialogRef<VehicleTypeFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: VehicleTypeFormData
-  ) { }
 
   ngOnInit(): void {
     const type = this.data.type;

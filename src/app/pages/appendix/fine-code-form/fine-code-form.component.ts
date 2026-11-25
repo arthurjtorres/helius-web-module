@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FineCodeService } from '../../../core/services/fine-code.service';
@@ -12,15 +12,13 @@ import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface'
   styleUrl: './fine-code-form.component.scss'
 })
 export class FineCodeFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private service = inject(FineCodeService);
+  private dialogRef = inject<MatDialogRef<FineCodeFormComponent>>(MatDialogRef);
+  data = inject<FineCodeInterface>(MAT_DIALOG_DATA);
+
   form!: FormGroup;
   isEdit = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private service: FineCodeService,
-    private dialogRef: MatDialogRef<FineCodeFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: FineCodeInterface
-  ) { }
 
   ngOnInit(): void {
     this.isEdit = !!this.data;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogRef } from '@angular/material/dialog';
 import { catchError, map, of } from 'rxjs';
@@ -48,6 +48,11 @@ export interface SheetState {
   styleUrl: './vehicles-import.component.scss'
 })
 export class VehiclesImportComponent implements OnInit {
+  private vehicleService = inject(VehicleService);
+  private companyService = inject(CompanyService);
+  private notification = inject(NotificationService);
+  private dialogRef = inject<MatDialogRef<VehiclesImportComponent>>(MatDialogRef);
+
   readonly cameraTypes = Object.values(CameraTypeEnum);
   readonly previewColumns = ['line', 'vehicleNumber', 'licensePlate', 'typeVehicleName', 'capacity', 'hasWifi', 'cameraType'];
   readonly fieldLabels: Record<string, string> = {
@@ -59,13 +64,6 @@ export class VehiclesImportComponent implements OnInit {
   /** Empresa escolhida antes do arquivo (T16: uma empresa e uma aba por importação). */
   companyId = '';
   state?: SheetState;
-
-  constructor(
-    private vehicleService: VehicleService,
-    private companyService: CompanyService,
-    private notification: NotificationService,
-    private dialogRef: MatDialogRef<VehiclesImportComponent>,
-  ) { }
 
   ngOnInit(): void {
     this.companyService.getAll().subscribe({

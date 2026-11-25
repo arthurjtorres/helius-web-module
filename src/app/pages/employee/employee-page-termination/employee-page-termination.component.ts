@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
@@ -11,6 +11,8 @@ import { EmployeeView } from '../../../core/interfaces/employee.interface';
   templateUrl: './employee-page-termination.component.html',
 })
 export class EmployeePageTerminationComponent {
+  data = inject<EmployeeView>(MAT_DIALOG_DATA);
+
   /** Padrão: hoje, no fuso do navegador. */
   terminationDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
   /** Máximo do seletor: amanhã (o backend também confere). */
@@ -18,7 +20,9 @@ export class EmployeePageTerminationComponent {
   /** Mínimo do seletor: a admissão (o backend também confere). */
   minDate: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: EmployeeView) {
+  constructor() {
+    const data = this.data;
+
     this.minDate = data.admissionDate ? String(data.admissionDate).slice(0, 10) : '';
   }
 }

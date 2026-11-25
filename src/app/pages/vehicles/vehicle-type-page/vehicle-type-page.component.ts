@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,15 +18,16 @@ import { VehicleTypeFormComponent, VehicleTypeFormData } from '../vehicle-type-f
   styleUrl: '../vehicle-page/vehicle-page.component.scss'
 })
 export class VehicleTypePageComponent implements OnInit {
+  private service = inject(VehicleTypeService);
+  private dialog = inject(MatDialog);
+  private notification = inject(NotificationService);
+
   readonly columns = ['typeVehicleName', 'airConditioner', 'actions'];
   dataSource = new MatTableDataSource<VehicleTypeInterface>([]);
 
-  constructor(
-    private service: VehicleTypeService,
-    private dialog: MatDialog,
-    private notification: NotificationService,
-    auth: AuthService,
-  ) {
+  constructor() {
+    const auth = inject(AuthService);
+
     // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
     if (auth.canSeeInactive('VEICULOS')) this.columns.splice(this.columns.length - 1, 0, 'status');
   }

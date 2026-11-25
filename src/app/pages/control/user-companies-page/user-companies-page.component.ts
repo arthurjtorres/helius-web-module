@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -19,6 +19,10 @@ import { UserCompanyLink, UserCompanyService, UserSummary } from '../../../core/
   styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss'
 })
 export class UserCompaniesPageComponent implements OnInit {
+  private service = inject(UserCompanyService);
+  private companyService = inject(CompanyService);
+  private notification = inject(NotificationService);
+
   readonly columns = ['company', 'actions'];
   // shortcut: lista todos os colaboradores num select; trocar por busca no servidor quando houver muitos usuários.
   users: UserSummary[] = [];
@@ -27,12 +31,6 @@ export class UserCompaniesPageComponent implements OnInit {
   dataSource = new MatTableDataSource<UserCompanyLink>([]);
   /** Empresas visíveis a quem concede, para mostrar o nome. */
   private companyNames = new Map<string, string>();
-
-  constructor(
-    private service: UserCompanyService,
-    private companyService: CompanyService,
-    private notification: NotificationService,
-  ) { }
 
   ngOnInit(): void {
     this.service.getCollaborators().subscribe({
