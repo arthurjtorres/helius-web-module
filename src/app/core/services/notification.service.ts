@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 /** Tempo, em milissegundos, que a notificação fica visível. */
@@ -13,7 +13,8 @@ const CLOSE_LABEL = 'Fechar';
  */
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  constructor(private snackBar: MatSnackBar) { }
+  private snackBar = inject(MatSnackBar);
+
 
   /**
    * Mostra uma mensagem de erro.

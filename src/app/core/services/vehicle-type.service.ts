@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { VehicleTypeInterface } from '../interfaces/vehicle.interface';
@@ -9,9 +9,9 @@ import { VehicleTypeInterface } from '../interfaces/vehicle.interface';
   providedIn: 'root'
 })
 export class VehicleTypeService {
-  private API: string = environment.baseUrl + ':' + environment.operations_port + '/vehicle-type';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private API: string = environment.baseUrl + ':' + environment.operations_port + '/vehicle-type';
 
   /** Lista os tipos; só ativos, exceto com `includeInactive` (T17). Responde 404 quando não há nenhum. */
   list(includeInactive = false): Observable<{ data: VehicleTypeInterface[] }> {

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -10,10 +10,10 @@ import { PenaltyCompositeView } from '../interfaces/penalty.interface';
   providedIn: 'root'
 })
 export class PenaltyService {
+  private http = inject(HttpClient);
+
   private API: string = environment.baseUrl + ':' + environment.juristic_port + '/penalty';
   private BASE: string = environment.baseUrl + ':' + environment.juristic_port;
-
-  constructor(private http: HttpClient) { }
 
    /** Visão composta das penalidades; só ativas, exceto com `includeInactive` (T17). */
    getCompositePenalties(includeInactive = false): Observable<StandardResponse<PenaltyCompositeView[]>> {

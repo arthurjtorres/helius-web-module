@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DocumentInterface } from '../interfaces/document.interface';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -11,9 +11,9 @@ type DocumentWithPerson = DocumentInterface & { Person?: { personId: string; ful
   providedIn: 'root'
 })
 export class DocumentService {
-  private API: string = environment.baseUrl + ':' + environment.registry_port + '/document';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private API: string = environment.baseUrl + ':' + environment.registry_port + '/document';
 
   findDocuments(filters: Partial<DocumentInterface>): Observable<{ data: DocumentWithPerson[] }> {
     let params = new HttpParams();

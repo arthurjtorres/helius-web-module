@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { EmployeeApi, EmployeeDTO } from '../interfaces/employee.interface';
@@ -9,9 +9,9 @@ import { ImportReport } from '../../shared/import-report/import-report.model';
   providedIn: 'root'
 })
 export class EmployeeService {
-  private API: string = environment.baseUrl + ':' + environment.registry_port + '/employee'
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private API: string = environment.baseUrl + ':' + environment.registry_port + '/employee'
 
   create(employee: EmployeeDTO): Observable<EmployeeDTO> {
     return this.http.post<EmployeeDTO>(this.API, employee);
