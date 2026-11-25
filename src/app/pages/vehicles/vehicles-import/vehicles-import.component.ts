@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogRef } from '@angular/material/dialog';
 import { catchError, map, of } from 'rxjs';
@@ -44,6 +44,7 @@ export interface SheetState {
   selector: 'app-vehicles-import',
   standalone: false,
   templateUrl: './vehicles-import.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicles-import.component.scss'
 })
 export class VehiclesImportComponent implements OnInit {

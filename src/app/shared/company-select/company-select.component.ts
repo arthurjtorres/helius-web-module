@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -16,6 +16,7 @@ import { NotificationService } from '../../core/services/notification.service';
   standalone: false,
   templateUrl: './company-select.component.html',
   styles: [':host { display: block; } .company-select { width: 100%; }'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CompanySelectComponent), multi: true }],
 })
 export class CompanySelectComponent implements OnInit, ControlValueAccessor {

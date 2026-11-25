@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde
   selector: 'app-landingpage',
   standalone: false,
   templateUrl: './landingpage.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './landingpage.component.scss'
 })
 export class LandingpageComponent {

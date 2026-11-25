@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ImportFieldChange, ImportItem, ImportReport } from './import-report.model';
 
 /**
@@ -10,6 +10,7 @@ import { ImportFieldChange, ImportItem, ImportReport } from './import-report.mod
   selector: 'app-import-report',
   standalone: false,
   templateUrl: './import-report.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './import-report.component.scss'
 })
 export class ImportReportComponent implements OnChanges {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -27,6 +27,7 @@ export function yearValidator(control: AbstractControl): ValidationErrors | null
   selector: 'app-vehicles-form',
   standalone: false,
   templateUrl: './vehicles-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './vehicles-form.component.scss'
 })
 export class VehiclesFormComponent implements OnInit {

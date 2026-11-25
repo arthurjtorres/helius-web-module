@@ -1,10 +1,11 @@
-import { Component, Input, input, signal } from '@angular/core';
+import { Component, Input, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-menu-item',
   standalone: false,
   templateUrl: './menu-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './menu-item.component.scss'
 })
 export class MenuItemComponent {
