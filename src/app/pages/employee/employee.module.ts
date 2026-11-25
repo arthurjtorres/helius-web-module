@@ -21,40 +21,36 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { ImportReportModule } from '../../shared/import-report/import-report.module';
-import { CompanySelectModule } from '../../shared/company-select/company-select.module';
-import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-toggle.module';
-import { OutsideListModule } from '../../shared/outside-list/outside-list.module';
+
+
+
+
 
 
 @NgModule({
     imports: [
-        CommonModule,
-        EmployeeRoutingModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatDividerModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatDialogModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatTabsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCardModule,
-        MatSelectModule,
-        MatProgressSpinnerModule,
-        MatProgressBarModule,
-        ImportReportModule,
-        CompanySelectModule,
-        InactiveToggleModule,
-        OutsideListModule,
-        EmployeePageContentComponent,
-        EmployeePageImportComponent,
-        EmployeePageFormComponent,
-        EmployeePageTerminationComponent
-    ]
+    CommonModule,
+    EmployeeRoutingModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatTabsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    EmployeePageContentComponent,
+    EmployeePageImportComponent,
+    EmployeePageFormComponent,
+    EmployeePageTerminationComponent
+]
 })
 export class EmployeeModule { }
