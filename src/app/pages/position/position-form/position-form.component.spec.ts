@@ -5,7 +5,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of, throwError } from 'rxjs';
 
 import { PositionFormComponent, PositionFormData } from './position-form.component';
-import { PositionModule } from '../position.module';
 import { PositionService } from '../../../core/services/position.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
@@ -29,7 +28,7 @@ describe('PositionFormComponent', () => {
     service = jasmine.createSpyObj<PositionService>('PositionService', ['create', 'update', 'reactivate']);
     dialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
     await TestBed.configureTestingModule({
-      imports: [PositionModule, NoopAnimationsModule],
+      imports: [PositionFormComponent, NoopAnimationsModule],
       providers: [
         { provide: PositionService, useValue: service },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['error', 'info']) },

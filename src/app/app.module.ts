@@ -15,8 +15,8 @@ import { PenaltyControlModule } from './pages/penalty-control/penalty-control.mo
 import { EmployeeModule } from './pages/employee/employee.module';
 import { VehiclesModule } from './pages/vehicles/vehicles.module';
 import { CompanyModule } from './pages/company/company.module';
-import { PositionModule } from './pages/position/position.module';
-import { ControlModule } from './pages/control/control.module';
+
+
 
 
 
@@ -38,9 +38,7 @@ import { ControlModule } from './pages/control/control.module';
     PenaltyControlModule,
     EmployeeModule,
     VehiclesModule,
-    CompanyModule,
-    PositionModule,
-    ControlModule
+    CompanyModule
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

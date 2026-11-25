@@ -16,29 +16,28 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PenaltyDetailsComponent } from './penalty-details/penalty-details.component';
-import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-toggle.module';
+
 
 
 @NgModule({
     imports: [
-        CommonModule,
-        PenaltyControlRoutingModule,
-        InactiveToggleModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatDividerModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatDialogModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatTabsModule,
-        MatInputModule,
-        MatButtonModule,
-        PenaltyPageComponent,
-        PenaltyContentComponent,
-        PenaltyDetailsComponent
-    ]
+    CommonModule,
+    PenaltyControlRoutingModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatTabsModule,
+    MatInputModule,
+    MatButtonModule,
+    PenaltyPageComponent,
+    PenaltyContentComponent,
+    PenaltyDetailsComponent
+]
 })
 export class PenaltyControlModule { }

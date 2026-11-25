@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ImportReportComponent } from './import-report.component';
-import { ImportReportModule } from './import-report.module';
 import { ImportReport } from './import-report.model';
 
 describe('ImportReportComponent', () => {
@@ -33,7 +32,7 @@ describe('ImportReportComponent', () => {
   }
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [ImportReportModule, NoopAnimationsModule] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [ImportReportComponent, NoopAnimationsModule] }).compileComponents();
     fixture = TestBed.createComponent(ImportReportComponent);
     component = fixture.componentInstance;
     component.keyField = 'vehicleNumber';

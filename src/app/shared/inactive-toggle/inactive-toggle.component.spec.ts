@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { InactiveToggleComponent } from './inactive-toggle.component';
-import { InactiveToggleModule } from './inactive-toggle.module';
 import { AuthService } from '../../core/services/auth.service';
 
 describe('InactiveToggleComponent (T17)', () => {
   function create(canSee: boolean) {
     TestBed.configureTestingModule({
-      imports: [InactiveToggleModule],
+      imports: [InactiveToggleComponent],
       providers: [{ provide: AuthService, useValue: { canSeeInactive: () => canSee } }],
     });
     const fixture = TestBed.createComponent(InactiveToggleComponent);
