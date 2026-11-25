@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -8,10 +8,6 @@ import { AuthService } from '../../../core/services/auth.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './profile.component.scss'
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent {
   user$ = inject(AuthService).getUser();
-
-  ngOnInit(): void {
-    
-  }
 }

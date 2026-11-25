@@ -22,7 +22,7 @@ export interface EmployeeFile {
 type Field = Exclude<keyof EmployeeRow, 'line' | 'cpf'>;
 
 /** Colunas obrigatórias → campo. Apelidos: `.txt` do RH (`CHAPAFUNC`…) e a planilha feita a partir dele. */
-const COLUMNS: Array<[Field, string[]]> = [
+const COLUMNS: [Field, string[]][] = [
   ['registration', ['CHAPAFUNC', 'MATRICULA', 'CHAPA']],
   ['fullName', ['NOMECOMPLETOFUNC', 'NOMECOMPLETO', 'NOME COMPLETO', 'NOME']],
   ['admissionDate', ['DTADMFUNC', 'DATAADMISSAO', 'DATA ADMISSAO', 'ADMISSAO']],

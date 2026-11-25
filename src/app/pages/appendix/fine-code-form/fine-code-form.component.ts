@@ -13,7 +13,7 @@ import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface'
 })
 export class FineCodeFormComponent implements OnInit {
   form!: FormGroup;
-  isEdit: boolean = false;
+  isEdit = false;
 
   constructor(
     private fb: FormBuilder,

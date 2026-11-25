@@ -17,7 +17,7 @@ const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde
 export class LandingpageComponent {
   loginForm: FormGroup;
   hidePassword = true;
-  errorMessage: string = '';
+  errorMessage = '';
 
   constructor(
 
@@ -40,10 +40,10 @@ export class LandingpageComponent {
     const { userLogin, password } = this.loginForm.value;
     
     this.authService.login(userLogin, password).subscribe({
-      next: (response) => {
+      next: () => {
       // Verificamos se o token foi realmente salvo antes de mudar de página
       if (localStorage.getItem('access_token')) {
-        this.router.navigate(['/home']); // Ou a rota principal do seu app
+        void this.router.navigate(['/home']); // Ou a rota principal do seu app
       }
     },
       error: (err: HttpErrorResponse) => {

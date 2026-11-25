@@ -28,7 +28,7 @@ export interface VehicleSheet {
 }
 
 /** Colunas da planilha → campo, com apelidos e ocorrência (a 1ª `MODELO` é o modelo do chassi). */
-const COLUMNS: Array<[keyof VehicleRow, string[], number]> = [
+const COLUMNS: [keyof VehicleRow, string[], number][] = [
   ['vehicleNumber', ['PREFIXO'], 1],
   ['brand', ['MARCA'], 1],
   ['model', ['MODELO'], 1],

@@ -10,7 +10,6 @@ import { of } from 'rxjs';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { PersonService } from '../../../core/services/person.service';
 import { DocumentService } from '../../../core/services/document.service';
-import { PersonInterface } from '../../../core/interfaces/person.interface';
 import { DocumentInterface } from '../../../core/interfaces/document.interface';
 
 describe('EmployeePageFormComponent', () => {
@@ -55,7 +54,7 @@ describe('EmployeePageFormComponent', () => {
   });
 
   it('divide o nome por qualquer espaço em branco', () => {
-    const create = spyOn(TestBed.inject(PersonService), 'create').and.returnValue(of({ data: { personId: 'p1' } } as never as PersonInterface));
+    const create = spyOn(TestBed.inject(PersonService), 'create').and.returnValue(of({ data: { personId: 'p1' } }) as never);
     spyOn(TestBed.inject(DocumentService), 'create').and.returnValue(of({} as DocumentInterface));
     spyOn(TestBed.inject(EmployeeService), 'create').and.returnValue(of({ registration: '900001', fkPersonId: 'p1' }));
     component.isEdit = false;

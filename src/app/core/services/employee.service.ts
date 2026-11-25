@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { EmployeeDTO } from '../interfaces/employee.interface';
+import { EmployeeApi, EmployeeDTO } from '../interfaces/employee.interface';
 import { ImportReport } from '../../shared/import-report/import-report.model';
 
 @Injectable({
@@ -22,10 +22,10 @@ export class EmployeeService {
   }
 
   /** Funcionários de uma empresa (`?fkCompanyId`); só ativos, exceto com `includeInactive` (T17). */
-  getByCompany(companyId: string, includeInactive = false): Observable<any> {
+  getByCompany(companyId: string, includeInactive = false): Observable<{ data?: EmployeeApi[] }> {
     const params: Record<string, string> = { fkCompanyId: companyId };
     if (includeInactive) params['includeInactive'] = 'true';
-    return this.http.get<any>(this.API, { params });
+    return this.http.get<{ data?: EmployeeApi[] }>(this.API, { params });
   }
 
   /** Reativa o funcionário e limpa a data de rescisão (T17); o usuário dele no `control` continua desativado. */

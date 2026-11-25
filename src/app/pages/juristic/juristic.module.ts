@@ -12,16 +12,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
-  MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatSort, Sort, MatSortModule, MatSortHeader } from '@angular/material/sort';
-import { AfterViewInit, Component, ViewChild, inject, NgModule } from '@angular/core';
+import { MatSort, MatSortModule, MatSortHeader } from '@angular/material/sort';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,7 +29,6 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatCellDef,
-  MatTableDataSource,
   MatHeaderRowDef
 } from '@angular/material/table';
 import { MatDivider } from "@angular/material/divider";

@@ -1,4 +1,4 @@
-import { Component, Input, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from '../sidebar/sidebar.component';
 
 @Component({
