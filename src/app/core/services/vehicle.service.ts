@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { VehicleInterface } from '../interfaces/vehicle.interface';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -9,9 +9,9 @@ import { ImportReport } from '../../shared/import-report/import-report.model';
   providedIn: 'root'
 })
 export class VehicleService {
-  private vehiclesAPI: string = environment.baseUrl + ':' + environment.operations_port + '/vehicle'
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private vehiclesAPI: string = environment.baseUrl + ':' + environment.operations_port + '/vehicle'
 
   createVehicle(vehicle: VehicleInterface): Observable<unknown> {
     return this.http.post(this.vehiclesAPI, vehicle);

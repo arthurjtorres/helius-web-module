@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PersonInterface } from '../interfaces/person.interface';
@@ -8,9 +8,9 @@ import { PersonInterface } from '../interfaces/person.interface';
   providedIn: 'root'
 })
 export class PersonService {
-  private API: string = environment.baseUrl + ':' + environment.registry_port + '/person';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private API: string = environment.baseUrl + ':' + environment.registry_port + '/person';
 
   create(person: PersonInterface): Observable<{ data: PersonInterface }> {
     return this.http.post<{ data: PersonInterface }>(this.API, person);
