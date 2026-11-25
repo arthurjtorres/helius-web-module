@@ -22,29 +22,27 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
-  declarations: [
-    CompanyPageFormComponent,
-    CompanyPageContentComponent
-  ],
-  imports: [
-    CommonModule,
-    CompanyRoutingModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatTabsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule
-  ]
+    imports: [
+        CommonModule,
+        CompanyRoutingModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTabsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCardModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        CompanyPageFormComponent,
+        CompanyPageContentComponent
+    ]
 })
 export class CompanyModule { }

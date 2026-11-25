@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { VehicleInterface } from '../../../core/interfaces/vehicle.interface';
 import { VehicleService } from '../../../core/services/vehicle.service';
@@ -11,13 +11,21 @@ import { VehiclesImportComponent } from '../vehicles-import/vehicles-import.comp
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
+import { FormsModule } from '@angular/forms';
+import { InactiveToggleComponent } from '../../../shared/inactive-toggle/inactive-toggle.component';
+import { MatFormField, MatInput, MatSuffix } from '@angular/material/input';
+import { MatDivider } from '@angular/material/list';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-vehicle-page',
-  standalone: false,
-  templateUrl: './vehicle-page.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './vehicle-page.component.scss'
+    selector: 'app-vehicle-page',
+    templateUrl: './vehicle-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './vehicle-page.component.scss',
+    imports: [MatFabButton, MatIcon, CompanySelectComponent, FormsModule, InactiveToggleComponent, MatFormField, MatInput, MatIconButton, MatSuffix, MatDivider, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator]
 })
 export class VehiclePageComponent implements OnInit {
   private vehicleService = inject(VehicleService);

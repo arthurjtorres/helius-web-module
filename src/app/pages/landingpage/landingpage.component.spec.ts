@@ -16,14 +16,13 @@ describe('LandingpageComponent', () => {
   beforeEach(async () => {
     authService = jasmine.createSpyObj<AuthService>('AuthService', ['login']);
     await TestBed.configureTestingModule({
-      declarations: [LandingpageComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
+    imports: [ReactiveFormsModule, LandingpageComponent],
+    providers: [
         { provide: AuthService, useValue: authService },
         { provide: Router, useValue: jasmine.createSpyObj<Router>('Router', ['navigate']) },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(LandingpageComponent);

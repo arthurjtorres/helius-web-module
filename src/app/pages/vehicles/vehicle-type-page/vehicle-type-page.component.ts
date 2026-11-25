@@ -1,21 +1,26 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
 import { VehicleTypeInterface } from '../../../core/interfaces/vehicle.interface';
 import { VehicleTypeService } from '../../../core/services/vehicle-type.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { VehicleTypeFormComponent, VehicleTypeFormData } from '../vehicle-type-form/vehicle-type-form.component';
+import { InactiveToggleComponent } from '../../../shared/inactive-toggle/inactive-toggle.component';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/list';
+import { MatTooltip } from '@angular/material/tooltip';
 
 /** Aba "Tipo de Veículo": lista, cria, edita e desativa tipos (`operations`). */
 @Component({
-  selector: 'app-vehicle-type-page',
-  standalone: false,
-  templateUrl: './vehicle-type-page.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: '../vehicle-page/vehicle-page.component.scss'
+    selector: 'app-vehicle-type-page',
+    templateUrl: './vehicle-type-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: '../vehicle-page/vehicle-page.component.scss',
+    imports: [InactiveToggleComponent, MatFabButton, MatIcon, MatDivider, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
 export class VehicleTypePageComponent implements OnInit {
   private service = inject(VehicleTypeService);
