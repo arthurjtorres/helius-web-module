@@ -124,7 +124,7 @@ describe('EmployeePageImportComponent', () => {
     const active = { data: [{ employeeId: 'n1', registration: 'ZT001234' }, { employeeId: 'e9', registration: 'ZT009999' }] };
 
     function importNow(): void {
-      employeeService.getByCompany.and.returnValue(of(active));
+      employeeService.getByCompany.and.returnValue(of(active) as never);
       employeeService.bulkImport.and.returnValue(of({ data: report({ dryRun: false }) }));
       ready();
       component.import();

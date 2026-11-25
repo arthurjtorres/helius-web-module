@@ -3,13 +3,13 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { isTokenValid } from '../utils/TokenValidation';
 
-export const loginGuard: CanActivateFn = (route, state) => {
+export const loginGuard: CanActivateFn = () => {
   const router = inject(Router);
   const token = localStorage.getItem('access_token');
 
   // Se o token existe e É VÁLIDO, manda para a home
   if (token && isTokenValid(token)) {
-    router.navigate(['/home']);
+    void router.navigate(['/home']);
     return false;
   }
   

@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
+import PositionInterface from '../../../core/interfaces/position.interface';
+import SectorInterface from '../../../core/interfaces/sector.interface';
+import DepartmentInterface from '../../../core/interfaces/department.interface';
 import { DepartmentService } from '../../../core/services/department.service';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { PositionService } from '../../../core/services/position.service';
@@ -22,11 +25,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class EmployeePageFormComponent implements OnInit {
   employeeForm!: FormGroup;
-  isEdit: boolean = false;
+  isEdit = false;
 
-  positions: any[] = [];
-  sectors: any[] = [];
-  departments: any[] = [];
+  positions: PositionInterface[] = [];
+  sectors: SectorInterface[] = [];
+  departments: DepartmentInterface[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -38,7 +41,7 @@ export class EmployeePageFormComponent implements OnInit {
     private personService: PersonService,
     private notification: NotificationService,
     private dialogRef: MatDialogRef<EmployeePageFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: (EmployeeView & { cpf?: string }) | null
   ) { }
 
   ngOnInit(): void {
@@ -78,23 +81,23 @@ export class EmployeePageFormComponent implements OnInit {
       sectors: this.sectorService.getAll(),
       departments: this.departmentService.getAll(),
     }).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         this.positions = response.positions.data;
         this.sectors = response.sectors.data;
         this.departments = response.departments.data;
 
         if (this.isEdit) {
           this.employeeForm.patchValue({
-            position: this.data.fkPositionId,
-            sector: this.data.fkSectorId,
-            department: this.data.fkDepartmentId
+            position: this.data?.fkPositionId,
+            sector: this.data?.fkSectorId,
+            department: this.data?.fkDepartmentId
           });
         }
       }
     });
   }
 
-  private createNewPersonAndDocument(raw: any): Observable<string> {
+  private createNewPersonAndDocument(raw: { fullName: string; birthDate: string; cpf: string }): Observable<string> {
     const nameParts = raw.fullName.trim().split(/\s+/);
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(' ') || '';
@@ -107,8 +110,9 @@ export class EmployeePageFormComponent implements OnInit {
     };
 
     return this.personService.create(personPayload).pipe(
-      switchMap((personRes: any) => {
+      switchMap(personRes => {
         const personId = personRes.data.personId;
+        if (!personId) throw new Error('registry não devolveu o personId da pessoa criada');
         const docPayload = {
           documentType: DocumentTypeEnum.CPF,
           documentNumber: raw.cpf,
@@ -145,7 +149,7 @@ export class EmployeePageFormComponent implements OnInit {
           
         };
 
-        return this.isEdit 
+        return this.isEdit && this.data
           ? this.employeeService.update(this.data.employeeId, employeePayload)
           : this.employeeService.create(employeePayload);
       })

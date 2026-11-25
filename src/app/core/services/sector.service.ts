@@ -13,7 +13,7 @@ export class SectorService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<SectorInterface[]> {
-    return this.http.get<SectorInterface[]>(this.API);
+  getAll(): Observable<{ data: SectorInterface[] }> {
+    return this.http.get<{ data: SectorInterface[] }>(this.API);
   }
 }

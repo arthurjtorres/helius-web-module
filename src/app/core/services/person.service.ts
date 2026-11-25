@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -12,7 +12,7 @@ export class PersonService {
 
   constructor(private http: HttpClient) { }
 
-  create(person: PersonInterface): Observable<PersonInterface> {
-    return this.http.post<PersonInterface>(this.API, person);
+  create(person: PersonInterface): Observable<{ data: PersonInterface }> {
+    return this.http.post<{ data: PersonInterface }>(this.API, person);
   }
 }
