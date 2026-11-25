@@ -10,7 +10,7 @@
       <p><strong>Usuário:</strong> {{ (user$ | async)?.userName }}</p>
       <p><strong>E-mail:</strong> {{ (user$ | async)?.email }}</p>
       <p><strong>ID:</strong> {{ (user$ | async)?.userId }}</p>
-      <p><strong>Setor:</strong> {{ (user$ | async)?.fkClearanceId ?? 'Acesso Total (Sistema)' }}</p>
+      <p><strong>Nível de acesso:</strong> {{ (user$ | async)?.clearance }}</p>
     </div>
     
     <mat-divider></mat-divider>
