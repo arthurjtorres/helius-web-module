@@ -64,9 +64,9 @@ export class PenaltyPageComponent implements OnInit {
 
   loadData() {
     this.penaltyService.getCompositePenalties(this.includeInactive).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         // o backend já filtra os ativos (T17: inativos só com includeInactive)
-        this.penaltySource.data = response.data || response;
+        this.penaltySource.data = ('data' in response && response.data) || [];
         this.penaltySource.paginator = this.paginator;
         this.penaltySource.sort = this.sort;
 

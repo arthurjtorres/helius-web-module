@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { EmployeeDTO, EmployeeView } from '../../../core/interfaces/employee.interface';
+import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -60,8 +60,8 @@ export class EmployeePageContentComponent implements OnInit {
   loadData() {
     if (!this.companyId) return this.showEmployees([]);
     this.service.getByCompany(this.companyId, this.includeInactive).subscribe({
-      next: (response: any) => {
-        const mappedData: EmployeeView[] = (response.data || []).map((item: any) => ({
+      next: (response) => {
+        const mappedData: EmployeeView[] = (response.data || []).map(item => ({
           employeeId: item.employeeId,
           fkPersonId: item.fkPersonId,
           fkCompanyId: item.fkCompanyId,

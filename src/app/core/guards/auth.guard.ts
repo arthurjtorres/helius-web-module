@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { isTokenValid } from '../utils/TokenValidation';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
   const token = localStorage.getItem('access_token');
 
@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   } else {
     // Se o token estiver expirado ou não existir, limpa para evitar loops
     localStorage.removeItem('access_token');
-    router.navigate(['/login']);
+    void router.navigate(['/login']);
     return false;
   }
 };

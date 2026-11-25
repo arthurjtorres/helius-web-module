@@ -4,6 +4,21 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+/** Payload do JWT emitido pelo `control` (`AuthService.login`). */
+export interface TokenPayload {
+  userId: string;
+  userName: string;
+  usertag: string;
+  email: string;
+  userType: string;
+  clearance: string;
+  clearanceId: string;
+  roles?: { role: string }[];
+  allowedMenus?: { menu: string; permissions: string[] }[];
+  companyIds?: string[];
+  exp?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +27,7 @@ export class AuthService {
   private readonly AUTH_URL = environment.baseUrl + ':' + environment.control_port;
 
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-  private userData = new BehaviorSubject<any>(this.getUserDataFromToken());
+  private userData = new BehaviorSubject<TokenPayload | null>(this.getUserDataFromToken());
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -21,12 +36,12 @@ export class AuthService {
     return !!token && !this.isTokenExpired(token);
   }
 
-  login(login: string, password: string): Observable<any> {
+  login(login: string, password: string): Observable<{ message: string; data?: { token: string } }> {
     const authHeaders = new HttpHeaders({
       'Authorization': btoa(password + ';' + login)
     });
 
-    return this.http.post<any>(`${this.AUTH_URL}/authenticate`, {}, { headers: authHeaders }).pipe(
+    return this.http.post<{ message: string; data?: { token: string } }>(`${this.AUTH_URL}/authenticate`, {}, { headers: authHeaders }).pipe(
       tap(res => {
         if (res && res.data && res.data.token) {
           localStorage.setItem('access_token', res.data.token);
@@ -38,7 +53,7 @@ export class AuthService {
     );
   }
 
-  getUser(): Observable<any> {
+  getUser(): Observable<TokenPayload | null> {
     return this.userData.asObservable();
   }
 
@@ -47,12 +62,12 @@ export class AuthService {
     return token ? this.decodeToken(token) : null;
   }
 
-  private decodeToken(token: string) {
+  private decodeToken(token: string): TokenPayload | null {
     try {
       const payload = token.split('.')[1];
       const decoded = JSON.parse(window.atob(payload));
       return decoded;
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -74,8 +89,8 @@ export class AuthService {
     const user = this.userData.value;
     if (!user) return false;
     if (['SYSTEM_ADMIN', 'SUPER_ADMIN'].includes(user.clearance)) return true;
-    if ((user.roles ?? []).some((r: { role: string }) => r.role === 'DESENVOLVEDOR')) return true;
-    const permissions: string[] = (user.allowedMenus ?? []).find((m: { menu: string }) => m.menu === menu)?.permissions ?? [];
+    if ((user.roles ?? []).some(r => r.role === 'DESENVOLVEDOR')) return true;
+    const permissions: string[] = (user.allowedMenus ?? []).find(m => m.menu === menu)?.permissions ?? [];
     return permissions.some(p => ['CREATE', 'UPDATE', 'DELETE'].includes(p));
   }
 
@@ -94,7 +109,7 @@ export class AuthService {
     localStorage.removeItem('access_token');
     this.loggedIn.next(false);
     this.userData.next(null);
-    this.router.navigate(['/login']).then(() => {
+    void this.router.navigate(['/login']).then(() => {
       window.location.reload();
     });
   }

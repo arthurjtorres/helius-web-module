@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, signal, ChangeDetectionStrategy } from '@angular/core';
 
-export type MenuItem = {
+export interface MenuItem {
   label?: string;
   icon?: string;
   route?: string;

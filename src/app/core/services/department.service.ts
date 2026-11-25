@@ -13,7 +13,7 @@ export class DepartmentService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<DepartmentInterface[]> {
-    return this.http.get<DepartmentInterface[]>(this.API);
+  getAll(): Observable<{ data: DepartmentInterface[] }> {
+    return this.http.get<{ data: DepartmentInterface[] }>(this.API);
   }
 }

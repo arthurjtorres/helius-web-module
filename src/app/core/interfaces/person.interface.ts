@@ -3,6 +3,6 @@ export interface PersonInterface {
   firstName: string;
   lastName: string;
   fullName: string;
-  birthDate?: Date;
+  birthDate?: string;
 
 }

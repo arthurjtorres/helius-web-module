@@ -22,8 +22,8 @@ export class FineCodeService {
   }
 
   /** Lista os códigos; só ativos, exceto com `includeInactive` (T17). */
-  getAll(includeInactive = false) : Observable<FineCodeInterface[]> {
-    return this.http.get<FineCodeInterface[]>(this.API, includeInactive ? { params: { includeInactive: 'true' } } : {});
+  getAll(includeInactive = false) : Observable<{ data?: FineCodeInterface[] }> {
+    return this.http.get<{ data?: FineCodeInterface[] }>(this.API, includeInactive ? { params: { includeInactive: 'true' } } : {});
   }
 
   /** Desativa o código (exclusão lógica; 409 se houver penalidades ativas). */
