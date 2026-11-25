@@ -18,31 +18,30 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MotivePageComponent } from './motive-page/motive-page.component';
 import { MotiveFormComponent } from './motive-form/motive-form.component';
-import { InactiveToggleModule } from '../../shared/inactive-toggle/inactive-toggle.module';
+
 
 
 @NgModule({
     imports: [
-        CommonModule,
-        AppendixRoutingModule,
-        InactiveToggleModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatDividerModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatDialogModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatTabsModule,
-        MatInputModule,
-        MatButtonModule,
-        FineCodePageComponent,
-        AppendixContentComponent,
-        FineCodeFormComponent,
-        MotivePageComponent,
-        MotiveFormComponent
-    ]
+    CommonModule,
+    AppendixRoutingModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatTabsModule,
+    MatInputModule,
+    MatButtonModule,
+    FineCodePageComponent,
+    AppendixContentComponent,
+    FineCodeFormComponent,
+    MotivePageComponent,
+    MotiveFormComponent
+]
 })
 export class AppendixModule { }

@@ -3,7 +3,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 
 import { CompanySelectComponent } from './company-select.component';
-import { CompanySelectModule } from './company-select.module';
 import { CompanyService } from '../../core/services/company.service';
 import { NotificationService } from '../../core/services/notification.service';
 
@@ -12,7 +11,7 @@ describe('CompanySelectComponent', () => {
     const companyService = jasmine.createSpyObj<CompanyService>('CompanyService', ['getAll']);
     companyService.getAll.and.returnValue(of({ data: companies as never }));
     TestBed.configureTestingModule({
-      imports: [CompanySelectModule, NoopAnimationsModule],
+      imports: [CompanySelectComponent, NoopAnimationsModule],
       providers: [
         { provide: CompanyService, useValue: companyService },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['error']) },
