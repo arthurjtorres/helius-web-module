@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -21,9 +21,9 @@ export interface UserCompanyLink {
   providedIn: 'root'
 })
 export class UserCompanyService {
-  private API = environment.baseUrl + ':' + environment.control_port;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private API = environment.baseUrl + ':' + environment.control_port;
 
   /** Usuários colaboradores ativos (exige `USUARIOS:READ`). Responde 404 quando não há nenhum. */
   getCollaborators(): Observable<{ data: UserSummary[] }> {

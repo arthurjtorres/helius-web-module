@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -23,13 +23,14 @@ export interface TokenPayload {
   providedIn: 'root'
 })
 export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
 
   private readonly AUTH_URL = environment.baseUrl + ':' + environment.control_port;
 
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   private userData = new BehaviorSubject<TokenPayload | null>(this.getUserDataFromToken());
-
-  constructor(private http: HttpClient, private router: Router) { }
 
   private hasToken(): boolean {
     const token = localStorage.getItem('access_token');

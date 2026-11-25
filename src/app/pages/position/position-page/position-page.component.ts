@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,15 +18,16 @@ import { PositionFormComponent, PositionFormData } from '../position-form/positi
   styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss'
 })
 export class PositionPageComponent implements OnInit {
+  private service = inject(PositionService);
+  private dialog = inject(MatDialog);
+  private notification = inject(NotificationService);
+
   readonly columns = ['positionCode', 'positionName', 'actions'];
   dataSource = new MatTableDataSource<PositionInterface>([]);
 
-  constructor(
-    private service: PositionService,
-    private dialog: MatDialog,
-    private notification: NotificationService,
-    auth: AuthService,
-  ) {
+  constructor() {
+    const auth = inject(AuthService);
+
     // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
     if (auth.canSeeInactive('ORGANOGRAMA')) this.columns.splice(this.columns.length - 1, 0, 'status');
   }

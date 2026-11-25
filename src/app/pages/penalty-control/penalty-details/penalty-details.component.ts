@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PenaltyCompositeView } from '../../../core/interfaces/penalty.interface';
 
@@ -9,10 +9,7 @@ import { PenaltyCompositeView } from '../../../core/interfaces/penalty.interface
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './penalty-details.component.scss'
 })
-export class PenaltyDetailsComponent {
+export class PenaltyDetailsComponent {  dialogRef = inject<MatDialogRef<PenaltyDetailsComponent>>(MatDialogRef);
+  data = inject<PenaltyCompositeView>(MAT_DIALOG_DATA);
 
-  constructor(
-    public dialogRef: MatDialogRef<PenaltyDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PenaltyCompositeView
-  ) {}
 }

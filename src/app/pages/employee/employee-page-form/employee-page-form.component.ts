@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -24,25 +24,23 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './employee-page-form.component.scss'
 })
 export class EmployeePageFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private employeeService = inject(EmployeeService);
+  private positionService = inject(PositionService);
+  private sectorService = inject(SectorService);
+  private departmentService = inject(DepartmentService);
+  private documentService = inject(DocumentService);
+  private personService = inject(PersonService);
+  private notification = inject(NotificationService);
+  private dialogRef = inject<MatDialogRef<EmployeePageFormComponent>>(MatDialogRef);
+  data = inject<(EmployeeView & { cpf?: string }) | null>(MAT_DIALOG_DATA);
+
   employeeForm!: FormGroup;
   isEdit = false;
 
   positions: PositionInterface[] = [];
   sectors: SectorInterface[] = [];
   departments: DepartmentInterface[] = [];
-
-  constructor(
-    private fb: FormBuilder,
-    private employeeService: EmployeeService,
-    private positionService: PositionService,
-    private sectorService: SectorService,
-    private departmentService: DepartmentService,
-    private documentService: DocumentService,
-    private personService: PersonService,
-    private notification: NotificationService,
-    private dialogRef: MatDialogRef<EmployeePageFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: (EmployeeView & { cpf?: string }) | null
-  ) { }
 
   ngOnInit(): void {
     this.isEdit = !!this.data;

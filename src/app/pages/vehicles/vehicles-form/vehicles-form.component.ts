@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -31,22 +31,20 @@ export function yearValidator(control: AbstractControl): ValidationErrors | null
   styleUrl: './vehicles-form.component.scss'
 })
 export class VehiclesFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private vehicleService = inject(VehicleService);
+  private vehicleTypeService = inject(VehicleTypeService);
+  private companyService = inject(CompanyService);
+  private notification = inject(NotificationService);
+  private dialogRef = inject<MatDialogRef<VehiclesFormComponent>>(MatDialogRef);
+  data = inject<VehicleInterface | null>(MAT_DIALOG_DATA);
+
   form!: FormGroup;
   isEdit = false;
   saving = false;
   companies: CompanyInterface[] = [];
   vehicleTypes: VehicleTypeInterface[] = [];
   readonly cameraTypes = Object.values(CameraTypeEnum);
-
-  constructor(
-    private fb: FormBuilder,
-    private vehicleService: VehicleService,
-    private vehicleTypeService: VehicleTypeService,
-    private companyService: CompanyService,
-    private notification: NotificationService,
-    private dialogRef: MatDialogRef<VehiclesFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: VehicleInterface | null
-  ) { }
 
   ngOnInit(): void {
     this.isEdit = !!this.data?.vehicleId;

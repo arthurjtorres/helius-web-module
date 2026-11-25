@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -16,7 +16,9 @@ export const FORBIDDEN_FALLBACK_MESSAGE = 'Você não tem permissão para esta a
  */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private notification: NotificationService) {}
+  private authService = inject(AuthService);
+  private notification = inject(NotificationService);
+
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = localStorage.getItem('access_token');

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 
 /**
@@ -14,12 +14,12 @@ import { AuthService } from '../../core/services/auth.service';
   }`,
 })
 export class InactiveToggleComponent implements OnInit {
+  private auth = inject(AuthService);
+
   /** Menu da tela (`menu.menu_name`), ex.: `FUNCIONARIOS`. */
   @Input({ required: true }) menu!: string;
   @Output() includeInactiveChange = new EventEmitter<boolean>();
   visible = false;
-
-  constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
     this.visible = this.auth.canSeeInactive(this.menu);
