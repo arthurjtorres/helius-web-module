@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,6 +24,10 @@ import { AuthService } from '../../../core/services/auth.service';
  
 })
 export class PenaltyPageComponent implements OnInit {
+  private penaltyService = inject(PenaltyService);
+  private dialog = inject(MatDialog);
+  private notification = inject(NotificationService);
+
 
   penaltyHeader: string[] = [ 
     'ctdopNumber',
@@ -48,12 +52,9 @@ export class PenaltyPageComponent implements OnInit {
   /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
   includeInactive = false;
 
-  constructor(
-      private penaltyService: PenaltyService,
-      private dialog: MatDialog,
-      private notification: NotificationService,
-      auth: AuthService,
-    ) {
+  constructor() {
+    const auth = inject(AuthService);
+
     // Coluna de situação sempre visível para quem pode ver inativos (T17, regra 3)
     if (auth.canSeeInactive('PENALIDADES')) this.penaltyHeader.splice(this.penaltyHeader.length - 1, 0, 'status');
   }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -15,16 +15,15 @@ const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde
   styleUrl: './landingpage.component.scss'
 })
 export class LandingpageComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   loginForm: FormGroup;
   hidePassword = true;
   errorMessage = '';
 
-  constructor(
-
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-  ){
+  constructor(){
     this.loginForm = this.fb.group({
       userLogin: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],

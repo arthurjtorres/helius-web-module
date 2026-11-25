@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,6 +18,10 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './fine-code-page.component.scss'
 })
 export class FineCodePageComponent implements OnInit {
+  private service = inject(FineCodeService);
+  private dialog = inject(MatDialog);
+  private notification = inject(NotificationService);
+
 
   fineCodeHeader: string[] = [
     'fineNumber',
@@ -36,12 +40,9 @@ export class FineCodePageComponent implements OnInit {
   /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
   includeInactive = false;
 
-  constructor(
-    private service: FineCodeService,
-    private dialog: MatDialog,
-    private notification: NotificationService,
-    auth: AuthService,
-  ) {
+  constructor() {
+    const auth = inject(AuthService);
+
     // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
     if (auth.canSeeInactive('AUXILIARES')) this.fineCodeHeader.splice(this.fineCodeHeader.length - 1, 0, 'status');
   }

@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -20,6 +20,9 @@ import { NotificationService } from '../../core/services/notification.service';
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CompanySelectComponent), multi: true }],
 })
 export class CompanySelectComponent implements OnInit, ControlValueAccessor {
+  private companyService = inject(CompanyService);
+  private notification = inject(NotificationService);
+
   /** Dica mostrada enquanto nenhuma empresa está escolhida. */
   @Input() hint = '';
   companies: CompanyInterface[] = [];
@@ -27,8 +30,6 @@ export class CompanySelectComponent implements OnInit, ControlValueAccessor {
   disabled = false;
   private onChange?: (value: string) => void;
   private onTouched?: () => void;
-
-  constructor(private companyService: CompanyService, private notification: NotificationService) { }
 
   ngOnInit(): void {
     this.companyService.getAll().subscribe({

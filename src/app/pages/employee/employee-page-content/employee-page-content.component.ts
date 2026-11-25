@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,6 +20,10 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './employee-page-content.component.scss'
 })
 export class EmployeePageContentComponent implements OnInit {
+  private service = inject(EmployeeService);
+  private dialog = inject(MatDialog);
+  private notification = inject(NotificationService);
+
 
   employeeHeader: string[] = [
     'registration',
@@ -42,12 +46,9 @@ export class EmployeePageContentComponent implements OnInit {
   /** Inativos listados (checkbox "Ocultar inativos" desmarcado, T17). */
   includeInactive = false;
 
-  constructor(
-    private service: EmployeeService,
-    private dialog: MatDialog,
-    private notification: NotificationService,
-    auth: AuthService,
-  ) {
+  constructor() {
+    const auth = inject(AuthService);
+
     // Coluna de status sempre visível para quem pode ver inativos (T17, regra 3)
     if (auth.canSeeInactive('FUNCIONARIOS')) this.employeeHeader.splice(this.employeeHeader.length - 1, 0, 'status');
   }
