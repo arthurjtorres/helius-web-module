@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>
   {{
-    isEdit ? "Editar Cadastro de Funcionário" : "Novo Cadastro de Funcionário"
+  isEdit ? "Editar Cadastro de Funcionário" : "Novo Cadastro de Funcionário"
   }}
 </h2>
 
@@ -14,7 +14,7 @@
       </mat-form-field>
 
       <app-company-select formControlName="company"
-        [hint]="isEdit ? '' : 'A empresa não muda depois do cadastro.'"></app-company-select>
+      [hint]="isEdit ? '' : 'A empresa não muda depois do cadastro.'"></app-company-select>
 
       <mat-form-field appearance="outline">
         <mat-label>Data de Admissão</mat-label>
@@ -24,37 +24,43 @@
       <mat-form-field appearance="outline">
         <mat-label>Função</mat-label>
         <mat-select formControlName="position">
-          <mat-option *ngFor="let p of positions" [value]="p.positionId">
-            {{ p.positionName }}
-          </mat-option>
+          @for (p of positions; track p) {
+            <mat-option [value]="p.positionId">
+              {{ p.positionName }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Setor</mat-label>
         <mat-select formControlName="sector">
-          <mat-option *ngFor="let s of sectors" [value]="s.sectorId">
-            {{ s.sectorName }}
-          </mat-option>
+          @for (s of sectors; track s) {
+            <mat-option [value]="s.sectorId">
+              {{ s.sectorName }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Departamento</mat-label>
         <mat-select formControlName="department">
-          <mat-option *ngFor="let d of departments" [value]="d.departmentId">
-            {{ d.departmentName }}
-          </mat-option>
+          @for (d of departments; track d) {
+            <mat-option [value]="d.departmentId">
+              {{ d.departmentName }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </mat-card>
 
     <mat-card class="person-data" appearance="outlined">
       <mat-form-field appearance="outline">
-          <mat-label>CPF (Apenas números)</mat-label>
-          <input matInput formControlName="cpf" (blur)="onCpfBlur()" maxlength="11" />
-          <mat-hint>Digite 11 dígitos para buscar</mat-hint>
-        </mat-form-field>
+        <mat-label>CPF (Apenas números)</mat-label>
+        <input matInput formControlName="cpf" (blur)="onCpfBlur()" maxlength="11" />
+        <mat-hint>Digite 11 dígitos para buscar</mat-hint>
+      </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Nome Completo</mat-label>
@@ -77,7 +83,7 @@
     color="primary"
     (click)="onSave()"
     [disabled]="employeeForm.invalid"
-  >
+    >
     <mat-icon>{{ isEdit ? "edit" : "save" }}</mat-icon>
     {{ isEdit ? "Atualizar" : "Cadastrar" }}
   </button>
