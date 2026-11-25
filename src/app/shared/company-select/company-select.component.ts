@@ -25,8 +25,8 @@ export class CompanySelectComponent implements OnInit, ControlValueAccessor {
   companies: CompanyInterface[] = [];
   value = '';
   disabled = false;
-  private onChange: (value: string) => void = () => { };
-  private onTouched: () => void = () => { };
+  private onChange?: (value: string) => void;
+  private onTouched?: () => void;
 
   constructor(private companyService: CompanyService, private notification: NotificationService) { }
 
@@ -44,8 +44,8 @@ export class CompanySelectComponent implements OnInit, ControlValueAccessor {
 
   select(value: string): void {
     this.value = value;
-    this.onChange(value);
-    this.onTouched();
+    this.onChange?.(value);
+    this.onTouched?.();
   }
 
   writeValue(value: string | null): void {

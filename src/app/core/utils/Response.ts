@@ -1,13 +1,13 @@
-type SuccessResponse<T> = {
+interface SuccessResponse<T> {
   status: number;
   message: string;
   data?: T;
-};
+}
 
-type ErrorResponse = {
+interface ErrorResponse {
   status: number;
   message: string;
-};
+}
 
 type StandardResponse<T = undefined> = SuccessResponse<T> | ErrorResponse;
 
@@ -28,7 +28,7 @@ class Response {
     return { status: 400, message };
   }
 
-  static unauthorized(message: string = "Acesso não autorizado!"): ErrorResponse {
+  static unauthorized(message = "Acesso não autorizado!"): ErrorResponse {
     return { status: 401, message };
   }
 
@@ -48,7 +48,7 @@ class Response {
     return { status: 422, message };
   }
 
-  static internalError(message: string = "Erro interno do servidor"): ErrorResponse {
+  static internalError(message = "Erro interno do servidor"): ErrorResponse {
     return { status: 500, message };
   }
 }

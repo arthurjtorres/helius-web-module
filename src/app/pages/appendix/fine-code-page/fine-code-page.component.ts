@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface';
 import { MatPaginator } from '@angular/material/paginator';
@@ -52,9 +52,9 @@ export class FineCodePageComponent implements OnInit {
 
   loadData() {
     this.service.getAll(this.includeInactive).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         // o backend já filtra os ativos (T17: inativos só com includeInactive)
-        this.fineCodeSource.data = response.data || response;
+        this.fineCodeSource.data = response.data ?? [];
         this.fineCodeSource.paginator = this.paginator;
         this.fineCodeSource.sort = this.sort;
 

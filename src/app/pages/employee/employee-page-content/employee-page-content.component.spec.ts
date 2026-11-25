@@ -27,7 +27,7 @@ describe('EmployeePageContentComponent', () => {
 
   beforeEach(async () => {
     service = jasmine.createSpyObj<EmployeeService>('EmployeeService', ['getByCompany', 'delete', 'reactivate']);
-    service.getByCompany.and.returnValue(of({ data: [apiEmployee] }));
+    service.getByCompany.and.returnValue(of({ data: [apiEmployee] }) as never);
     notification = jasmine.createSpyObj<NotificationService>('NotificationService', ['error', 'info']);
     await TestBed.configureTestingModule({
       imports: [EmployeeModule, NoopAnimationsModule],
@@ -100,7 +100,7 @@ describe('EmployeePageContentComponent', () => {
   }));
 
   it('mostra a coluna de status e "Reativar" só no inativo (T17)', fakeAsync(() => {
-    service.getByCompany.and.returnValue(of({ data: [{ ...apiEmployee, activated: true }, { ...apiEmployee, employeeId: 'e2', activated: false }] }));
+    service.getByCompany.and.returnValue(of({ data: [{ ...apiEmployee, activated: true }, { ...apiEmployee, employeeId: 'e2', activated: false }] }) as never);
     const el = create('c1').nativeElement as HTMLElement;
     const status = Array.from(el.querySelectorAll('mat-cell.status')).map(c => c.textContent?.trim());
     expect(status).toEqual(['Ativo', 'Inativo']);

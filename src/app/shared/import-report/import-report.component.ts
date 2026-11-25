@@ -45,7 +45,7 @@ export class ImportReportComponent implements OnChanges {
     this.confirmChange.emit([]);
   }
 
-  key(item: { [k: string]: unknown }): string {
+  key(item: Record<string, unknown>): string {
     return String(item[this.keyField] ?? '');
   }
 

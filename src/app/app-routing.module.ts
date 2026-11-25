@@ -7,7 +7,6 @@ import { PenaltyContentComponent } from './pages/penalty-control/penalty-content
 import { DashboardComponent } from './pages/juristic/dashboard/dashboard.component';
 import { CTDOPControlComponent } from './pages/juristic/ctdop-control/ctdop-control.component';
 import { AppealControlComponent } from './pages/juristic/appeal-control/appeal-control.component';
-import { ScheduleComponent } from './pages/schedule/schedule.component';
 
 import { AppendixContentComponent } from './pages/appendix/appendix-content/appendix-content.component';
 import { LandingpageComponent } from './pages/landingpage/landingpage.component';
