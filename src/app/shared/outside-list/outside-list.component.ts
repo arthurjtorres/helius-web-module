@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
 
 /** Registro ativo da empresa que não veio no arquivo importado. */
 export interface OutsideItem {
@@ -14,6 +14,7 @@ export interface OutsideItem {
   selector: 'app-outside-list',
   standalone: false,
   templateUrl: './outside-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: ['.actions { display: flex; justify-content: flex-end; }', '.outside-list { max-height: 20rem; overflow: auto; }'],
 })
 export class OutsideListComponent implements OnChanges {

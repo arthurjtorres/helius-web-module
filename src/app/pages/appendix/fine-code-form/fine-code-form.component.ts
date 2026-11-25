@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FineCodeService } from '../../../core/services/fine-code.service';
@@ -8,6 +8,7 @@ import { FineCodeInterface } from '../../../core/interfaces/fine-code.interface'
   selector: 'app-fine-code-form',
   standalone: false,
   templateUrl: './fine-code-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './fine-code-form.component.scss'
 })
 export class FineCodeFormComponent implements OnInit {
