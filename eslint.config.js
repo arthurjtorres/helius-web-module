@@ -19,8 +19,6 @@ module.exports = defineConfig([
       "@typescript-eslint/no-floating-promises": "error",
       // `({ line, ...row })` descarta o campo de propósito
       "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
-      // shortcut: migração ainda não feita (T21 item 4, PR 4); a PR religa a regra
-      "@angular-eslint/prefer-on-push-component-change-detection": "off",
       "@angular-eslint/directive-selector": [
         "error",
         {

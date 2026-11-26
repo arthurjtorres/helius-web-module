@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { EmployeeRow } from './employee-sheet';
 import { ImportReport } from '../../../shared/import-report/import-report.model';
 
 describe('EmployeePageImportComponent', () => {
+  let fixture: ComponentFixture<unknown>;
   let component: EmployeePageImportComponent;
   let employeeService: jasmine.SpyObj<EmployeeService>;
   let dialogRef: jasmine.SpyObj<MatDialogRef<EmployeePageImportComponent>>;
@@ -47,8 +48,9 @@ describe('EmployeePageImportComponent', () => {
         { provide: MatDialogRef, useValue: dialogRef },
       ],
     }).compileComponents();
-    const fixture = TestBed.createComponent(EmployeePageImportComponent);
-    component = fixture.componentInstance;
+    const created = TestBed.createComponent(EmployeePageImportComponent);
+    component = created.componentInstance;
+    fixture = created;
     fixture.detectChanges();
   });
 
@@ -74,7 +76,7 @@ describe('EmployeePageImportComponent', () => {
     expect(confirmIds).toEqual([]);
     expect(employees.length).toBe(2);
     expect('line' in employees[0]).toBeFalse();
-    expect(component.report?.created[0].line).toBe(3);
+    expect(component.report()?.created[0].line).toBe(3);
     expect(component.canImport()).toBeTrue();
   });
 
@@ -88,7 +90,7 @@ describe('EmployeePageImportComponent', () => {
       status: 400, error: { data: report({ failed: [{ line: 1, field: 'birthDate', error: 'Data inválida.' }] }) },
     })));
     component.simulate();
-    expect(component.report?.failed[0].line).toBe(3);
+    expect(component.report()?.failed[0].line).toBe(3);
     expect(component.canImport()).toBeFalse();
   });
 
@@ -100,7 +102,7 @@ describe('EmployeePageImportComponent', () => {
     employeeService.bulkImport.and.returnValue(of({ data: report({ dryRun: false }) }));
     component.import();
     expect(employeeService.bulkImport.calls.mostRecent().args.slice(2)).toEqual([false, ['e9']]);
-    expect(component.imported).toBeTrue();
+    expect(component.imported()).toBeTrue();
     component.close();
     expect(dialogRef.close).toHaveBeenCalledWith(true);
   });
@@ -133,7 +135,7 @@ describe('EmployeePageImportComponent', () => {
     it('lista os ativos da empresa cuja matrícula não veio no relatório', () => {
       importNow();
       expect(employeeService.getByCompany).toHaveBeenCalledWith('c1');
-      expect(component.outsideItems).toEqual([{ id: 'e9', key: 'ZT009999' }]);
+      expect(component.outsideItems()).toEqual([{ id: 'e9', key: 'ZT009999' }]);
     });
 
     it('desliga os marcados com a data de rescisão do campo e tira da lista', () => {
@@ -142,7 +144,7 @@ describe('EmployeePageImportComponent', () => {
       employeeService.bulkDeactivate.and.returnValue(of({ message: '1 funcionário(s) desligado(s).', data: { deactivated: 1, pendingEmployeeIds: [] } }));
       component.deactivate(['e9']);
       expect(employeeService.bulkDeactivate).toHaveBeenCalledWith(['e9'], '2026-11-19');
-      expect(component.outsideItems).toEqual([]);
+      expect(component.outsideItems()).toEqual([]);
       expect(notification().info).toHaveBeenCalledWith('1 funcionário(s) desligado(s).');
     });
 
@@ -168,5 +170,16 @@ describe('EmployeePageImportComponent', () => {
       expect(component.terminationDate).toBe(day(now));
       expect(component.maxTerminationDate).toBe(day(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)));
     });
+  });
+
+  it('a tela acompanha o arquivo carregado e o relatório (OnPush)', () => {
+    const el = fixture.nativeElement as HTMLElement;
+    employeeService.bulkImport.and.returnValue(of({ data: report() }));
+    ready();
+    fixture.detectChanges();
+    expect(el.querySelector('.table-preview-card')).not.toBeNull();
+    component.simulate();
+    fixture.detectChanges();
+    expect(el.querySelector('app-import-report')).not.toBeNull();
   });
 });
