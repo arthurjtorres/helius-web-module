@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -15,7 +15,6 @@ const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde
 @Component({
     selector: 'app-landingpage',
     templateUrl: './landingpage.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './landingpage.component.scss',
     imports: [MatCard, FormsModule, ReactiveFormsModule, MatFormField, MatIcon, MatPrefix, MatInput, MatButton, MatSuffix, MatCheckbox]
 })
@@ -26,7 +25,7 @@ export class LandingpageComponent {
 
   loginForm: FormGroup;
   hidePassword = true;
-  errorMessage = '';
+  errorMessage = signal('');
 
   constructor(){
     this.loginForm = this.fb.group({
@@ -51,7 +50,7 @@ export class LandingpageComponent {
       }
     },
       error: (err: HttpErrorResponse) => {
-        this.errorMessage = this.loginErrorMessage(err);
+        this.errorMessage.set(this.loginErrorMessage(err));
       }
     })
   }
