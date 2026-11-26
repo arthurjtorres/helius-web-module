@@ -28,7 +28,7 @@ describe('CompanySelectComponent', () => {
 
   it('pré-seleciona e avisa quando há uma única empresa', () => {
     const { component, changes } = create([{ companyId: 'c1', companyName: 'ZZ_TEST_ A', companyAcronym: 'ZA' }]);
-    expect(component.value).toBe('c1');
+    expect(component.value()).toBe('c1');
     expect(changes).toEqual(['c1']);
   });
 
@@ -37,7 +37,7 @@ describe('CompanySelectComponent', () => {
     expect(create(two).changes).toEqual([]);
     TestBed.resetTestingModule();
     const { component, changes } = create([two[0]], 'c9');
-    expect(component.value).toBe('c9');
+    expect(component.value()).toBe('c9');
     expect(changes).toEqual([]);
   });
 
@@ -45,5 +45,21 @@ describe('CompanySelectComponent', () => {
     const { component, changes } = create([]);
     component.select('c2');
     expect(changes).toEqual(['c2']);
+  });
+
+  it('valor escrito depois pelo formulário aparece na tela (OnPush)', () => {
+    const fixture = TestBed.configureTestingModule({
+      imports: [CompanySelectComponent, NoopAnimationsModule],
+      providers: [
+        { provide: CompanyService, useValue: { getAll: () => of({ data: [] }) } },
+        { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['error']) },
+      ],
+    }).createComponent(CompanySelectComponent);
+    fixture.componentRef.setInput('hint', 'ZZ_TEST_ escolha');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('ZZ_TEST_ escolha');
+    fixture.componentInstance.writeValue('c1');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).not.toContain('ZZ_TEST_ escolha');
   });
 });

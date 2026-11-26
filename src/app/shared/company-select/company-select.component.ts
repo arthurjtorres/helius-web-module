@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -17,7 +17,6 @@ import { MatSelect, MatOption } from '@angular/material/select';
     selector: 'app-company-select',
     templateUrl: './company-select.component.html',
     styles: [':host { display: block; } .company-select { width: 100%; }'],
-    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CompanySelectComponent), multi: true }],
     imports: [
         MatFormField,
@@ -33,17 +32,18 @@ export class CompanySelectComponent implements OnInit, ControlValueAccessor {
 
   /** Dica mostrada enquanto nenhuma empresa está escolhida. */
   @Input() hint = '';
-  companies: CompanyInterface[] = [];
-  value = '';
-  disabled = false;
+  companies = signal<CompanyInterface[]>([]);
+  value = signal('');
+  disabled = signal(false);
   private onChange?: (value: string) => void;
   private onTouched?: () => void;
 
   ngOnInit(): void {
     this.companyService.getAll().subscribe({
       next: res => {
-        this.companies = res.data ?? [];
-        if (this.companies.length === 1 && !this.value && !this.disabled) this.select(this.companies[0].companyId ?? '');
+        const companies = res.data ?? [];
+        this.companies.set(companies);
+        if (companies.length === 1 && !this.value() && !this.disabled()) this.select(companies[0].companyId ?? '');
       },
       error: (err: HttpErrorResponse) => {
         if (err.status !== 404 && err.status !== 403) this.notification.error('Não foi possível carregar as empresas.');
@@ -52,13 +52,13 @@ export class CompanySelectComponent implements OnInit, ControlValueAccessor {
   }
 
   select(value: string): void {
-    this.value = value;
+    this.value.set(value);
     this.onChange?.(value);
     this.onTouched?.();
   }
 
   writeValue(value: string | null): void {
-    this.value = value ?? '';
+    this.value.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -70,6 +70,6 @@ export class CompanySelectComponent implements OnInit, ControlValueAccessor {
   }
 
   setDisabledState(disabled: boolean): void {
-    this.disabled = disabled;
+    this.disabled.set(disabled);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -8,7 +8,6 @@ import { AsyncPipe } from '@angular/common';
 @Component({
     selector: 'app-profile',
     templateUrl: './profile.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './profile.component.scss',
     imports: [MatCard, MatCardHeader, MatCardAvatar, MatIcon, MatCardTitle, MatCardSubtitle, MatCardContent, MatDivider, AsyncPipe]
 })
