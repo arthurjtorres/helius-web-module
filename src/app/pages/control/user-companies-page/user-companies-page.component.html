@@ -3,7 +3,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Usuário</mat-label>
       <mat-select [value]="userId" (selectionChange)="selectUser($event.value)">
-        @for (u of users; track u.userId) { <mat-option [value]="u.userId">{{ u.userName }} ({{ u.email }})</mat-option> }
+        @for (u of users(); track u.userId) { <mat-option [value]="u.userId">{{ u.userName }} ({{ u.email }})</mat-option> }
       </mat-select>
     </mat-form-field>
     @if (userId) {

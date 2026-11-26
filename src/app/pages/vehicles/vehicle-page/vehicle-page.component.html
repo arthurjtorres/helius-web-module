@@ -90,7 +90,7 @@
     </mat-table>
   </div>
 
-  @if (!vehicleDataSource.data.length) {
+  @if (!hasRows()) {
     <p class="empty">{{ !companyId ? 'Selecione uma empresa para ver os veículos.' : includeInactive ? 'Nenhum veículo nesta empresa.' : 'Nenhum veículo ativo nesta empresa.' }}</p>
   }
 
