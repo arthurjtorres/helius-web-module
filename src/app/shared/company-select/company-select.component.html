@@ -1,7 +1,7 @@
 <mat-form-field appearance="outline" class="company-select">
   <mat-label>Empresa</mat-label>
-  <mat-select [value]="value" [disabled]="disabled" (selectionChange)="select($event.value)">
-    @for (c of companies; track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }} ({{ c.companyAcronym }})</mat-option> }
+  <mat-select [value]="value()" [disabled]="disabled()" (selectionChange)="select($event.value)">
+    @for (c of companies(); track c.companyId) { <mat-option [value]="c.companyId">{{ c.companyName }} ({{ c.companyAcronym }})</mat-option> }
   </mat-select>
-  @if (hint && !value) { <mat-hint>{{ hint }}</mat-hint> }
+  @if (hint && !value()) { <mat-hint>{{ hint }}</mat-hint> }
 </mat-form-field>

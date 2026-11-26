@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
@@ -31,7 +31,6 @@ export function yearValidator(control: AbstractControl): ValidationErrors | null
 @Component({
     selector: 'app-vehicles-form',
     templateUrl: './vehicles-form.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './vehicles-form.component.scss',
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatError, MatInput, MatDialogActions, MatButton, MatIcon]
 })
@@ -46,9 +45,9 @@ export class VehiclesFormComponent implements OnInit {
 
   form!: FormGroup;
   isEdit = false;
-  saving = false;
-  companies: CompanyInterface[] = [];
-  vehicleTypes: VehicleTypeInterface[] = [];
+  saving = signal(false);
+  companies = signal<CompanyInterface[]>([]);
+  vehicleTypes = signal<VehicleTypeInterface[]>([]);
   readonly cameraTypes = Object.values(CameraTypeEnum);
 
   ngOnInit(): void {
@@ -74,8 +73,8 @@ export class VehiclesFormComponent implements OnInit {
       companies: this.loadList(this.companyService.getAll(), 'empresas'),
       vehicleTypes: this.loadList(this.vehicleTypeService.list(), 'tipos de veículo'),
     }).subscribe(({ companies, vehicleTypes }) => {
-      this.companies = companies;
-      this.vehicleTypes = vehicleTypes;
+      this.companies.set(companies);
+      this.vehicleTypes.set(vehicleTypes);
     });
   }
 
@@ -91,7 +90,7 @@ export class VehiclesFormComponent implements OnInit {
   }
 
   onSave(): void {
-    if (this.form.invalid || this.saving) return;
+    if (this.form.invalid || this.saving()) return;
     const value = this.form.value;
     const payload: VehicleInterface = {
       ...value,
@@ -103,7 +102,7 @@ export class VehiclesFormComponent implements OnInit {
       capacity: Number(value.capacity),
     };
 
-    this.saving = true;
+    this.saving.set(true);
     const request = this.isEdit
       ? this.vehicleService.updateVehicle(this.data!.vehicleId!, payload)
       : this.vehicleService.createVehicle(payload);
@@ -114,7 +113,7 @@ export class VehiclesFormComponent implements OnInit {
         this.dialogRef.close(true);
       },
       error: (err: HttpErrorResponse) => {
-        this.saving = false;
+        this.saving.set(false);
         this.showSaveError(err);
       }
     });

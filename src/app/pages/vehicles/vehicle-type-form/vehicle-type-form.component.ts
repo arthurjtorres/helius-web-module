@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
@@ -27,7 +27,6 @@ export interface VehicleTypeFormData {
 @Component({
     selector: 'app-vehicle-type-form',
     templateUrl: './vehicle-type-form.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: '../vehicles-form/vehicles-form.component.scss',
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, MatSelect, MatOption, MatDialogActions, MatButton, MatIcon]
 })
@@ -40,7 +39,7 @@ export class VehicleTypeFormComponent implements OnInit {
 
   form!: FormGroup;
   isEdit = false;
-  saving = false;
+  saving = signal(false);
 
   ngOnInit(): void {
     const type = this.data.type;
@@ -59,9 +58,9 @@ export class VehicleTypeFormComponent implements OnInit {
   };
 
   onSave(): void {
-    if (this.form.invalid || this.saving) return;
+    if (this.form.invalid || this.saving()) return;
     const payload: VehicleTypeInterface = { ...this.form.value, typeVehicleName: String(this.form.value.typeVehicleName).trim() };
-    this.saving = true;
+    this.saving.set(true);
     const request = this.isEdit
       ? this.service.update(this.data.type!.typeVehicleId!, payload)
       : this.service.create(payload);
@@ -69,7 +68,7 @@ export class VehicleTypeFormComponent implements OnInit {
     request.subscribe({
       next: () => this.done(this.isEdit ? 'Tipo de veículo atualizado.' : 'Tipo de veículo cadastrado.'),
       error: (err: HttpErrorResponse) => {
-        this.saving = false;
+        this.saving.set(false);
         this.showSaveError(err);
       }
     });
