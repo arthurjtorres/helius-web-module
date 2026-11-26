@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, WritableSignal, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { catchError, map, of } from 'rxjs';
@@ -34,15 +34,16 @@ export interface SheetState {
   companyId: string;
   hasWifi: boolean | null;
   cameraType: string | null;
-  report?: ImportReport;
+  /** Signals: gravados em callbacks assíncronos (OnPush). */
+  report: WritableSignal<ImportReport | undefined>;
   confirmIds: string[];
   /** Prefixos ativos na base fora da aba (informativo na simulação). */
-  outside: string[];
+  outside: WritableSignal<string[]>;
   /** Os mesmos, com id, para desativar depois de importar (T19). */
-  outsideItems: OutsideItem[];
-  deactivating: boolean;
-  busy: boolean;
-  imported: boolean;
+  outsideItems: WritableSignal<OutsideItem[]>;
+  deactivating: WritableSignal<boolean>;
+  busy: WritableSignal<boolean>;
+  imported: WritableSignal<boolean>;
 }
 
 /**
@@ -54,7 +55,6 @@ export interface SheetState {
 @Component({
     selector: 'app-vehicles-import',
     templateUrl: './vehicles-import.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './vehicles-import.component.scss',
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, CompanySelectComponent, FormsModule, MatButton, MatIcon, MatCardTitle, MatFormField, MatLabel, MatSelect, MatOption, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatInput, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatProgressBar, ImportReportComponent, OutsideListComponent, MatDialogActions]
 })
@@ -71,14 +71,14 @@ export class VehiclesImportComponent implements OnInit {
     fabricationYear: 'Ano fab.', modelYear: 'Ano mod.', renavan: 'Renavam', typeVehicleName: 'Tipo',
     capacity: 'Capacidade', hasWifi: 'Wi-Fi', cameraType: 'Câmera', companyId: 'Empresa', activated: 'Ativo',
   };
-  companies: CompanyInterface[] = [];
+  readonly companies = signal<CompanyInterface[]>([]);
   /** Empresa escolhida antes do arquivo (T16: uma empresa e uma aba por importação). */
   companyId = '';
-  state?: SheetState;
+  readonly state = signal<SheetState | undefined>(undefined);
 
   ngOnInit(): void {
     this.companyService.getAll().subscribe({
-      next: res => this.companies = res.data ?? [],
+      next: res => this.companies.set(res.data ?? []),
       error: (err: HttpErrorResponse) => {
         if (err.status !== 404 && err.status !== 403) this.notification.error('Não foi possível carregar as empresas.');
       }
@@ -97,25 +97,29 @@ export class VehiclesImportComponent implements OnInit {
 
   /** Aceita só arquivo de uma aba; a empresa vem do combobox. */
   load(sheets: VehicleSheet[]): void {
-    this.state = undefined;
+    this.state.set(undefined);
     if (sheets.length !== 1) {
       this.notification.error('O arquivo deve ter uma única aba.');
       return;
     }
-    this.state = { sheet: sheets[0], companyId: this.companyId, hasWifi: null, cameraType: null, confirmIds: [], outside: [], outsideItems: [], deactivating: false, busy: false, imported: false };
+    this.state.set({
+      sheet: sheets[0], companyId: this.companyId, hasWifi: null, cameraType: null, confirmIds: [], report: signal(undefined),
+      outside: signal([]), outsideItems: signal([]), deactivating: signal(false), busy: signal(false), imported: signal(false),
+    });
   }
 
   /** Troca de empresa no combobox vale para a aba carregada e invalida a simulação. */
   companyChanged(): void {
-    if (!this.state) return;
-    this.state.companyId = this.companyId;
-    this.changed(this.state);
+    const state = this.state();
+    if (!state) return;
+    state.companyId = this.companyId;
+    this.changed(state);
   }
 
   /** A coluna `EMPRESA` da aba (nome ou sigla) não bate com a empresa escolhida. */
   private companyMismatch(state: SheetState): boolean {
     const key = normalizeText(state.sheet.companyName);
-    const company = this.companies.find(c => c.companyId === state.companyId);
+    const company = this.companies().find(c => c.companyId === state.companyId);
     return !!key && !!company && ![company.companyName, company.companyAcronym].some(n => n && normalizeText(n) === key);
   }
 
@@ -139,14 +143,14 @@ export class VehiclesImportComponent implements OnInit {
 
   /** Qualquer edição invalida a simulação anterior. */
   changed(state: SheetState): void {
-    state.report = undefined;
+    state.report.set(undefined);
     state.confirmIds = [];
-    state.outside = [];
+    state.outside.set([]);
   }
 
   canImport(state: SheetState): boolean {
-    const r = state.report;
-    return !!r && r.dryRun && !r.failed.length && !(r.missingVehicleTypes ?? []).length && !state.busy && !this.blocker(state);
+    const r = state.report();
+    return !!r && r.dryRun && !r.failed.length && !(r.missingVehicleTypes ?? []).length && !state.busy() && !this.blocker(state);
   }
 
   simulate(state: SheetState): void {
@@ -163,17 +167,17 @@ export class VehiclesImportComponent implements OnInit {
       ...row, hasWifi: row.hasWifi ?? state.hasWifi, cameraType: row.cameraType ?? state.cameraType,
     }));
     const lines = state.sheet.rows.map(r => r.line);
-    state.busy = true;
+    state.busy.set(true);
     this.vehicleService.bulkImport(state.companyId, vehicles, dryRun, dryRun ? [] : state.confirmIds).subscribe({
       next: res => {
-        state.busy = false;
-        state.report = withFileLines(res.data, lines);
-        if (!dryRun) state.imported = true;
+        state.busy.set(false);
+        state.report.set(withFileLines(res.data, lines));
+        if (!dryRun) state.imported.set(true);
         this.loadOutside(state);
       },
       error: (err: HttpErrorResponse) => {
-        state.busy = false;
-        if (err.status === 400 && err.error?.data) state.report = withFileLines(err.error.data, lines);
+        state.busy.set(false);
+        if (err.status === 400 && err.error?.data) state.report.set(withFileLines(err.error.data, lines));
         else if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível importar.');
       }
     });
@@ -186,22 +190,22 @@ export class VehiclesImportComponent implements OnInit {
       map(res => (res.data ?? []).filter(v => v.vehicleId && !inSheet.has(v.vehicleNumber)).map(v => ({ id: v.vehicleId!, key: v.vehicleNumber }))),
       catchError(() => of([] as OutsideItem[])),
     ).subscribe(items => {
-      state.outsideItems = items;
-      state.outside = items.map(i => i.key);
+      state.outsideItems.set(items);
+      state.outside.set(items.map(i => i.key));
     });
   }
 
   /** Desativa em lote os veículos marcados na lista "fora da planilha" (tudo ou nada). */
   deactivate(state: SheetState, ids: string[]): void {
-    state.deactivating = true;
+    state.deactivating.set(true);
     this.vehicleService.bulkDeactivate(ids).subscribe({
       next: res => {
-        state.deactivating = false;
-        state.outsideItems = state.outsideItems.filter(i => !ids.includes(i.id));
+        state.deactivating.set(false);
+        state.outsideItems.update(items => items.filter(i => !ids.includes(i.id)));
         this.notification.info(res.message || 'Veículos desativados.');
       },
       error: (err: HttpErrorResponse) => {
-        state.deactivating = false;
+        state.deactivating.set(false);
         if (err.status !== 403) this.notification.error(err.error?.message || 'Não foi possível desativar os veículos.');
         if (err.status === 409) this.loadOutside(state);
       }
@@ -209,6 +213,6 @@ export class VehiclesImportComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close(!!this.state?.imported);
+    this.dialogRef.close(!!this.state()?.imported());
   }
 }

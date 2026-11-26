@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { VehicleRow, VehicleSheet } from './vehicle-sheet';
 import { ImportReport } from '../../../shared/import-report/import-report.model';
 
 describe('VehiclesImportComponent', () => {
+  let fixture: ComponentFixture<unknown>;
   let component: VehiclesImportComponent;
   let vehicleService: jasmine.SpyObj<VehicleService>;
   let dialogRef: jasmine.SpyObj<MatDialogRef<VehiclesImportComponent>>;
@@ -32,7 +33,7 @@ describe('VehiclesImportComponent', () => {
   function ready(s = sheet()): SheetState {
     component.companyId = 'c1';
     component.load([s]);
-    const state = component.state!;
+    const state = component.state()!;
     state.hasWifi = false;
     state.cameraType = 'TACOM';
     return state;
@@ -53,15 +54,16 @@ describe('VehiclesImportComponent', () => {
         { provide: MatDialogRef, useValue: dialogRef },
       ],
     }).compileComponents();
-    const fixture = TestBed.createComponent(VehiclesImportComponent);
-    component = fixture.componentInstance;
+    const created = TestBed.createComponent(VehiclesImportComponent);
+    component = created.componentInstance;
+    fixture = created;
     fixture.detectChanges();
   });
 
   it('recusa arquivo com mais de uma aba', () => {
     component.companyId = 'c1';
     component.load([sheet(), sheet({ name: 'B' })]);
-    expect(component.state).toBeUndefined();
+    expect(component.state()).toBeUndefined();
     expect(TestBed.inject(NotificationService).error).toHaveBeenCalledWith('O arquivo deve ter uma única aba.');
   });
 
@@ -83,7 +85,7 @@ describe('VehiclesImportComponent', () => {
   it('bloqueia simulação sem padrões, com capacidade inválida ou acima de 500 linhas', () => {
     component.companyId = 'c1';
     component.load([sheet()]);
-    expect(component.blocker(component.state!)).toContain('Wi-Fi');
+    expect(component.blocker(component.state()!)).toContain('Wi-Fi');
     expect(component.blocker(ready(sheet({ rows: [row({ capacity: null })] })))).toContain('capacidade');
     expect(component.blocker(ready(sheet({ rows: Array.from({ length: 501 }, (_, i) => row({ line: i })) })))).toContain('500');
     expect(component.blocker(ready())).toBeNull();
@@ -92,7 +94,7 @@ describe('VehiclesImportComponent', () => {
   it('linha com Wi-Fi e câmera próprios dispensa o padrão', () => {
     component.companyId = 'c1';
     component.load([sheet({ rows: [row({ hasWifi: true, cameraType: 'ENGIS' })] })]);
-    expect(component.blocker(component.state!)).toBeNull();
+    expect(component.blocker(component.state()!)).toBeNull();
   });
 
   it('simula com os padrões aplicados, sem a linha, e calcula os fora da planilha', () => {
@@ -104,7 +106,7 @@ describe('VehiclesImportComponent', () => {
     expect(dryRun).toBeTrue();
     expect(vehicles[0]).toEqual(jasmine.objectContaining({ hasWifi: false, cameraType: 'TACOM', capacity: 44 }));
     expect('line' in vehicles[0]).toBeFalse();
-    expect(state.outside).toEqual(['ZZ_TEST_999']);
+    expect(state.outside()).toEqual(['ZZ_TEST_999']);
     expect(component.canImport(state)).toBeTrue();
   });
 
@@ -114,7 +116,7 @@ describe('VehiclesImportComponent', () => {
     })));
     const state = ready();
     component.simulate(state);
-    expect(state.report?.failed.length).toBe(1);
+    expect(state.report()?.failed.length).toBe(1);
     expect(component.canImport(state)).toBeFalse();
   });
 
@@ -126,7 +128,7 @@ describe('VehiclesImportComponent', () => {
     vehicleService.bulkImport.and.returnValue(of({ data: report({ dryRun: false }) }));
     component.import(state);
     expect(vehicleService.bulkImport.calls.mostRecent().args.slice(2)).toEqual([false, ['v3']]);
-    expect(state.imported).toBeTrue();
+    expect(state.imported()).toBeTrue();
     component.close();
     expect(dialogRef.close).toHaveBeenCalledWith(true);
   });
@@ -136,10 +138,10 @@ describe('VehiclesImportComponent', () => {
     vehicleService.bulkDeactivate.and.returnValue(of({ message: '1 veículo(s) desativado(s).', data: { deactivated: 1 } }));
     const state = ready();
     component.import(state);
-    expect(state.outsideItems).toEqual([{ id: 'v9', key: 'ZZ_TEST_999' }]);
+    expect(state.outsideItems()).toEqual([{ id: 'v9', key: 'ZZ_TEST_999' }]);
     component.deactivate(state, ['v9']);
     expect(vehicleService.bulkDeactivate).toHaveBeenCalledWith(['v9']);
-    expect(state.outsideItems).toEqual([]);
+    expect(state.outsideItems()).toEqual([]);
     expect(TestBed.inject(NotificationService).info).toHaveBeenCalledWith('1 veículo(s) desativado(s).');
   });
 
@@ -151,7 +153,7 @@ describe('VehiclesImportComponent', () => {
     component.deactivate(state, ['v9']);
     expect(TestBed.inject(NotificationService).error).toHaveBeenCalledWith('Nada foi desativado.');
     expect(vehicleService.getVehiclesByCompany).toHaveBeenCalledTimes(2);
-    expect(state.deactivating).toBeFalse();
+    expect(state.deactivating()).toBeFalse();
   });
 
   it('editar depois de simular exige nova simulação', () => {
@@ -160,5 +162,16 @@ describe('VehiclesImportComponent', () => {
     component.simulate(state);
     component.changed(state);
     expect(component.canImport(state)).toBeFalse();
+  });
+
+  it('a tela acompanha o arquivo carregado e o relatório (OnPush)', () => {
+    const el = fixture.nativeElement as HTMLElement;
+    vehicleService.bulkImport.and.returnValue(of({ data: report() }));
+    const state = ready();
+    fixture.detectChanges();
+    expect(el.querySelector('.table-preview-card')).not.toBeNull();
+    component.simulate(state);
+    fixture.detectChanges();
+    expect(el.querySelector('app-import-report')).not.toBeNull();
   });
 });
