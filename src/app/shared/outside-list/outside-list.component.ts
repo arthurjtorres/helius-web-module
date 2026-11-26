@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from '@angular/material/card';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatList, MatListItem } from '@angular/material/list';
@@ -18,7 +18,6 @@ export interface OutsideItem {
 @Component({
     selector: 'app-outside-list',
     templateUrl: './outside-list.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styles: ['.actions { display: flex; justify-content: flex-end; }', '.outside-list { max-height: 20rem; overflow: auto; }'],
     imports: [
         MatCard,

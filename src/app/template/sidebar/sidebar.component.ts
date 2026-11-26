@@ -1,4 +1,4 @@
-import { Component, Input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { MatNavList } from '@angular/material/list';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
 
@@ -13,7 +13,6 @@ export interface MenuItem {
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './sidebar.component.scss',
     imports: [MatNavList, MenuItemComponent]
 })

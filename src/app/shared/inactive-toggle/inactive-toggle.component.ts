@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { MatCheckbox } from '@angular/material/checkbox';
 
@@ -8,7 +8,6 @@ import { MatCheckbox } from '@angular/material/checkbox';
  */
 @Component({
     selector: 'app-inactive-toggle',
-    changeDetection: ChangeDetectionStrategy.Eager,
     template: `@if (visible) {
     <mat-checkbox [checked]="true" (change)="includeInactiveChange.emit(!$event.checked)">Ocultar inativos</mat-checkbox>
   }`,
