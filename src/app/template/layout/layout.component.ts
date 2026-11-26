@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -15,7 +15,6 @@ import { AsyncPipe } from '@angular/common';
 @Component({
     selector: 'app-layout',
     templateUrl: './layout.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './layout.component.scss',
     imports: [MatToolbar, MatIconButton, MatIcon, MatMenuTrigger, MatMenu, MatDivider, MatMenuItem, MatSlideToggle, MatSidenavContainer, MatSidenav, SidebarComponent, MatSidenavContent, RouterOutlet, AsyncPipe]
 })

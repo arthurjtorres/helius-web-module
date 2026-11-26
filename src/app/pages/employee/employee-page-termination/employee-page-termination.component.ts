@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
@@ -10,7 +10,6 @@ import { MatButton } from '@angular/material/button';
 /** Diálogo de desligamento (T20): pede a data de rescisão e a devolve ao fechar (`AAAA-MM-DD`). */
 @Component({
     selector: 'app-employee-page-termination',
-    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './employee-page-termination.component.html',
     imports: [
         MatDialogTitle,
