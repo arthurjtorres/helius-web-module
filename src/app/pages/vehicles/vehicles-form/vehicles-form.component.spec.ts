@@ -68,13 +68,13 @@ describe('VehiclesFormComponent', () => {
 
   it('carrega empresas e tipos para os selects', () => {
     create(null);
-    expect(component.companies.length).toBe(1);
-    expect(component.vehicleTypes.length).toBe(1);
+    expect(component.companies().length).toBe(1);
+    expect(component.vehicleTypes().length).toBe(1);
   });
 
   it('trata 404 dos tipos como lista vazia, sem notificar', () => {
     create(null, throwError(() => new HttpErrorResponse({ status: 404 })));
-    expect(component.vehicleTypes).toEqual([]);
+    expect(component.vehicleTypes()).toEqual([]);
     expect(notification.error).not.toHaveBeenCalled();
   });
 

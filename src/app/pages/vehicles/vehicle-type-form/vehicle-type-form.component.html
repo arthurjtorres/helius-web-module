@@ -22,7 +22,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" color="warn">Descartar</button>
-  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || saving">
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || saving()">
     <mat-icon>{{ isEdit ? 'edit' : 'save' }}</mat-icon> {{ isEdit ? 'Atualizar' : 'Cadastrar' }}
   </button>
 </mat-dialog-actions>

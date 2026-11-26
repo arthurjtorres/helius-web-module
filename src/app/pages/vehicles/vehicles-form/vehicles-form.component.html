@@ -7,22 +7,22 @@
       <mat-form-field appearance="outline" class="field-item">
         <mat-label>Empresa</mat-label>
         <mat-select formControlName="fkVehicleCompanyId">
-          @for (company of companies; track company.companyId) {
+          @for (company of companies(); track company.companyId) {
             <mat-option [value]="company.companyId">{{ company.companyName }}</mat-option>
           }
         </mat-select>
-        @if (!companies.length) { <mat-hint>Nenhuma empresa cadastrada.</mat-hint> }
+        @if (!companies().length) { <mat-hint>Nenhuma empresa cadastrada.</mat-hint> }
         <mat-error>Informe a empresa.</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="field-item">
         <mat-label>Tipo</mat-label>
         <mat-select formControlName="fkTypeVehicleId">
-          @for (type of vehicleTypes; track type.typeVehicleId) {
+          @for (type of vehicleTypes(); track type.typeVehicleId) {
             <mat-option [value]="type.typeVehicleId">{{ type.typeVehicleName }}</mat-option>
           }
         </mat-select>
-        @if (!vehicleTypes.length) { <mat-hint>Nenhum tipo de veículo cadastrado.</mat-hint> }
+        @if (!vehicleTypes().length) { <mat-hint>Nenhum tipo de veículo cadastrado.</mat-hint> }
         <mat-error>Informe o tipo.</mat-error>
       </mat-form-field>
     </div>
@@ -110,7 +110,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" color="warn">Descartar</button>
-  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || saving">
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || saving()">
     <mat-icon>{{ isEdit ? 'edit' : 'save' }}</mat-icon> {{ isEdit ? 'Atualizar' : 'Cadastrar' }}
   </button>
 </mat-dialog-actions>

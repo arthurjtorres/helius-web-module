@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { ImportFieldChange, ImportItem, ImportReport } from './import-report.model';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
 import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
@@ -14,7 +14,6 @@ import { MatList, MatListItem, MatListItemTitle, MatListItemLine } from '@angula
 @Component({
     selector: 'app-import-report',
     templateUrl: './import-report.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './import-report.component.scss',
     imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatChipSet, MatChip, MatCheckbox, MatList, MatListItem, MatListItemTitle, MatListItemLine]
 })

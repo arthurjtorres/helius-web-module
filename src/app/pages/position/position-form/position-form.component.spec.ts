@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { of, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 
 import { PositionFormComponent, PositionFormData } from './position-form.component';
 import { PositionService } from '../../../core/services/position.service';
@@ -71,5 +71,20 @@ describe('PositionFormComponent', () => {
     c.onSave();
     expect(service.reactivate).toHaveBeenCalledWith('p9');
     expect(dialogRef.close).toHaveBeenCalledWith(true);
+  });
+
+  it('erro do servidor reabilita o botão na tela (OnPush)', () => {
+    const result = new Subject<never>();
+    service.update.and.returnValue(result);
+    TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: { position: existing[0], existing } });
+    const fixture = TestBed.createComponent(PositionFormComponent);
+    fixture.detectChanges();
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button[color="primary"]');
+    button.click();
+    fixture.detectChanges();
+    expect(button.disabled).toBeTrue();
+    result.error(new HttpErrorResponse({ status: 500 }));
+    fixture.detectChanges();
+    expect(button.disabled).toBeFalse();
   });
 });

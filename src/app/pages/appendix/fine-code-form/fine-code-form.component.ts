@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { FineCodeService } from '../../../core/services/fine-code.service';
@@ -11,7 +11,6 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
     selector: 'app-fine-code-form',
     templateUrl: './fine-code-form.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './fine-code-form.component.scss',
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton, MatIcon]
 })
