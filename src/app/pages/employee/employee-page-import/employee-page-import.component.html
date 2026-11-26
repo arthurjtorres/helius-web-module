@@ -6,25 +6,25 @@
       <mat-card-subtitle>Arquivo .txt do RH ou planilha .xlsx, uma empresa por vez. A importação é tudo ou nada.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content class="grid-form">
-      <app-company-select [(ngModel)]="companyId" (ngModelChange)="changed()" [disabled]="imported || busy"
+      <app-company-select [(ngModel)]="companyId" (ngModelChange)="changed()" [disabled]="imported() || busy()"
         hint="Selecione uma empresa para importar"></app-company-select>
 
       <div class="file-input-wrapper">
         <input type="file" #fileInput hidden accept=".txt,.xlsx,.xls" aria-label="Arquivo de funcionários"
-          (change)="onFile($event)" [disabled]="busy" />
+          (change)="onFile($event)" [disabled]="busy()" />
         <button mat-stroked-button color="primary" class="full-width-button" (click)="fileInput.click()"
-          [disabled]="!companyId || busy || imported">
+          [disabled]="!companyId || busy() || imported()">
           <mat-icon>attach_file</mat-icon>
-          {{ file ? 'Trocar arquivo' : 'Selecionar arquivo' }}
+          {{ file() ? 'Trocar arquivo' : 'Selecionar arquivo' }}
         </button>
       </div>
     </mat-card-content>
   </mat-card>
 
-  @if (file && !file.error) {
+  @if (!file()?.error && file(); as file) {
     <mat-card class="table-preview-card" appearance="outlined">
       <mat-card-header>
-        <mat-card-title>{{ file.rows.length }} funcionários @if (imported) { <span class="ok">(importados)</span> }</mat-card-title>
+        <mat-card-title>{{ file.rows.length }} funcionários @if (imported()) { <span class="ok">(importados)</span> }</mat-card-title>
         @if (file.rows.length > previewRows) {
           <mat-card-subtitle>Mostrando {{ previewRows }} de {{ file.rows.length }}; a simulação confere todas.</mat-card-subtitle>
         }
@@ -67,33 +67,33 @@
   }
 
   @if (blocker(); as reason) { <p class="error">{{ reason }}</p> }
-  @if (busy) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
+  @if (busy()) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
 
-  @if (report) {
+  @if (report(); as report) {
     <app-import-report [report]="report" keyField="registration" idField="employeeId" keyLabel="Matrícula"
-      [fieldLabels]="fieldLabels" missingLabel="Cargos não cadastrados" [outside]="imported ? [] : outsideKeys"
+      [fieldLabels]="fieldLabels" missingLabel="Cargos não cadastrados" [outside]="imported() ? [] : outsideKeys"
       (confirmChange)="confirmIds = $event"></app-import-report>
   }
 
-  @if (imported && outsideItems.length) {
+  @if (imported() && outsideItems().length) {
     <mat-form-field appearance="outline">
       <mat-label>Data de rescisão</mat-label>
       <input matInput type="date" name="terminationDate" required [max]="maxTerminationDate"
-        [(ngModel)]="terminationDate" [disabled]="deactivating" />
+        [(ngModel)]="terminationDate" [disabled]="deactivating()" />
       <mat-hint>Vale para todos os desligados da lista abaixo.</mat-hint>
     </mat-form-field>
-    <app-outside-list [items]="outsideItems" keyLabel="Matrícula" noun="funcionários"
-      [busy]="deactivating || !terminationDate" (deactivate)="deactivate($event)"></app-outside-list>
+    <app-outside-list [items]="outsideItems()" keyLabel="Matrícula" noun="funcionários"
+      [busy]="deactivating() || !terminationDate" (deactivate)="deactivate($event)"></app-outside-list>
   }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="close()" [disabled]="busy">Fechar</button>
-  <button mat-stroked-button color="primary" (click)="simulate()" [disabled]="!!blocker() || busy || imported">
+  <button mat-button (click)="close()" [disabled]="busy()">Fechar</button>
+  <button mat-stroked-button color="primary" (click)="simulate()" [disabled]="!!blocker() || busy() || imported()">
     <mat-icon>fact_check</mat-icon>
     Simular
   </button>
-  <button mat-flat-button color="primary" (click)="import()" [disabled]="!canImport() || imported">
+  <button mat-flat-button color="primary" (click)="import()" [disabled]="!canImport() || imported()">
     <mat-icon>cloud_upload</mat-icon>
     Importar
   </button>

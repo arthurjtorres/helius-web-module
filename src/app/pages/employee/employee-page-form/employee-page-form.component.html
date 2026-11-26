@@ -24,7 +24,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Função</mat-label>
         <mat-select formControlName="position">
-          @for (p of positions; track p) {
+          @for (p of positions(); track p) {
             <mat-option [value]="p.positionId">
               {{ p.positionName }}
             </mat-option>
@@ -35,7 +35,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Setor</mat-label>
         <mat-select formControlName="sector">
-          @for (s of sectors; track s) {
+          @for (s of sectors(); track s) {
             <mat-option [value]="s.sectorId">
               {{ s.sectorName }}
             </mat-option>
@@ -46,7 +46,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Departamento</mat-label>
         <mat-select formControlName="department">
-          @for (d of departments; track d) {
+          @for (d of departments(); track d) {
             <mat-option [value]="d.departmentId">
               {{ d.departmentName }}
             </mat-option>
