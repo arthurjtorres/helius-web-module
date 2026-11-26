@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +23,6 @@ import { MatDivider } from '@angular/material/list';
 @Component({
     selector: 'app-penalty-page',
     templateUrl: './penalty-page.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './penalty-page.component.scss',
     imports: [
         MatFabButton,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +23,6 @@ import { MatTooltip } from '@angular/material/tooltip';
 @Component({
     selector: 'app-vehicle-page',
     templateUrl: './vehicle-page.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './vehicle-page.component.scss',
     imports: [MatFabButton, MatIcon, CompanySelectComponent, FormsModule, InactiveToggleComponent, MatFormField, MatInput, MatIconButton, MatSuffix, MatDivider, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator]
 })
@@ -45,6 +44,9 @@ export class VehiclePageComponent implements OnInit {
   ]
 
   vehicleDataSource = new MatTableDataSource<VehicleInterface>([]);
+
+  /** Signal: a mensagem de lista vazia fica fora da tabela (OnPush). */
+  readonly hasRows = signal(false);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -80,6 +82,7 @@ export class VehiclePageComponent implements OnInit {
 
   private showVehicles(vehicles: VehicleInterface[]): void {
     this.vehicleDataSource.data = vehicles;
+    this.hasRows.set(vehicles.length > 0);
     setTimeout(() => {
       this.vehicleDataSource.paginator = this.paginator;
       this.vehicleDataSource.sort = this.sort;

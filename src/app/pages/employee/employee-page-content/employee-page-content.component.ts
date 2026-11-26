@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import { MatPaginator } from '@angular/material/paginator';
@@ -23,7 +23,6 @@ import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-employee-page-content',
     templateUrl: './employee-page-content.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './employee-page-content.component.scss',
     imports: [MatFabButton, MatIcon, CompanySelectComponent, FormsModule, InactiveToggleComponent, MatFormField, MatInput, MatIconButton, MatSuffix, MatDivider, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator, DatePipe]
 })
@@ -44,6 +43,9 @@ export class EmployeePageContentComponent implements OnInit {
   ]
 
   employeeDataSource = new MatTableDataSource<EmployeeView>([]);
+
+  /** Signal: a mensagem de lista vazia fica fora da tabela (OnPush). */
+  readonly hasRows = signal(false);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -96,6 +98,7 @@ export class EmployeePageContentComponent implements OnInit {
 
   private showEmployees(employees: EmployeeView[]): void {
     this.employeeDataSource.data = employees;
+    this.hasRows.set(employees.length > 0);
     setTimeout(() => {
       this.employeeDataSource.paginator = this.paginator;
       this.employeeDataSource.sort = this.sort;
