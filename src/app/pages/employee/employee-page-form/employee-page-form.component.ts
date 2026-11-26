@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
@@ -26,7 +26,6 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
     selector: 'app-employee-page-form',
     templateUrl: './employee-page-form.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './employee-page-form.component.scss',
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatCard, MatFormField, MatLabel, MatInput, MatHint, CompanySelectComponent, MatSelect, MatOption, MatError, MatDialogActions, MatButton, MatIcon]
 })
@@ -45,9 +44,9 @@ export class EmployeePageFormComponent implements OnInit {
   employeeForm!: FormGroup;
   isEdit = false;
 
-  positions: PositionInterface[] = [];
-  sectors: SectorInterface[] = [];
-  departments: DepartmentInterface[] = [];
+  readonly positions = signal<PositionInterface[]>([]);
+  readonly sectors = signal<SectorInterface[]>([]);
+  readonly departments = signal<DepartmentInterface[]>([]);
 
   ngOnInit(): void {
     this.isEdit = !!this.data;
@@ -87,9 +86,9 @@ export class EmployeePageFormComponent implements OnInit {
       departments: this.departmentService.getAll(),
     }).subscribe({
       next: (response) => {
-        this.positions = response.positions.data;
-        this.sectors = response.sectors.data;
-        this.departments = response.departments.data;
+        this.positions.set(response.positions.data);
+        this.sectors.set(response.sectors.data);
+        this.departments.set(response.departments.data);
 
         if (this.isEdit) {
           this.employeeForm.patchValue({
