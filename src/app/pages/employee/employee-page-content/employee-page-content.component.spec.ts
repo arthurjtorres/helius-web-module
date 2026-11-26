@@ -122,4 +122,15 @@ describe('EmployeePageContentComponent', () => {
     fixture.componentInstance.reactivateEmployee({ employeeId: 'e1', registration: 'ZZT000001' } as never);
     expect(service.reactivate).not.toHaveBeenCalled();
   }));
+
+  it('a mensagem de lista vazia acompanha a resposta', fakeAsync(() => {
+    const fixture = create('c1');
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.empty')).toBeNull();
+    service.getByCompany.and.returnValue(of({ data: [] }) as never);
+    fixture.componentInstance.loadData();
+    tick();
+    fixture.detectChanges();
+    expect(el.querySelector('.empty')).not.toBeNull();
+  }));
 });

@@ -142,4 +142,14 @@ describe('VehiclePageComponent', () => {
     fixture.componentInstance.reactivateVehicle(vehicle);
     expect(notification.error).toHaveBeenCalledWith('Tipo de veículo inativo.');
   }));
+
+  it('a mensagem de lista vazia acompanha a resposta', fakeAsync(() => {
+    const el = render(of({ data: [vehicle] }));
+    expect(el.querySelector('.empty')).toBeNull();
+    vehicleService.getVehiclesByCompany.and.returnValue(of({ data: [] }));
+    fixture.componentInstance.loadData();
+    tick();
+    fixture.detectChanges();
+    expect(el.querySelector('.empty')).not.toBeNull();
+  }));
 });

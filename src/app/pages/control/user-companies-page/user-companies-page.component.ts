@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
@@ -22,7 +22,6 @@ import { MatTooltip } from '@angular/material/tooltip';
 @Component({
     selector: 'app-user-companies-page',
     templateUrl: './user-companies-page.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss',
     imports: [MatFormField, MatLabel, MatSelect, MatOption, CompanySelectComponent, FormsModule, MatFabButton, MatIcon, MatDivider, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
@@ -33,27 +32,27 @@ export class UserCompaniesPageComponent implements OnInit {
 
   readonly columns = ['company', 'actions'];
   // shortcut: lista todos os colaboradores num select; trocar por busca no servidor quando houver muitos usuários.
-  users: UserSummary[] = [];
+  readonly users = signal<UserSummary[]>([]);
   userId = '';
   companyId = '';
   dataSource = new MatTableDataSource<UserCompanyLink>([]);
   /** Empresas visíveis a quem concede, para mostrar o nome. */
-  private companyNames = new Map<string, string>();
+  private readonly companyNames = signal(new Map<string, string>());
 
   ngOnInit(): void {
     this.service.getCollaborators().subscribe({
-      next: res => this.users = res.data ?? [],
+      next: res => this.users.set(res.data ?? []),
       error: (err: HttpErrorResponse) => this.fail(err, 'Não foi possível carregar os usuários.'),
     });
     this.companyService.getAll().subscribe({
-      next: res => (res.data ?? []).forEach((c: CompanyInterface) => this.companyNames.set(c.companyId ?? '', `${c.companyName} (${c.companyAcronym})`)),
+      next: res => this.companyNames.set(new Map((res.data ?? []).map((c: CompanyInterface) => [c.companyId ?? '', `${c.companyName} (${c.companyAcronym})`]))),
       error: (err: HttpErrorResponse) => this.fail(err, 'Não foi possível carregar as empresas.'),
     });
   }
 
   /** Nome da empresa, ou o id se ela estiver fora do escopo de quem consulta. */
   companyName(id: string): string {
-    return this.companyNames.get(id) ?? id;
+    return this.companyNames().get(id) ?? id;
   }
 
   selectUser(userId: string): void {
