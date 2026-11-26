@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
@@ -18,7 +18,6 @@ import { MatTooltip } from '@angular/material/tooltip';
 @Component({
     selector: 'app-position-page',
     templateUrl: './position-page.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: '../../vehicles/vehicle-page/vehicle-page.component.scss',
     imports: [InactiveToggleComponent, MatFabButton, MatIcon, MatDivider, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatTooltip, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
