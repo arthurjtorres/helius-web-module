@@ -7,7 +7,7 @@ import PositionInterface from '../../../core/interfaces/position.interface';
 import SectorInterface from '../../../core/interfaces/sector.interface';
 import DepartmentInterface from '../../../core/interfaces/department.interface';
 import { DepartmentService } from '../../../core/services/department.service';
-import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { PositionService } from '../../../core/services/position.service';
 import { SectorService } from '../../../core/services/sector.service';
 import { DocumentService } from '../../../core/services/document.service';
@@ -81,24 +81,33 @@ export class EmployeePageFormComponent implements OnInit {
 
   loadResources() {
     forkJoin({
-      positions: this.positionService.getAll(),
-      sectors: this.sectorService.getAll(),
-      departments: this.departmentService.getAll(),
-    }).subscribe({
-      next: (response) => {
-        this.positions.set(response.positions.data);
-        this.sectors.set(response.sectors.data);
-        this.departments.set(response.departments.data);
+      positions: this.loadList(this.positionService.getAll(), 'cargos'),
+      sectors: this.loadList(this.sectorService.getAll(), 'setores'),
+      departments: this.loadList(this.departmentService.getAll(), 'departamentos'),
+    }).subscribe(({ positions, sectors, departments }) => {
+      this.positions.set(positions);
+      this.sectors.set(sectors);
+      this.departments.set(departments);
 
-        if (this.isEdit) {
-          this.employeeForm.patchValue({
-            position: this.data?.fkPositionId,
-            sector: this.data?.fkSectorId,
-            department: this.data?.fkDepartmentId
-          });
-        }
+      if (this.isEdit) {
+        this.employeeForm.patchValue({
+          position: this.data?.fkPositionId,
+          sector: this.data?.fkSectorId,
+          department: this.data?.fkDepartmentId
+        });
       }
     });
+  }
+
+  /** Busca uma lista para os selects; 404 = vazia, 403 já avisado pelo interceptor. */
+  private loadList<T>(request: Observable<{ data: T[] }>, label: string): Observable<T[]> {
+    return request.pipe(
+      map(res => res.data ?? []),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status !== 404 && err.status !== 403) this.notification.error(`Não foi possível carregar ${label}.`);
+        return of([]);
+      })
+    );
   }
 
   private createNewPersonAndDocument(raw: { fullName: string; birthDate: string; cpf: string }): Observable<string> {
