@@ -24,6 +24,9 @@ export interface EmployeeDTO {
   fkPositionId?: string;
   fkSectorId?: string;
   fkDepartmentId?: string;
+  /** Da pessoa; só na edição (T27). */
+  fullName?: string;
+  birthDate?: string;
 }
 
 /** Funcionário como o `registry` devolve em `GET /employee` (associações incluídas). */

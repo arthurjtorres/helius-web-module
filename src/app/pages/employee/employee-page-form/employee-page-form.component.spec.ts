@@ -51,6 +51,18 @@ describe('EmployeePageFormComponent', () => {
     expect(JSON.parse(JSON.stringify(payload))).toEqual({ registration: '900001', admissionDate: '2026-01-02', fkPersonId: 'p1', fkCompanyId: 'c1' });
   });
 
+  it('na edição envia nome e nascimento da pessoa (T27)', () => {
+    const update = spyOn(TestBed.inject(EmployeeService), 'update').and.returnValue(of({ registration: '900001', fkPersonId: 'p1' }));
+    component.isEdit = true;
+    component.data = { employeeId: 'e1' } as EmployeeView;
+    component.employeeForm.get('cpf')?.disable();
+    component.employeeForm.patchValue({
+      personId: 'p1', registration: '900001', fullName: 'ZZ_TEST_ Edicao', birthDate: '1991-02-01', admissionDate: '2026-01-02', company: 'c1',
+    });
+    component.onSave();
+    expect(update.calls.mostRecent().args[1]).toEqual(jasmine.objectContaining({ fullName: 'ZZ_TEST_ Edicao', birthDate: '1991-02-01' }));
+  });
+
   it('lista vazia (404) em setor e departamento não impede a de cargos nem o preenchimento na edição', () => {
     const empty = throwError(() => new HttpErrorResponse({ status: 404 }));
     const cargo = { positionId: 'c1', positionName: 'ZZ_TEST_' };

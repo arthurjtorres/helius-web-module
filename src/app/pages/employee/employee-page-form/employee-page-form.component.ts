@@ -163,7 +163,8 @@ export class EmployeePageFormComponent implements OnInit {
         };
 
         return this.isEdit && this.data
-          ? this.employeeService.update(this.data.employeeId, employeePayload)
+          // nome e nascimento são da pessoa; o registry os grava junto (T27). Na criação a API os recusa
+          ? this.employeeService.update(this.data.employeeId, { ...employeePayload, fullName: raw.fullName, birthDate: raw.birthDate })
           : this.employeeService.create(employeePayload);
       })
     ).subscribe({
