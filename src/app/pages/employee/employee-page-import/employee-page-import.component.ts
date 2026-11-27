@@ -9,7 +9,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { readWorkbook } from '../../../core/utils/sheet-reader';
 import { ImportReport, withFileLines } from '../../../shared/import-report/import-report.model';
 import { OutsideItem, OutsideListComponent } from '../../../shared/outside-list/outside-list.component';
-import { EmployeeFile, parseEmployeeSheet, parseEmployeeWorkbook, txtToSheet } from './employee-sheet';
+import { EmployeeFile, parseEmployeeTxt, parseEmployeeWorkbook } from './employee-sheet';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatCardTitle } from '@angular/material/card';
 import { CompanySelectComponent } from '../../../shared/company-select/company-select.component';
@@ -76,7 +76,7 @@ export class EmployeePageImportComponent {
     try {
       const data = await file.arrayBuffer();
       this.load(file.name.toLowerCase().endsWith('.txt')
-        ? parseEmployeeSheet(txtToSheet(decodeText(data)))
+        ? parseEmployeeTxt(decodeText(data))
         : parseEmployeeWorkbook(readWorkbook(data)));
     } catch {
       this.notification.error('Não foi possível ler o arquivo. Use o .txt do RH ou uma planilha .xlsx.');

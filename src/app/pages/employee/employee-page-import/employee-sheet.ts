@@ -75,6 +75,18 @@ export function parseEmployeeSheet(sheet: SheetData): EmployeeFile {
   };
 }
 
+/**
+ * `.txt` do RH: ignora o rodapé do export (sem matrícula numérica e sem data). Linha com data é
+ * mantida mesmo com matrícula errada, para o `dryRun` apontar: sumindo, o funcionário apareceria
+ * em "fora da planilha", onde pode ser desligado.
+ */
+export function parseEmployeeTxt(text: string): EmployeeFile {
+  const file = parseEmployeeSheet(txtToSheet(text));
+  const date = /^\d{2}\/\d{2}\/\d{4}$/;
+  const isEmployee = (row: EmployeeRow) => /^\d+$/.test(row.registration) || date.test(row.admissionDate) || date.test(row.birthDate);
+  return { ...file, rows: file.rows.filter(isEmployee) };
+}
+
 /** Planilha de uma única aba (T16); mais de uma aba é recusada. */
 export function parseEmployeeWorkbook(sheets: SheetData[]): EmployeeFile {
   if (sheets.length > 1) return { rows: [], error: 'O arquivo deve ter uma única aba.' };
