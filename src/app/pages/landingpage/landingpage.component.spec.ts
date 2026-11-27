@@ -42,6 +42,10 @@ describe('LandingpageComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('o botão Entrar recebe o estilo .btn-enter', () => {
+    expect(fixture.nativeElement.querySelector('button.btn-enter')).not.toBeNull();
+  });
+
   it('login recusado mostra a mensagem genérica', () => {
     submitFailing(401, { status: 401, message: 'Usuário ou senha inválidos' });
     expect(component.errorMessage()).toBe('Falha na autenticação. Verifique seus dados.');
