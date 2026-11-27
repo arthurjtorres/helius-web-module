@@ -1,6 +1,6 @@
 import { SheetData } from '../../../core/utils/sheet-reader';
 import { withFileLines } from '../../../shared/import-report/import-report.model';
-import { formatDate, parseEmployeeSheet, parseEmployeeWorkbook, txtToSheet } from './employee-sheet';
+import { formatDate, parseEmployeeSheet, parseEmployeeTxt, parseEmployeeWorkbook, txtToSheet } from './employee-sheet';
 
 // Dados fictícios (ZZ_TEST_); o layout imita o .txt do RH e a planilha feita a partir dele.
 const TXT = [
@@ -34,6 +34,18 @@ describe('employee-sheet', () => {
       { line: 3, registration: '001234', fullName: 'ZZ_TEST_ MARIA', admissionDate: '01/02/2020', position: 'MOTORISTA', birthDate: '15/06/1985', cpf: '' },
       { line: 4, registration: '001234', fullName: 'ZZ_TEST_ '.padEnd(63, 'N'), admissionDate: '01/02/2020', position: 'C'.repeat(20), birthDate: '15/06/1985', cpf: '' },
     ]);
+  });
+
+  it('.txt: rodapé do export (título e linhas tracejadas) não vira funcionário', () => {
+    const footer = ['', 'ZZ_TEST_ FIM', '-'.repeat(71), '', '-'.repeat(71)];
+    const { rows } = parseEmployeeTxt([TXT, ...footer].join('\r\n'));
+    expect(rows.map(r => r.registration)).toEqual(['001234', '001235']);
+  });
+
+  it('.txt: linha com matrícula errada, mas com data, é mantida para o dryRun apontar', () => {
+    const line = '00123A    ZZ_TEST_ ANA LIMA         01/02/2020 MOTORISTA    15/06/1985';
+    const { rows } = parseEmployeeTxt([TXT, line].join('\r\n'));
+    expect(rows.map(r => r.registration)).toEqual(['001234', '001235', '00123A']);
   });
 
   it('.txt com CPF em qualquer posição e linha curta mantida (o dryRun aponta o campo vazio)', () => {
