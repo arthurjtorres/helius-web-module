@@ -21,6 +21,21 @@ describe('employee-sheet', () => {
     ]);
   });
 
+  it('.txt do RH com os rótulos das datas fora de posição: corta onde a data começa', () => {
+    // No export real, DTADMFUNC começa 1 coluna depois do dado e DTNASCTOFUNC 2 antes.
+    const row = (name: string, position: string) => '001234    ' + name.padEnd(63) + '01/02/2020 ' + position.padEnd(20) + '15/06/1985';
+    const txt = [
+      'CHAPAFUNC NOMECOMPLETOFUNC'.padEnd(74) + 'DTADMFUNC DESCFUNCAO'.padEnd(28) + 'DTNASCTOFUNC',
+      '-'.repeat(114),
+      row('ZZ_TEST_ MARIA', 'MOTORISTA'),
+      row('ZZ_TEST_ '.padEnd(63, 'N'), 'C'.repeat(20)), // nome e cargo ocupando a coluna inteira
+    ].join('\r\n');
+    expect(parseEmployeeSheet(txtToSheet(txt)).rows).toEqual([
+      { line: 3, registration: '001234', fullName: 'ZZ_TEST_ MARIA', admissionDate: '01/02/2020', position: 'MOTORISTA', birthDate: '15/06/1985', cpf: '' },
+      { line: 4, registration: '001234', fullName: 'ZZ_TEST_ '.padEnd(63, 'N'), admissionDate: '01/02/2020', position: 'C'.repeat(20), birthDate: '15/06/1985', cpf: '' },
+    ]);
+  });
+
   it('.txt com CPF em qualquer posição e linha curta mantida (o dryRun aponta o campo vazio)', () => {
     const txt = [
       'CHAPAFUNC CPF         NOMECOMPLETOFUNC     DTADMFUNC  DESCFUNCAO DTNASCTOFUNC',

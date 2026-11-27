@@ -82,9 +82,19 @@ export function parseEmployeeWorkbook(sheets: SheetData[]): EmployeeFile {
 }
 
 /**
+ * No export do RH o rótulo das datas não está alinhado ao dado: havendo uma data começando a até
+ * 2 colunas do rótulo, o corte é onde ela começa (os campos podem estar colados, sem espaço).
+ */
+const cutAt = (line: string, label: number): number => {
+  const from = Math.max(label - 2, 0);
+  const date = line.substring(from, label + 12).search(/\d{2}\/\d{2}\/\d{4}/);
+  return date < 0 ? label : from + date;
+};
+
+/**
  * Converte o `.txt` de largura fixa do RH (cabeçalho, linha tracejada, dados) em linhas de células,
- * para usar o mesmo mapeamento da planilha. Cada coluna vai do início do seu rótulo até o início do
- * próximo, sem supor a ordem das colunas. As linhas mantêm o número do arquivo.
+ * para usar o mesmo mapeamento da planilha. Cada coluna vai do início do seu rótulo (ou da data perto
+ * dele) até o da próxima, sem supor a ordem das colunas. As linhas mantêm o número do arquivo.
  */
 export function txtToSheet(text: string): SheetData {
   const lines = text.split(/\r?\n/);
@@ -92,7 +102,10 @@ export function txtToSheet(text: string): SheetData {
   if (sep < 1) return { name: 'txt', rows: [] };
 
   const starts = [...lines[sep - 1].matchAll(/\S+/g)].map(m => m.index ?? 0);
-  const cut = (line: string): Cell[] => starts.map((s, i) => line.substring(s, starts[i + 1] ?? line.length).trim() || null);
+  const cut = (line: string): Cell[] => {
+    const at = starts.map(s => cutAt(line, s));
+    return at.map((s, i) => line.substring(s, at[i + 1] ?? line.length).trim() || null);
+  };
   const labels = starts.map((s, i) => normalizeText(lines[sep - 1].substring(s, starts[i + 1])));
   // A linha tracejada vira linha vazia: o índice de cada linha segue igual ao do arquivo.
   return { name: 'txt', rows: lines.map((line, i) => (i < sep - 1 ? [] : i === sep - 1 ? labels : i === sep ? [] : cut(line))) };
