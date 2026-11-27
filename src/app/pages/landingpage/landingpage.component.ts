@@ -7,7 +7,6 @@ import { MatCard } from '@angular/material/card';
 import { MatFormField, MatPrefix, MatInput, MatSuffix } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { MatCheckbox } from '@angular/material/checkbox';
 
 const LOGIN_FAILED_MESSAGE = 'Falha na autenticação. Verifique seus dados.';
 const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde.';
@@ -16,7 +15,7 @@ const TOO_MANY_ATTEMPTS_MESSAGE = 'Muitas tentativas. Tente novamente mais tarde
     selector: 'app-landingpage',
     templateUrl: './landingpage.component.html',
     styleUrl: './landingpage.component.scss',
-    imports: [MatCard, FormsModule, ReactiveFormsModule, MatFormField, MatIcon, MatPrefix, MatInput, MatButton, MatSuffix, MatCheckbox]
+    imports: [MatCard, FormsModule, ReactiveFormsModule, MatFormField, MatIcon, MatPrefix, MatInput, MatButton, MatSuffix]
 })
 export class LandingpageComponent {
   private fb = inject(FormBuilder);
@@ -30,8 +29,7 @@ export class LandingpageComponent {
   constructor(){
     this.loginForm = this.fb.group({
       userLogin: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      savePassword: [false]
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
     
     

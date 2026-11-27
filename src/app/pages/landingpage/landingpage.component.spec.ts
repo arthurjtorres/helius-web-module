@@ -33,7 +33,7 @@ describe('LandingpageComponent', () => {
   /** Preenche o formulário, faz o login falhar com o status informado e envia. */
   function submitFailing(status: number, body: unknown): void {
     authService.login.and.returnValue(throwError(() => new HttpErrorResponse({ status, error: body })));
-    component.loginForm.setValue({ userLogin: 'zz_test_login', password: 'senha-de-teste', savePassword: false });
+    component.loginForm.setValue({ userLogin: 'zz_test_login', password: 'senha-de-teste' });
     fixture.detectChanges();
     component.onSubmit();
   }

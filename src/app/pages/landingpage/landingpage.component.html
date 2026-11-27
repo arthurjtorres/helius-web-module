@@ -55,13 +55,6 @@
           </mat-form-field>
         </div>
 
-        <div class="form-options">
-          <mat-checkbox fromControlName="savePassword" color="primary"
-            >Lembrar-me</mat-checkbox
-          >
-          <a href="#" class="forgot-link">Esqueceu sua senha?</a>
-        </div>
-
         @if (errorMessage()) { <p class="login-error" role="alert">{{ errorMessage() }}</p> }
 
         <button mat-flat-button color="primary" class="btn-block bnt-enter">

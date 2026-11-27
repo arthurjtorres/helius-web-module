@@ -147,23 +147,6 @@ $bg-blue-vibrant: #0d6efd;
   transform: scale(1.2);
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-
-  .forgot-link {
-    color: var(--color-secondary-light); // Azul claro do link
-    text-decoration: none;
-    
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
 // Botões
 .btn-block {
   width: 100%;
