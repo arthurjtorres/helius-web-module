@@ -1,7 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EmployeePageFormComponent } from './employee-page-form.component';
-import { provideHttpClient, withXhr } from '@angular/common/http';
+import { HttpErrorResponse, provideHttpClient, withXhr } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { PositionService } from '../../../core/services/position.service';
+import { SectorService } from '../../../core/services/sector.service';
+import { DepartmentService } from '../../../core/services/department.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { EmployeeView } from '../../../core/interfaces/employee.interface';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -43,6 +49,34 @@ describe('EmployeePageFormComponent', () => {
     component.onSave();
     const payload = create.calls.mostRecent().args[0];
     expect(JSON.parse(JSON.stringify(payload))).toEqual({ registration: '900001', admissionDate: '2026-01-02', fkPersonId: 'p1', fkCompanyId: 'c1' });
+  });
+
+  it('lista vazia (404) em setor e departamento não impede a de cargos nem o preenchimento na edição', () => {
+    const empty = throwError(() => new HttpErrorResponse({ status: 404 }));
+    const cargo = { positionId: 'c1', positionName: 'ZZ_TEST_' };
+    spyOn(TestBed.inject(PositionService), 'getAll').and.returnValue(of({ data: [cargo] }) as never);
+    spyOn(TestBed.inject(SectorService), 'getAll').and.returnValue(empty);
+    spyOn(TestBed.inject(DepartmentService), 'getAll').and.returnValue(empty);
+    component.isEdit = true;
+    component.data = { fkPositionId: 'c1' } as EmployeeView;
+
+    const toast = spyOn(TestBed.inject(NotificationService), 'error');
+
+    component.loadResources();
+
+    expect(toast).not.toHaveBeenCalled();
+    expect(component.positions()).toEqual([cargo] as never);
+    expect(component.sectors()).toEqual([]);
+    expect(component.employeeForm.get('position')?.value).toBe('c1');
+  });
+
+  it('outro erro numa lista avisa na tela', () => {
+    spyOn(TestBed.inject(SectorService), 'getAll').and.returnValue(throwError(() => new HttpErrorResponse({ status: 500 })));
+    const toast = spyOn(TestBed.inject(NotificationService), 'error');
+
+    component.loadResources();
+
+    expect(toast).toHaveBeenCalledWith('Não foi possível carregar setores.');
   });
 
   it('exige nome e sobrenome, como a importação (o registry recusa lastName vazio)', () => {
